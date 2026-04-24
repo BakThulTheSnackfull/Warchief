@@ -680,7 +680,7 @@ select.inp{cursor:pointer}
       <div id="gt-player-rows"></div>
       <div class="inp-row" style="margin-top:10px">
         <div class="field"><label>Starting CP (per player)</label>
-          <select class="inp" id="gt-startcp">
+          <select class="inp" id="gt-startcp" onchange="mpSyncSetup()">
             <option value="0">0 CP</option><option value="1">1 CP</option><option value="2">2 CP</option>
             <option value="3">3 CP</option><option value="4">4 CP</option><option value="5">5 CP</option>
             <option value="6" selected>6 CP</option><option value="7">7 CP</option><option value="8">8 CP</option>
@@ -1252,7 +1252,7 @@ let S = { units:[], armies:[], rules:[], objectives:{primary:[],secondary:[]},
           theme:'n', apiKey:'', game:null, lastSetup:null, weaponRules:{}, fbConfig:null };
 // ── MULTIPLAYER STATE ─────────────────────────────────────
 let _fbApp = null, _fbDb = null, _mpActive = false, _mpRoom = null, _mpRole = null;
-let _mpIgnoreNext = false;
+let _mpClientId = Math.random().toString(36).slice(2); // unique per browser tab
 let _TOOLTIPS = {}; // merged: built-in WEAPON_TOOLTIPS + user S.weaponRules
 let _dsFilt = 'All', _ruCat = 'All', _obCat = 'All';
 let _currentArmy = null;
@@ -1302,9 +1302,8 @@ function save() {
 function saveGame() {
   save();
   if (_mpActive && _fbDb && _mpRoom && S.game) {
-    _mpIgnoreNext = true;
-    _fbDb.ref('rooms/' + _mpRoom + '/game').set(S.game).catch(e => {
-      _mpIgnoreNext = false;
+    const payload = Object.assign({}, S.game, {_mp_sender: _mpClientId});
+    _fbDb.ref('rooms/' + _mpRoom + '/game').set(payload).catch(e => {
       console.error('[MP] sync failed:', e);
     });
   }
@@ -3166,10 +3165,10 @@ function renderPlayerSetupRows() {
   document.getElementById('gt-player-rows').innerHTML = Array.from({length:n},(_,i)=>`
     <div class="inp-row" style="margin-top:8px">
       <div class="field"><label>Player ${i+1} Name</label>
-        <input class="inp" id="gt-pname-${i}" value="${['Duncan','Leo','Player 3','Player 4'][i]||'Player '+(i+1)}">
+        <input class="inp" id="gt-pname-${i}" value="${['Duncan','Leo','Player 3','Player 4'][i]||'Player '+(i+1)}" oninput="mpSyncSetup()">
       </div>
       <div class="field"><label>Faction</label>
-        <select class="inp" id="gt-pfact-${i}">${factOpts}</select>
+        <select class="inp" id="gt-pfact-${i}" onchange="mpSyncSetup()">${factOpts}</select>
       </div>
     </div>`).join('');
   // set defaults
@@ -3213,7 +3212,7 @@ function renderArmyImportRows() {
   el.innerHTML = Array.from({length:n},(_,i)=>`
     <div class="inp-row" style="margin-bottom:6px">
       <div style="font-size:13px;color:var(--ts);display:flex;align-items:center">Player ${i+1}</div>
-      <select class="inp" id="gt-army-${i}">${armyOpts}</select>
+      <select class="inp" id="gt-army-${i}" onchange="mpSyncSetup()">${armyOpts}</select>
     </div>`).join('');
 }
 function startBattle() {
@@ -3329,7 +3328,7 @@ function renderActiveGame() {
         <div class="btn-row">
           <button class="btn btn-p btn-sm" onclick="endTurn()">End Turn ▶</button>
           <button class="btn btn-d btn-sm" onclick="endGame()">End Game</button>
-          ${_mpActive ? `<span style="background:#1a3a1a;border:1px solid #2ecc71;color:#2ecc71;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700;letter-spacing:1px">🟢 ${_mpRoom}</span>` : `<button class="btn btn-g btn-sm" onclick="mpShowPanel()" title="Go Online">🌐</button>`}
+          ${_mpActive ? `<span class="mp-room-badge" style="background:#1a3a1a;border:1px solid #2ecc71;color:#2ecc71;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700;letter-spacing:1px;transition:background 0.3s">🟢 ${_mpRoom}</span>` : `<button class="btn btn-g btn-sm" onclick="mpShowPanel()" title="Go Online">🌐</button>`}
         </div>
       </div>
       ${g.priObj ? `<div class="sec-obj-card" style="margin-top:12px;border-left-color:var(--blue)">
@@ -4258,23 +4257,65 @@ function _mpGenCode() {
   return Array.from({length:4}, ()=>chars[Math.floor(Math.random()*chars.length)]).join('');
 }
 
-function _mpSubscribe(code) {
-  _fbDb.ref('rooms/' + code + '/game').on('value', snap => {
-    if (_mpIgnoreNext) { _mpIgnoreNext = false; return; }
-    const g = snap.val();
-    if (!g) return;
-    if (JSON.stringify(g) === JSON.stringify(S.game)) return;
-    S.game = g;
-    save();
-    const gtActive = document.getElementById('gt-active');
-    if (gtActive && gtActive.style.display !== 'none') renderActiveGame();
-    const gtSetup = document.getElementById('gt-setup');
-    if (gtSetup && gtSetup.style.display !== 'none') {
-      // Guest joined before host started — show waiting state
-      document.getElementById('gt-mp-status-panel').style.display = 'none';
-      document.getElementById('gt-mp-connected').style.display = '';
-    }
+function _mpApplyGame(g) {
+  if (!g || g._mp_sender === _mpClientId) return; // echo from ourselves — skip
+  const clean = Object.assign({}, g);
+  delete clean._mp_sender;
+  S.game = clean;
+  save();
+  // Re-render without stealing focus from inputs the local player is editing
+  const focused = document.activeElement?.id || null;
+  const gtActive = document.getElementById('gt-active');
+  if (gtActive && gtActive.style.display !== 'none') {
+    renderActiveGame();
+    if (focused) { const el = document.getElementById(focused); if (el) el.focus(); }
+  }
+  _mpFlashSync();
+}
+
+function _mpFlashSync() {
+  // Brief green pulse on the room badge to confirm sync received
+  const badge = document.querySelector('.mp-room-badge');
+  if (!badge) return;
+  badge.style.background = '#1a4a1a';
+  setTimeout(() => { badge.style.background = ''; }, 400);
+}
+
+function _mpApplySetup(setup) {
+  if (!setup || setup._sender === _mpClientId) return;
+  const n = parseInt(document.getElementById('gt-numplayers')?.value) || 2;
+  (setup.players || []).forEach((p, i) => {
+    if (i >= n) return;
+    const nameEl = document.getElementById('gt-pname-' + i);
+    const factEl = document.getElementById('gt-pfact-' + i);
+    const armyEl = document.getElementById('gt-army-' + i);
+    if (nameEl && p.name && document.activeElement !== nameEl) nameEl.value = p.name;
+    if (factEl && p.faction) factEl.value = p.faction;
+    if (armyEl && p.armyId) armyEl.value = p.armyId;
   });
+  if (setup.startingCp) {
+    const cpEl = document.getElementById('gt-startcp');
+    if (cpEl) cpEl.value = setup.startingCp;
+  }
+  renderTurnOrderSetup();
+}
+
+function _mpSubscribe(code) {
+  _fbDb.ref('rooms/' + code + '/game').on('value', snap => _mpApplyGame(snap.val()));
+  _fbDb.ref('rooms/' + code + '/setup').on('value', snap => _mpApplySetup(snap.val()));
+}
+
+// Push current setup form state to Firebase (called on every name/faction/army change)
+function mpSyncSetup() {
+  if (!_mpActive || !_fbDb || !_mpRoom) return;
+  const n = parseInt(document.getElementById('gt-numplayers')?.value) || 2;
+  const players = Array.from({length:n}, (_,i) => ({
+    name:    document.getElementById('gt-pname-' + i)?.value || 'Player ' + (i+1),
+    faction: document.getElementById('gt-pfact-' + i)?.value || '',
+    armyId:  document.getElementById('gt-army-' + i)?.value || ''
+  }));
+  const startingCp = document.getElementById('gt-startcp')?.value || '6';
+  _fbDb.ref('rooms/' + _mpRoom + '/setup').set({ players, startingCp, _sender: _mpClientId });
 }
 
 function mpCreateRoom() {
@@ -4282,7 +4323,7 @@ function mpCreateRoom() {
   if (_mpActive) { toast('Already in a room — disconnect first'); return; }
   const code = _mpGenCode();
   _mpRoom = code; _mpRole = 'host'; _mpActive = true;
-  _fbDb.ref('rooms/' + code).set({ game: null, createdAt: Date.now() });
+  _fbDb.ref('rooms/' + code).set({ game: null, setup: null, createdAt: Date.now() });
   _mpSubscribe(code);
   _mpUpdateSetupUI();
   toast('Room created! Share code: ' + code);
@@ -4295,39 +4336,36 @@ function mpJoinRoom() {
   if (code.length !== 4) { toast('Enter the 4-character room code'); return; }
   if (_mpActive) mpLeaveRoom();
   _mpRoom = code; _mpRole = 'guest'; _mpActive = true;
-  // Read current game state once, then subscribe
+  // Read current game state once — if game already started, jump straight in
   _fbDb.ref('rooms/' + code + '/game').once('value', snap => {
     const g = snap.val();
-    if (g) {
-      S.game = g; save();
+    if (g && g._mp_sender !== _mpClientId) {
+      const clean = Object.assign({}, g); delete clean._mp_sender;
+      S.game = clean; save();
       document.getElementById('gt-setup').style.display = 'none';
       renderActiveGame();
     }
   });
   _mpSubscribe(code);
   _mpUpdateSetupUI();
-  toast('Joined room ' + code + ' — waiting for host to start');
+  toast('Joined room ' + code);
 }
 
 function mpLeaveRoom() {
   if (_mpRoom && _fbDb) {
-    try { _fbDb.ref('rooms/' + _mpRoom + '/game').off(); } catch(e) {}
+    try {
+      _fbDb.ref('rooms/' + _mpRoom + '/game').off();
+      _fbDb.ref('rooms/' + _mpRoom + '/setup').off();
+    } catch(e) {}
   }
   _mpActive = false; _mpRoom = null; _mpRole = null;
   _mpUpdateSetupUI();
   toast('Disconnected from room');
-  // Re-render to update the 🌐 button in active game header
   if (S.game) renderActiveGame();
 }
 
 function mpShowPanel() {
-  // Called from the 🌐 button in the active game header
-  if (!_mpInitFirebase()) {
-    toast('Configure multiplayer in Settings first');
-    nav('settings');
-    return;
-  }
-  // Show the game tracker setup area with MP section visible
+  if (!_mpInitFirebase()) { toast('Configure multiplayer in Settings first'); nav('settings'); return; }
   document.getElementById('gt-setup').style.display = 'block';
   document.getElementById('gt-active').style.display = 'none';
   document.getElementById('gt-mp-card').style.display = '';
@@ -4348,7 +4386,7 @@ function _mpUpdateSetupUI() {
     if (codeDisplay) codeDisplay.textContent = _mpRoom;
     if (roleLabel) roleLabel.textContent = _mpRole === 'host'
       ? 'You created this room — share the code with your opponent'
-      : 'Connected as guest — waiting for host';
+      : 'Connected as guest — syncing with host';
   } else {
     if (panel) panel.style.display = '';
     if (connected) connected.style.display = 'none';
@@ -4359,7 +4397,6 @@ function saveFbConfig() {
   const raw = document.getElementById('set-fbconfig')?.value?.trim() || '';
   if (!raw) { toast('Paste your Firebase config JSON first'); return; }
   try {
-    // Accept both the raw object and 'const firebaseConfig = {...}'
     const match = raw.match(/\{[\s\S]*\}/);
     if (!match) throw new Error('No JSON object found');
     const cfg = JSON.parse(match[0]);
@@ -4367,7 +4404,6 @@ function saveFbConfig() {
     S.fbConfig = cfg; save();
     toast('Firebase config saved! Multiplayer ready.');
     renderFbStatus();
-    // Show MP card in game tracker
     const mpCard = document.getElementById('gt-mp-card');
     if (mpCard) mpCard.style.display = '';
   } catch(e) {
