@@ -246,7 +246,7 @@ select.inp{cursor:pointer}
 .ut-kws{display:flex;gap:4px;flex-wrap:wrap;margin:4px 0}
 .ut-kw{padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;background:var(--fg);color:var(--ft)}
 .counter-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ts)}
-.counter-btn{width:22px;height:22px;border-radius:50%;border:1px solid var(--ba);background:var(--card);color:var(--tp);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;transition:.15s}
+.counter-btn{width:28px;height:28px;border-radius:50%;border:1px solid var(--ba);background:var(--card);color:var(--tp);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;transition:.15s;touch-action:manipulation}
 .counter-btn:hover{background:var(--fp);color:var(--bg);border-color:var(--fp)}
 .counter-val{font-weight:700;color:var(--tp);min-width:30px;text-align:center}
 .ut-dead{opacity:.4;text-decoration:line-through}
@@ -311,6 +311,14 @@ select.inp{cursor:pointer}
 .panel-name{font-family:var(--fd);font-size:15px;color:var(--ft)}
 .section-hdr{font-size:11px;color:var(--ts);font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin:10px 0 6px;display:flex;justify-content:space-between;align-items:center}
 
+/* VP BADGE & QUICK COUNTER */
+.vp-badge{display:inline-flex;align-items:center;gap:5px;background:var(--fg);border:1px solid #f39c12;color:#f39c12;border-radius:14px;padding:3px 12px;font-size:13px;font-weight:700;font-family:var(--fd)}
+.vp-quick-row{display:flex;align-items:center;gap:10px;margin:8px 0 4px}
+.vp-quick-label{font-size:11px;color:var(--ts);font-weight:600;flex:1}
+.vp-counter-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--ba);background:var(--card);color:var(--tp);cursor:pointer;font-size:17px;font-weight:700;line-height:1;transition:.15s;touch-action:manipulation;display:flex;align-items:center;justify-content:center}
+.vp-counter-btn:hover{background:#f39c12;color:#000;border-color:#f39c12}
+.vp-counter-val{font-size:20px;font-weight:700;color:var(--ft);font-family:var(--fd);min-width:36px;text-align:center}
+
 /* RESPONSIVE */
 @media(max-width:700px){
   #app{grid-template-columns:1fr;grid-template-rows:58px auto 1fr}
@@ -322,6 +330,10 @@ select.inp{cursor:pointer}
   .quick-grid{grid-template-columns:repeat(2,1fr)}
   .enh-grid,.strat-grid{grid-template-columns:1fr}
   .inp-row,.inp-row3{grid-template-columns:1fr}
+  .counter-btn{width:32px;height:32px;font-size:15px}
+  .score-tbl input{width:44px;height:28px;font-size:13px;padding:4px 2px}
+  .vp-counter-btn{width:38px;height:38px;font-size:20px}
+  .vp-counter-val{font-size:22px}
 }
 
 /* ── WARGEAR CHECKBOXES (Feature 4) ── */
@@ -1251,7 +1263,7 @@ const WEAPON_TOOLTIPS = {"ANTI-INFANTRY 4": "An unmodified Wound roll of 4+ agai
 let S = { units:[], armies:[], rules:[], objectives:{primary:[],secondary:[]},
           theme:'n', apiKey:'', game:null, lastSetup:null, weaponRules:{}, fbConfig:null };
 // ── MULTIPLAYER STATE ─────────────────────────────────────
-let _fbApp = null, _fbDb = null, _mpActive = false, _mpRoom = null, _mpRole = null;
+let _fbApp = null, _fbDb = null, _mpActive = false, _mpRoom = null, _mpRole = null, _mpPlayerIdx = -1;
 let _mpClientId = Math.random().toString(36).slice(2); // unique per browser tab
 let _TOOLTIPS = {}; // merged: built-in WEAPON_TOOLTIPS + user S.weaponRules
 let _dsFilt = 'All', _ruCat = 'All', _obCat = 'All';
@@ -3165,7 +3177,7 @@ function renderPlayerSetupRows() {
   document.getElementById('gt-player-rows').innerHTML = Array.from({length:n},(_,i)=>`
     <div class="inp-row" style="margin-top:8px">
       <div class="field"><label>Player ${i+1} Name</label>
-        <input class="inp" id="gt-pname-${i}" value="${['Duncan','Leo','Player 3','Player 4'][i]||'Player '+(i+1)}" oninput="mpSyncSetup()">
+        <input class="inp" id="gt-pname-${i}" placeholder="Player ${i+1}" oninput="mpSyncSetup()">
       </div>
       <div class="field"><label>Faction</label>
         <select class="inp" id="gt-pfact-${i}" onchange="mpSyncSetup()">${factOpts}</select>
@@ -3299,7 +3311,7 @@ function renderActiveGame() {
 
   // Scoreboard
   const rounds = [1,2,3,4,5];
-  let scoreboard = `<table class="score-tbl"><thead><tr><th>Player</th>${rounds.map(r=>`<th>R${r}</th>`).join('')}<th>Total</th></tr></thead><tbody>`;
+  let scoreboard = `<div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table class="score-tbl"><thead><tr><th>Player</th>${rounds.map(r=>`<th>R${r}</th>`).join('')}<th>Total</th></tr></thead><tbody>`;
   g.players.forEach((p,pi)=>{
     const total = p.scores.reduce((a,b)=>a+b,0);
     scoreboard += `<tr><td style="font-weight:700;color:var(--tp);text-align:left;padding-left:8px">${escH(p.name)}<br><span style="font-size:10px;color:var(--ts)">${escH(p.faction)}</span></td>`;
@@ -3308,7 +3320,7 @@ function renderActiveGame() {
     });
     scoreboard += `<td class="score-total">${total}</td></tr>`;
   });
-  scoreboard += '</tbody></table>';
+  scoreboard += '</tbody></table></div>';
 
   // Player panels
   const activePi = g.turnOrder[g.turnIdx];
@@ -3326,7 +3338,7 @@ function renderActiveGame() {
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
         <div class="round-badge pulse">⚔ Round ${g.round} of 5 — ${escH(g.players[g.turnOrder[g.turnIdx]].name)}'s Turn</div>
         <div class="btn-row">
-          <button class="btn btn-p btn-sm" onclick="endTurn()">End Turn ▶</button>
+          ${(()=>{ const activePi=g.turnOrder[g.turnIdx]; const activeName=escH(g.players[activePi].name||('Player '+(activePi+1))); const myTurn=!_mpActive||_mpPlayerIdx<0||_mpPlayerIdx===activePi; return myTurn ? \`<button class="btn btn-p btn-sm" onclick="endTurn()">End \${activeName}'s Turn ▶</button>\` : \`<button class="btn btn-sm" disabled style="opacity:0.45;cursor:not-allowed" title="It's \${activeName}'s turn to end their turn">Waiting for \${activeName}…</button>\`; })()}
           <button class="btn btn-d btn-sm" onclick="endGame()">End Game</button>
           ${_mpActive ? `<span class="mp-room-badge" style="background:#1a3a1a;border:1px solid #2ecc71;color:#2ecc71;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700;letter-spacing:1px;transition:background 0.3s">🟢 ${_mpRoom}</span>` : `<button class="btn btn-g btn-sm" onclick="mpShowPanel()" title="Go Online">🌐</button>`}
         </div>
@@ -3445,11 +3457,23 @@ function renderPlayerPanel(p, pi, isActive) {
     }).join('');
   }
 
+  const vpTotal = p.scores.reduce((a,b)=>a+b,0);
+  const curRoundVP = p.scores[g.round-1]||0;
   return `<div class="player-panel${isActive?' active-turn':''}">
     ${isActive ? '<div class="active-turn-banner">⚔ Active Turn</div>' : ''}
     <div class="panel-hdr">
-      <div class="panel-name">${escH(p.name)}</div>
-      ${fbadge(p.faction)}
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div class="panel-name">${escH(p.name)}</div>
+        ${fbadge(p.faction)}
+      </div>
+      <div class="vp-badge">🏆 ${vpTotal} VP</div>
+    </div>
+    <div class="section-hdr" style="margin-top:10px">Victory Points — Round ${g.round}</div>
+    <div class="vp-quick-row">
+      <span class="vp-quick-label">Round ${g.round} VP:</span>
+      <button class="vp-counter-btn" onclick="addVP(${pi},-1)">−</button>
+      <span class="vp-counter-val">${curRoundVP}</span>
+      <button class="vp-counter-btn" onclick="addVP(${pi},1)">+</button>
     </div>
     <div class="section-hdr">Command Points <span style="font-size:11px;color:var(--tm)">Spent this game: ${p.cpSpent}</span></div>
     <div class="pip-row" style="margin-bottom:8px">${pips}</div>
@@ -3947,6 +3971,15 @@ function endGame() {
     renderGameSetup();
   }, 3000);
 }
+function addVP(pi, delta) {
+  const g = S.game; if (!g) return;
+  const p = g.players[pi];
+  const ri = g.round - 1;
+  p.scores[ri] = Math.max(0, (p.scores[ri]||0) + delta);
+  if (delta > 0) addLog(`${p.name} scores ${delta} VP (Round ${g.round})`, delta);
+  else if (delta < 0) addLog(`${p.name} loses ${Math.abs(delta)} VP (Round ${g.round})`, 0);
+  saveGame(); renderActiveGame();
+}
 function addLog(msg, vp) {
   if (!S.game) return;
   S.game.log.push({ round: S.game.round, msg, vp: vp||0 });
@@ -4322,7 +4355,7 @@ function mpCreateRoom() {
   if (!_mpInitFirebase()) { toast('Add Firebase config in Settings first'); nav('settings'); return; }
   if (_mpActive) { toast('Already in a room — disconnect first'); return; }
   const code = _mpGenCode();
-  _mpRoom = code; _mpRole = 'host'; _mpActive = true;
+  _mpRoom = code; _mpRole = 'host'; _mpActive = true; _mpPlayerIdx = 0;
   _fbDb.ref('rooms/' + code).set({ game: null, setup: null, createdAt: Date.now() });
   _mpSubscribe(code);
   _mpUpdateSetupUI();
@@ -4335,7 +4368,7 @@ function mpJoinRoom() {
   const code = raw.trim().toUpperCase().replace(/[^A-Z0-9]/g,'').substring(0,4);
   if (code.length !== 4) { toast('Enter the 4-character room code'); return; }
   if (_mpActive) mpLeaveRoom();
-  _mpRoom = code; _mpRole = 'guest'; _mpActive = true;
+  _mpRoom = code; _mpRole = 'guest'; _mpActive = true; _mpPlayerIdx = 1;
   // Read current game state once — if game already started, jump straight in
   _fbDb.ref('rooms/' + code + '/game').once('value', snap => {
     const g = snap.val();
@@ -4358,7 +4391,7 @@ function mpLeaveRoom() {
       _fbDb.ref('rooms/' + _mpRoom + '/setup').off();
     } catch(e) {}
   }
-  _mpActive = false; _mpRoom = null; _mpRole = null;
+  _mpActive = false; _mpRoom = null; _mpRole = null; _mpPlayerIdx = -1;
   _mpUpdateSetupUI();
   toast('Disconnected from room');
   if (S.game) renderActiveGame();
