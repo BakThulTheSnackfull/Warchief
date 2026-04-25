@@ -1314,7 +1314,7 @@ function save() {
 function saveGame() {
   save();
   if (_mpActive && _fbDb && _mpRoom && S.game) {
-    S.game._stateTs = Date.now(); // stamp BEFORE push so stale-echo check has a reference
+    S.game._stateSeq = (S.game._stateSeq || 0) + 1; // increment BEFORE push so stale-echo check has a reference
     const payload = Object.assign({}, S.game, {_mp_sender: _mpClientId});
     _fbDb.ref('rooms/' + _mpRoom + '/game').set(payload).catch(e => {
       console.error('[MP] sync failed:', e);
@@ -3277,7 +3277,7 @@ function startBattle() {
     priObj = S.objectives.primary[Math.floor(Math.random()*S.objectives.primary.length)];
   }
   const firstPi = turnOrder[0];
-  S.game = { round:1, turnIdx:0, turnOrder, autoScore, autoSec, priObj, log:[], players, roundNotes:{} };
+  S.game = { round:1, turnIdx:0, turnOrder, autoScore, autoSec, priObj, log:[], players, roundNotes:{}, _stateSeq:0 };
   // Grant +1CP to first player (their Command phase begins)
   players[firstPi].cp++;
   addLog(players[firstPi].name + ' gains 1 CP (Command phase — Round 1)', 0);
@@ -4298,8 +4298,8 @@ function _mpGenCode() {
 
 function _mpApplyGame(g) {
   if (!g || g._mp_sender === _mpClientId) return; // echo from ourselves — skip
-  // Reject stale Firebase re-fires: if incoming timestamp is older than what we already have, ignore it
-  if (g._stateTs && S.game && S.game._stateTs && g._stateTs < S.game._stateTs) return;
+  // Reject stale Firebase re-fires: if incoming sequence is older than what we already have locally, ignore it
+  if (g._stateSeq && S.game && S.game._stateSeq && g._stateSeq <= S.game._stateSeq) return;
   // Game-over signal from another device
   if (g._mp_game_over) {
     if (S.game) {
