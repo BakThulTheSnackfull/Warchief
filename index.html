@@ -1275,7 +1275,8 @@ let S = { units:[], armies:[], rules:[], objectives:{primary:[],secondary:[]},
 // ── MULTIPLAYER STATE ─────────────────────────────────────
 let _fbApp = null, _fbDb = null, _mpActive = false, _mpRoom = null, _mpRole = null, _mpPlayerIdx = -1;
 let _mpClientId = Math.random().toString(36).slice(2); // unique per browser tab
-let _mpHighSeq = 0; // high-water mark: highest _stateSeq we have ever processed — never goes down
+let _mpHighSeq = 0;     // high-water mark: highest _stateSeq we have ever processed — never goes down
+let _mpTurnHighSeq = 0; // high-water mark for the /turns counter — prevents double-advance on local device
 let _TOOLTIPS = {}; // merged: built-in WEAPON_TOOLTIPS + user S.weaponRules
 let _dsFilt = 'All', _ruCat = 'All', _obCat = 'All';
 let _currentArmy = null;
@@ -3913,20 +3914,17 @@ function checkUnitCount() {
     });
   });
 }
-function endTurn() {
-  const g = S.game;
+// Advance turn state locally (shared logic for both solo and MP receive path)
+function _advanceTurnLocally() {
+  const g = S.game; if (!g) return;
   const activePi = g.turnOrder[g.turnIdx];
   const p = g.players[activePi];
-  addLog(`${p.name} ends their turn`, 0);
-  // Advance turn index
   g.turnIdx++;
   if (g.turnIdx >= g.turnOrder.length) {
-    // All players have gone — new round
     g.turnIdx = 0;
-    if (g.round >= 5) { saveGame(); endGame(); return; }
+    if (g.round >= 5) { save(); endGame(); return; }
     g.round++;
-    addLog(`--- Battle Round ${g.round} begins ---`, 0);
-    // Clear once-per-round ability uses for all players
+    addLog('--- Battle Round ' + g.round + ' begins ---', 0);
     g.players.forEach(pl => {
       pl.units.forEach(u => {
         if (!u.usedAbils) return;
@@ -3935,14 +3933,31 @@ function endTurn() {
       });
     });
   }
-  // Grant +1CP to the next active player
   const nextPi = g.turnOrder[g.turnIdx];
   const nextP = g.players[nextPi];
   nextP.cp++;
-  addLog(`${nextP.name} gains 1 CP (Command phase — Round ${g.round})`, 0);
-  // Draw secondaries for next player (top up to 2)
+  addLog(nextP.name + ' gains 1 CP (Command phase — Round ' + g.round + ')', 0);
   if (g.autoSec) drawSecondaries(nextPi);
-  saveGame(); renderActiveGame();
+  save();
+  if (document.getElementById('gt-active')?.style.display !== 'none') renderActiveGame();
+}
+
+function endTurn() {
+  const g = S.game;
+  const activePi = g.turnOrder[g.turnIdx];
+  const p = g.players[activePi];
+  addLog(`${p.name} ends their turn`, 0);
+  if (_mpActive && _fbDb && _mpRoom) {
+    // MP mode: signal turn advance via dedicated /turns path, then sync full state
+    _advanceTurnLocally();
+    _mpTurnHighSeq++;
+    _fbDb.ref('rooms/' + _mpRoom + '/turns').set(_mpTurnHighSeq);
+    saveGame(); // sync player data (CP, VP, log) to all devices
+  } else {
+    // Solo mode: advance locally and save
+    _advanceTurnLocally();
+    saveGame();
+  }
 }
 function forfeitSecondary(pi, si) {
   const g = S.game;
@@ -4333,7 +4348,18 @@ function _mpApplyGame(g) {
   }
   const clean = Object.assign({}, g);
   delete clean._mp_sender;
-  S.game = clean;
+  if (S.game) {
+    // Game already running locally — selectively merge so we never clobber turnIdx/round
+    // (turn advancement arrives via /turns, not via game state sync)
+    S.game.players  = clean.players;
+    S.game.log      = clean.log;
+    S.game.autoSec  = clean.autoSec;
+    S.game.autoScore = clean.autoScore;
+    S.game._stateSeq = clean._stateSeq;
+  } else {
+    // First load (joining a game in progress) — take everything as-is
+    S.game = clean;
+  }
   save();
   // Re-render without stealing focus from inputs the local player is editing
   const focused = document.activeElement?.id || null;
@@ -4398,6 +4424,16 @@ function _mpSubscribeSeats(code) {
 function _mpSubscribe(code) {
   _fbDb.ref('rooms/' + code + '/game').on('value', snap => _mpApplyGame(snap.val()));
   _fbDb.ref('rooms/' + code + '/setup').on('value', snap => _mpApplySetup(snap.val()));
+  _fbDb.ref('rooms/' + code + '/turns').on('value', snap => {
+    const t = snap.val() || 0;
+    if (t > _mpTurnHighSeq) {
+      _mpTurnHighSeq = t;
+      // A different device advanced the turn — apply it locally
+      if (S.game && document.getElementById('gt-active')?.style.display !== 'none') {
+        _advanceTurnLocally();
+      }
+    }
+  });
   _mpSubscribeSeats(code);
 }
 
@@ -4419,7 +4455,7 @@ function mpCreateRoom() {
   if (_mpActive) { toast('Already in a room — disconnect first'); return; }
   const code = _mpGenCode();
   _mpRoom = code; _mpRole = 'host'; _mpActive = true; _mpPlayerIdx = 0;
-  _fbDb.ref('rooms/' + code).set({ game: null, setup: null, createdAt: Date.now(), seats: {0: _mpClientId} });
+  _fbDb.ref('rooms/' + code).set({ game: null, setup: null, turns: 0, createdAt: Date.now(), seats: {0: _mpClientId} });
   _mpSubscribe(code);
   _mpUpdateSetupUI();
   toast('Room created! Share code: ' + code);
@@ -4441,6 +4477,10 @@ function mpJoinRoom() {
       // Game in progress — load it locally then ask which player they are
       const clean = Object.assign({}, g); delete clean._mp_sender;
       S.game = clean; save();
+      // Sync turn counter so we don't re-fire old turns
+      _fbDb.ref('rooms/' + code + '/turns').once('value', tsnap => {
+        _mpTurnHighSeq = tsnap.val() || 0;
+      });
       document.getElementById('gt-setup').style.display = 'none';
       renderActiveGame();
       _mpShowSeatPicker(code, clean.players || []);
@@ -4486,10 +4526,11 @@ function mpLeaveRoom() {
     try {
       _fbDb.ref('rooms/' + _mpRoom + '/game').off();
       _fbDb.ref('rooms/' + _mpRoom + '/setup').off();
+      _fbDb.ref('rooms/' + _mpRoom + '/turns').off();
       _fbDb.ref('rooms/' + _mpRoom + '/seats').off();
     } catch(e) {}
   }
-  _mpActive = false; _mpRoom = null; _mpRole = null; _mpPlayerIdx = -1; _mpHighSeq = 0;
+  _mpActive = false; _mpRoom = null; _mpRole = null; _mpPlayerIdx = -1; _mpHighSeq = 0; _mpTurnHighSeq = 0;
   _mpUpdateSetupUI();
   toast('Disconnected from room');
   if (S.game) renderActiveGame();
