@@ -1228,6 +1228,16 @@ select.inp{cursor:pointer}
   </div>
 </div></div>
 
+<!-- Seat Picker Modal -->
+<div class="overlay" id="m-seat-pick">
+<div class="modal" style="max-width:360px">
+  <div class="modal-hdr">
+    <div class="ph2">Who are you?</div>
+  </div>
+  <p style="font-size:13px;color:var(--ts);margin-bottom:16px">A game is already in progress. Select your player to rejoin.</p>
+  <div id="m-seat-pick-list"></div>
+</div></div>
+
 <!-- Swap Secondary Modal -->
 <div class="overlay" id="m-swap">
 <div class="modal" style="max-width:480px">
@@ -4328,7 +4338,12 @@ function _mpApplyGame(g) {
   // Re-render without stealing focus from inputs the local player is editing
   const focused = document.activeElement?.id || null;
   const gtActive = document.getElementById('gt-active');
-  if (gtActive && gtActive.style.display !== 'none') {
+  const gtSetup  = document.getElementById('gt-setup');
+  if (gtActive) {
+    if (gtActive.style.display === 'none' && gtSetup) {
+      // Game just started on another device — jump guests straight into the active game
+      gtSetup.style.display = 'none';
+    }
     renderActiveGame();
     if (focused) { const el = document.getElementById(focused); if (el) el.focus(); }
   }
@@ -4362,9 +4377,28 @@ function _mpApplySetup(setup) {
   renderTurnOrderSetup();
 }
 
+function _mpSubscribeSeats(code) {
+  _fbDb.ref('rooms/' + code + '/seats').on('value', snap => {
+    const seats = snap.val() || {};
+    // seats = { 0: clientId, 1: clientId, ... } — find my index by value
+    const myEntry = Object.entries(seats).find(([, cid]) => cid === _mpClientId);
+    if (myEntry) {
+      const myIdx = parseInt(myEntry[0]);
+      if (myIdx !== _mpPlayerIdx) {
+        _mpPlayerIdx = myIdx;
+        if (S.game && document.getElementById('gt-active')?.style.display !== 'none') {
+          renderActiveGame();
+        }
+        toast('You are Player ' + (myIdx + 1) + ' in this room');
+      }
+    }
+  });
+}
+
 function _mpSubscribe(code) {
   _fbDb.ref('rooms/' + code + '/game').on('value', snap => _mpApplyGame(snap.val()));
   _fbDb.ref('rooms/' + code + '/setup').on('value', snap => _mpApplySetup(snap.val()));
+  _mpSubscribeSeats(code);
 }
 
 // Push current setup form state to Firebase (called on every name/faction/army change)
@@ -4385,7 +4419,7 @@ function mpCreateRoom() {
   if (_mpActive) { toast('Already in a room — disconnect first'); return; }
   const code = _mpGenCode();
   _mpRoom = code; _mpRole = 'host'; _mpActive = true; _mpPlayerIdx = 0;
-  _fbDb.ref('rooms/' + code).set({ game: null, setup: null, createdAt: Date.now() });
+  _fbDb.ref('rooms/' + code).set({ game: null, setup: null, createdAt: Date.now(), seats: {0: _mpClientId} });
   _mpSubscribe(code);
   _mpUpdateSetupUI();
   toast('Room created! Share code: ' + code);
@@ -4397,20 +4431,54 @@ function mpJoinRoom() {
   const code = raw.trim().toUpperCase().replace(/[^A-Z0-9]/g,'').substring(0,4);
   if (code.length !== 4) { toast('Enter the 4-character room code'); return; }
   if (_mpActive) mpLeaveRoom();
-  _mpRoom = code; _mpRole = 'guest'; _mpActive = true; _mpPlayerIdx = 1;
-  // Read current game state once — if game already started, jump straight in
+  _mpRoom = code; _mpRole = 'guest'; _mpActive = true; _mpPlayerIdx = -1;
+  _mpSubscribe(code);
+  _mpUpdateSetupUI();
+  // Check if a game is already running — if so show player picker, otherwise auto-claim a seat
   _fbDb.ref('rooms/' + code + '/game').once('value', snap => {
     const g = snap.val();
-    if (g && g._mp_sender !== _mpClientId) {
+    if (g && !g._mp_game_over) {
+      // Game in progress — load it locally then ask which player they are
       const clean = Object.assign({}, g); delete clean._mp_sender;
       S.game = clean; save();
       document.getElementById('gt-setup').style.display = 'none';
       renderActiveGame();
+      _mpShowSeatPicker(code, clean.players || []);
+    } else {
+      // No game yet — auto-claim the next available seat index
+      _mpAutoClaimSeat(code);
     }
   });
-  _mpSubscribe(code);
-  _mpUpdateSetupUI();
   toast('Joined room ' + code);
+}
+
+function _mpAutoClaimSeat(code) {
+  _fbDb.ref('rooms/' + code + '/seats').once('value', snap => {
+    const seats = snap.val() || {};
+    // Already have a seat? (reconnect with same clientId)
+    const existing = Object.entries(seats).find(([, cid]) => cid === _mpClientId);
+    if (existing) return; // seat listener will handle it
+    // Find lowest unclaimed index
+    const takenIdxs = Object.keys(seats).map(Number);
+    let idx = 0;
+    while (takenIdxs.includes(idx)) idx++;
+    _fbDb.ref('rooms/' + code + '/seats/' + idx).set(_mpClientId);
+  });
+}
+
+function _mpShowSeatPicker(code, players) {
+  const list = document.getElementById('m-seat-pick-list');
+  if (!list) return;
+  list.innerHTML = players.map((p, idx) =>
+    '<button class="btn btn-g" style="width:100%;margin-bottom:8px;font-size:15px;padding:12px" onclick="_mpClaimSeat(\'' + code + '\',' + idx + ');closeModal(\'m-seat-pick\')">' +
+    escH(p.name || ('Player ' + (idx + 1))) + '</button>'
+  ).join('');
+  document.getElementById('m-seat-pick').classList.add('open');
+}
+
+function _mpClaimSeat(code, idx) {
+  _fbDb.ref('rooms/' + code + '/seats/' + idx).set(_mpClientId);
+  // _mpPlayerIdx will be confirmed by the seats listener
 }
 
 function mpLeaveRoom() {
@@ -4418,6 +4486,7 @@ function mpLeaveRoom() {
     try {
       _fbDb.ref('rooms/' + _mpRoom + '/game').off();
       _fbDb.ref('rooms/' + _mpRoom + '/setup').off();
+      _fbDb.ref('rooms/' + _mpRoom + '/seats').off();
     } catch(e) {}
   }
   _mpActive = false; _mpRoom = null; _mpRole = null; _mpPlayerIdx = -1; _mpHighSeq = 0;
