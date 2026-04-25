@@ -3338,7 +3338,7 @@ function renderActiveGame() {
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
         <div class="round-badge pulse">⚔ Round ${g.round} of 5 — ${escH(g.players[g.turnOrder[g.turnIdx]].name)}'s Turn</div>
         <div class="btn-row">
-          ${(()=>{ const activePi=g.turnOrder[g.turnIdx]; const activeName=escH(g.players[activePi].name||('Player '+(activePi+1))); const myTurn=!_mpActive||_mpPlayerIdx<0||_mpPlayerIdx===activePi; return myTurn ? \`<button class="btn btn-p btn-sm" onclick="endTurn()">End \${activeName}'s Turn ▶</button>\` : \`<button class="btn btn-sm" disabled style="opacity:0.45;cursor:not-allowed" title="It's \${activeName}'s turn to end their turn">Waiting for \${activeName}…</button>\`; })()}
+          ${(()=>{ const activePi=g.turnOrder[g.turnIdx]; const activeName=escH(g.players[activePi].name||('Player '+(activePi+1))); const myTurn=!_mpActive||_mpPlayerIdx<0||_mpPlayerIdx===activePi; if(myTurn) return '<button class="btn btn-p btn-sm" onclick="endTurn()">End '+activeName+'’s Turn ▶</button>'; return '<button class="btn btn-sm" disabled style="opacity:0.45;cursor:not-allowed">Waiting for '+activeName+'…</button>'; })()}
           <button class="btn btn-d btn-sm" onclick="endGame()">End Game</button>
           ${_mpActive ? `<span class="mp-room-badge" style="background:#1a3a1a;border:1px solid #2ecc71;color:#2ecc71;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700;letter-spacing:1px;transition:background 0.3s">🟢 ${_mpRoom}</span>` : `<button class="btn btn-g btn-sm" onclick="mpShowPanel()" title="Go Online">🌐</button>`}
         </div>
