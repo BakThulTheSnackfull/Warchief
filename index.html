@@ -1265,6 +1265,7 @@ let S = { units:[], armies:[], rules:[], objectives:{primary:[],secondary:[]},
 // ── MULTIPLAYER STATE ─────────────────────────────────────
 let _fbApp = null, _fbDb = null, _mpActive = false, _mpRoom = null, _mpRole = null, _mpPlayerIdx = -1;
 let _mpClientId = Math.random().toString(36).slice(2); // unique per browser tab
+let _mpHighSeq = 0; // high-water mark: highest _stateSeq we have ever processed — never goes down
 let _TOOLTIPS = {}; // merged: built-in WEAPON_TOOLTIPS + user S.weaponRules
 let _dsFilt = 'All', _ruCat = 'All', _obCat = 'All';
 let _currentArmy = null;
@@ -1314,7 +1315,8 @@ function save() {
 function saveGame() {
   save();
   if (_mpActive && _fbDb && _mpRoom && S.game) {
-    S.game._stateSeq = (S.game._stateSeq || 0) + 1; // increment BEFORE push so stale-echo check has a reference
+    S.game._stateSeq = (S.game._stateSeq || 0) + 1;
+    _mpHighSeq = S.game._stateSeq; // our own push sets the high-water mark immediately
     const payload = Object.assign({}, S.game, {_mp_sender: _mpClientId});
     _fbDb.ref('rooms/' + _mpRoom + '/game').set(payload).catch(e => {
       console.error('[MP] sync failed:', e);
@@ -4298,8 +4300,10 @@ function _mpGenCode() {
 
 function _mpApplyGame(g) {
   if (!g || g._mp_sender === _mpClientId) return; // echo from ourselves — skip
-  // Reject stale Firebase re-fires: if incoming sequence is older than what we already have locally, ignore it
-  if (g._stateSeq && S.game && S.game._stateSeq && g._stateSeq <= S.game._stateSeq) return;
+  // Reject stale Firebase re-fires using the high-water mark (never goes down, survives S.game replacements)
+  const _inSeq = g._stateSeq || 0;
+  if (_inSeq > 0 && _inSeq <= _mpHighSeq) return;
+  if (_inSeq > _mpHighSeq) _mpHighSeq = _inSeq;
   // Game-over signal from another device
   if (g._mp_game_over) {
     if (S.game) {
@@ -4416,7 +4420,7 @@ function mpLeaveRoom() {
       _fbDb.ref('rooms/' + _mpRoom + '/setup').off();
     } catch(e) {}
   }
-  _mpActive = false; _mpRoom = null; _mpRole = null; _mpPlayerIdx = -1;
+  _mpActive = false; _mpRoom = null; _mpRole = null; _mpPlayerIdx = -1; _mpHighSeq = 0;
   _mpUpdateSetupUI();
   toast('Disconnected from room');
   if (S.game) renderActiveGame();
