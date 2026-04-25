@@ -3458,7 +3458,8 @@ function renderPlayerPanel(p, pi, isActive) {
   }
 
   const vpTotal = p.scores.reduce((a,b)=>a+b,0);
-  const curRoundVP = p.scores[g.round-1]||0;
+  const curRound = S.game ? S.game.round : 1;
+  const curRoundVP = p.scores[curRound-1]||0;
   return `<div class="player-panel${isActive?' active-turn':''}">
     ${isActive ? '<div class="active-turn-banner">⚔ Active Turn</div>' : ''}
     <div class="panel-hdr">
@@ -3468,9 +3469,9 @@ function renderPlayerPanel(p, pi, isActive) {
       </div>
       <div class="vp-badge">🏆 ${vpTotal} VP</div>
     </div>
-    <div class="section-hdr" style="margin-top:10px">Victory Points — Round ${g.round}</div>
+    <div class="section-hdr" style="margin-top:10px">Victory Points — Round ${curRound}</div>
     <div class="vp-quick-row">
-      <span class="vp-quick-label">Round ${g.round} VP:</span>
+      <span class="vp-quick-label">Round ${curRound} VP:</span>
       <button class="vp-counter-btn" onclick="addVP(${pi},-1)">−</button>
       <span class="vp-counter-val">${curRoundVP}</span>
       <button class="vp-counter-btn" onclick="addVP(${pi},1)">+</button>
@@ -3965,8 +3966,12 @@ function endGame() {
   const winner = totals[0];
   addLog(`⚔ GAME OVER — ${winner.name} wins with ${winner.vp} VP!`, 0);
   toast(`Game Over! ${winner.name} wins with ${winner.vp} VP`);
+  // Signal other devices before we null S.game (saveGame skips push when game is null)
+  if (_mpActive && _fbDb && _mpRoom) {
+    _fbDb.ref('rooms/' + _mpRoom + '/game').set({_mp_game_over: true, _mp_sender: _mpClientId});
+  }
   setTimeout(() => {
-    S.game = null; saveGame();
+    S.game = null; save();
     document.getElementById('gt-active').style.display = 'none';
     renderGameSetup();
   }, 3000);
@@ -4292,6 +4297,23 @@ function _mpGenCode() {
 
 function _mpApplyGame(g) {
   if (!g || g._mp_sender === _mpClientId) return; // echo from ourselves — skip
+  // Game-over signal from another device
+  if (g._mp_game_over) {
+    if (S.game) {
+      const totals = S.game.players.map(p=>({name:p.name, vp:p.scores.reduce((a,b)=>a+b,0)}));
+      totals.sort((a,b)=>b.vp-a.vp);
+      const winner = totals[0];
+      toast('Game Over! ' + winner.name + ' wins with ' + winner.vp + ' VP');
+    } else {
+      toast('The host ended the game.');
+    }
+    setTimeout(() => {
+      S.game = null; save();
+      document.getElementById('gt-active').style.display = 'none';
+      renderGameSetup();
+    }, 3000);
+    return;
+  }
   const clean = Object.assign({}, g);
   delete clean._mp_sender;
   S.game = clean;
