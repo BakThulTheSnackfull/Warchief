@@ -439,6 +439,28 @@ select.inp{cursor:pointer}
 .codex-spend-btn{padding:3px 8px;border-radius:4px;background:var(--sur);border:1px solid var(--bdr);color:var(--ts);font-size:11px;cursor:pointer;transition:all .15s;white-space:nowrap}
 .codex-spend-btn:hover:not(:disabled){background:var(--fp);color:var(--bg);border-color:var(--fp)}
 .codex-spend-btn:disabled{opacity:0.4;cursor:not-allowed}
+/* ── PERSONAL TRACKER ── */
+.pt-header{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--bdr)}
+.pt-title{font-family:var(--fd);font-size:18px;font-weight:700;color:var(--ft);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pt-stat-chip{background:var(--card);border:1px solid var(--bdr);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--ts);text-align:center;white-space:nowrap}
+.pt-stat-chip strong{display:block;font-size:16px;color:var(--ft);line-height:1.2}
+.pt-tabs{display:flex;gap:4px;margin-bottom:12px;border-bottom:1px solid var(--bdr);padding-bottom:0}
+.pt-tab{padding:7px 16px;border-radius:6px 6px 0 0;border:1px solid transparent;border-bottom:none;background:none;color:var(--ts);font-size:13px;cursor:pointer;transition:all .15s;margin-bottom:-1px}
+.pt-tab:hover{background:var(--sur);color:var(--ft)}
+.pt-tab.active{background:var(--bg);color:var(--ft);border-color:var(--bdr);border-bottom-color:var(--bg)}
+.pt-section{display:none}
+.pt-section.active{display:block}
+.pt-unit-card{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:12px;margin-bottom:10px;transition:opacity .2s}
+.pt-unit-card.destroyed{opacity:0.35;border-style:dashed}
+.pt-wound-bar{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+.pt-wound-pips{display:flex;gap:3px;flex-wrap:wrap;flex:1;min-width:0}
+.pt-wound-pip{width:13px;height:13px;border-radius:2px;background:var(--fp);transition:background .1s;flex-shrink:0}
+.pt-wound-pip.lost{background:var(--sur);border:1px solid var(--bdr)}
+.pt-obj-card{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:12px;margin-bottom:8px}
+.pt-obj-card.achieved{border-color:var(--fp)}
+.pt-vp-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0}
+.pt-vp-cell{text-align:center}
+.pt-vp-cell label{font-size:10px;color:var(--ts);display:block;margin-bottom:3px;letter-spacing:.3px}
 
 </style>
 </head>
@@ -497,10 +519,14 @@ select.inp{cursor:pointer}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
     Objectives<span class="badge">Live</span>
   </div>
-  <div class="scat">Battle</div>
-  <div class="ni" id="ni-gt" onclick="nav('gt')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-    Game Tracker<span class="badge p4">Phase 4</span>
+
+  <div class="ni" id="ni-pt" onclick="nav('pt')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    My Tracker<span class="badge">Live</span>
+  </div>
+  <div class="ni" id="ni-mp" onclick="nav('mp')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    Multiplayer<span class="badge p">New</span>
   </div>
 </nav>
 
@@ -520,7 +546,8 @@ select.inp{cursor:pointer}
     <div class="qc" onclick="nav('det')"><div class="qc-icon">🛡️</div><div class="qc-name">Detachments</div><div class="qc-sub">Rules &amp; stratagems</div></div>
     <div class="qc" onclick="nav('ru')"><div class="qc-icon">📖</div><div class="qc-name">Rules</div><div class="qc-sub">Phase &amp; mechanic reference</div></div>
     <div class="qc" onclick="nav('ob')"><div class="qc-icon">🎯</div><div class="qc-name">Objectives</div><div class="qc-sub">Primary &amp; secondary</div></div>
-    <div class="qc" onclick="nav('gt')"><div class="qc-icon">⚡</div><div class="qc-name">Game Tracker</div><div class="qc-sub">Track your battle</div></div>
+    <div class="qc" onclick="nav('pt')"><div class="qc-icon">📋</div><div class="qc-name">My Tracker</div><div class="qc-sub">Personal battle log</div></div>
+    <div class="qc" onclick="nav('mp')"><div class="qc-icon">🌐</div><div class="qc-name">Multiplayer</div><div class="qc-sub">Host or join a battle</div></div>
   </div>
   <div class="card">
     <div class="ph2">About WARCHIEF</div>
@@ -542,7 +569,16 @@ select.inp{cursor:pointer}
         <button class="btn btn-g btn-sm" onclick="openPhotoImport()">📷 Photo Import</button>
       </div>
     </div>
-    <div class="srch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input id="ds-search" placeholder="Search units…" oninput="renderDSLib()"></div>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+      <div class="srch" style="flex:1;margin-bottom:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input id="ds-search" placeholder="Search units…" oninput="renderDSLib()"></div>
+      <select class="inp" id="ds-sort" style="width:auto;font-size:12px;padding:6px 8px" onchange="_dsSort=this.value;renderDSLib()">
+        <option value="name-az">Name A→Z</option>
+        <option value="name-za">Name Z→A</option>
+        <option value="pts-asc">Points ↑</option>
+        <option value="pts-desc">Points ↓</option>
+        <option value="recent">Recently Viewed</option>
+      </select>
+    </div>
     <div class="chips" id="ds-chips">
       <div class="chip active" data-f="All" onclick="setDSFilter(this)">All</div>
       <div class="chip" data-f="Orks" onclick="setDSFilter(this)">Orks</div>
@@ -670,185 +706,80 @@ select.inp{cursor:pointer}
   <div class="card-grid" id="ob-secondary"></div>
 </div>
 
-<!-- PAGE: GAME TRACKER -->
-<div class="pg" id="pg-gt">
-  <div id="gt-setup">
-    <h1 class="ph1" style="margin-bottom:16px">Game Tracker</h1>
-    <div id="gt-resume-area"></div>
+<!-- PAGE: MULTIPLAYER -->
+<div class="pg" id="pg-mp">
+  <div id="mp-wrap"></div>
+</div>
+
+<!-- PAGE: PERSONAL TRACKER -->
+<div class="pg" id="pg-pt">
+  <!-- Setup screen -->
+  <div id="pt-setup">
+    <h1 class="ph1" style="margin-bottom:4px">My Tracker</h1>
+    <p style="color:var(--ts);font-size:13px;margin-bottom:16px">Your personal battle cockpit — persists until you clear it.</p>
     <div class="card">
-      <div class="ph2" style="margin-bottom:12px">Game Setup</div>
-      <div class="inp-row">
-        <div class="field"><label>Number of Players</label>
-          <select class="inp" id="gt-numplayers" onchange="renderPlayerSetupRows()">
-            <option value="2">2 Players</option><option value="3">3 Players</option><option value="4">4 Players</option>
-          </select>
-        </div>
-        <div class="field"><label>Points Limit</label>
-          <select class="inp" id="gt-pts">
-            <option value="1000">1000 pts</option><option value="2000" selected>2000 pts</option><option value="3000">3000 pts</option>
-          </select>
-        </div>
-      </div>
-      <div id="gt-player-rows"></div>
-      <div class="inp-row" style="margin-top:10px">
-        <div class="field"><label>Starting CP (per player)</label>
-          <select class="inp" id="gt-startcp" onchange="mpSyncSetup()">
-            <option value="0">0 CP</option><option value="1">1 CP</option><option value="2">2 CP</option>
-            <option value="3">3 CP</option><option value="4">4 CP</option><option value="5">5 CP</option>
-            <option value="6" selected>6 CP</option><option value="7">7 CP</option><option value="8">8 CP</option>
-          </select>
-        </div>
-      </div>
-      <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">
-        <label style="display:flex;gap:8px;align-items:center;cursor:pointer;font-size:13px;color:var(--ts)">
-          <input type="checkbox" id="gt-autopri" checked> Draw primary objective randomly at game start
-        </label>
-        <label style="display:flex;gap:8px;align-items:center;cursor:pointer;font-size:13px;color:var(--ts)">
-          <input type="checkbox" id="gt-autosec" checked> Auto-draw secondary objectives each turn
-        </label>
-        <label style="display:flex;gap:8px;align-items:center;cursor:pointer;font-size:13px;color:var(--ts)">
-          <input type="checkbox" id="gt-autovp" checked> Auto-score VP when units are marked destroyed
-        </label>
-      </div>
+      <div class="ph2" style="margin-bottom:12px">Start a New Session</div>
+      <div class="field"><label>Game Name <span style="color:var(--ts);font-size:11px">(optional)</span></label>
+        <input class="inp" id="pt-gname" placeholder="e.g. League Match vs Marcus"></div>
+      <div class="field" style="margin-top:10px"><label>My Army</label>
+        <select class="inp" id="pt-army-sel" onchange="ptOnArmyChange()">
+          <option value="">— Select army —</option>
+        </select></div>
+      <div class="field" id="pt-det-field" style="margin-top:10px;display:none">
+        <label>My Detachment</label>
+        <select class="inp" id="pt-det-sel"></select></div>
       <div style="margin-top:14px">
-        <div class="ph3" style="margin-bottom:8px">Turn Order</div>
-        <div style="font-size:11px;color:var(--ts);margin-bottom:8px">Drag or use arrows to set who plays first each round.</div>
-        <div id="gt-turn-order"></div>
+        <div class="ph3" style="margin-bottom:6px">Reference Armies <span style="color:var(--ts);font-size:11px">(optional — opponent datasheets for quick lookup)</span></div>
+        <div id="pt-ref-list" style="margin-bottom:6px"></div>
+        <select class="inp" id="pt-ref-add-sel" onchange="ptAddRefArmy()">
+          <option value="">+ Add opponent's army…</option>
+        </select>
+      </div>
+      <button class="btn btn-p" style="width:100%;margin-top:16px" onclick="ptStartSession()">Start Session →</button>
+    </div>
+  </div>
+  <!-- Active session -->
+  <div id="pt-active" style="display:none">
+    <div class="pt-header">
+      <div class="pt-title" id="pt-hdr-name">My Battle</div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <div class="pt-stat-chip">Round<strong id="pt-hdr-round">1</strong></div>
+        <div class="pt-stat-chip" style="display:flex;gap:6px;align-items:center">
+          <button class="btn btn-g btn-sm" style="padding:2px 9px" onclick="ptSetCP(-1)">−</button>
+          <span style="font-size:12px">CP <strong id="pt-hdr-cp" style="font-size:16px">0</strong></span>
+          <button class="btn btn-g btn-sm" style="padding:2px 9px" onclick="ptSetCP(1)">+</button>
+        </div>
+        <div class="pt-stat-chip">VP<strong id="pt-hdr-vp">0</strong></div>
+        <button class="btn btn-g btn-sm" onclick="ptNextRound()">+Round</button>
+        <button class="btn btn-d btn-sm" onclick="ptClearSession()">Clear</button>
       </div>
     </div>
-    <div class="card">
-      <div class="ph2" style="margin-bottom:12px">Import Armies (Optional)</div>
-      <div id="gt-army-imports"></div>
-      <p style="font-size:12px;color:var(--tm);margin-top:8px">Importing an army enables unit tracking and auto-scoring during the game.</p>
+    <div class="pt-tabs">
+      <button class="pt-tab active" id="pt-tab-army" onclick="ptSwitchTab('pt-army')">⚔ My Army</button>
+      <button class="pt-tab" id="pt-tab-objs" onclick="ptSwitchTab('pt-objs')">🎯 Objectives</button>
+      <button class="pt-tab" id="pt-tab-ref" onclick="ptSwitchTab('pt-ref')">📖 Reference</button>
     </div>
-    <button class="btn btn-p btn-full" onclick="startBattle()" style="margin-top:4px">⚡ Start Battle</button>
-    <div id="gt-mp-card" style="display:none;margin-top:8px">
-      <div class="card">
-        <div class="ph2" style="margin-bottom:10px">🌐 Multiplayer</div>
-        <div id="gt-mp-status-panel">
-          <div style="display:flex;gap:8px;margin-bottom:8px">
-            <button class="btn btn-p" style="flex:1" onclick="mpCreateRoom()">+ Create Room</button>
-          </div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <input class="inp" id="gt-joincode" placeholder="Enter code (e.g. WRKZ)" style="flex:1;text-transform:uppercase;letter-spacing:2px;font-weight:600">
-            <button class="btn btn-g" onclick="mpJoinRoom()">Join</button>
-          </div>
-          <p style="font-size:11px;color:var(--ts);margin-top:6px">Create a room and share the 4-letter code with your opponent. They enter it to join and sync the game in real time.</p>
-        </div>
-        <div id="gt-mp-connected" style="display:none">
-          <div style="background:var(--sur);border:1px solid #2ecc71;border-radius:8px;padding:12px">
-            <div style="color:#2ecc71;font-weight:700;font-size:16px;letter-spacing:3px;font-family:var(--fd)" id="gt-mp-code-display">----</div>
-            <div style="font-size:12px;color:var(--ts);margin-top:4px" id="gt-mp-role-label">You created this room</div>
-            <button class="btn btn-d btn-sm" style="margin-top:8px" onclick="mpLeaveRoom()">Disconnect</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div id="pt-army" class="pt-section active"></div>
+    <div id="pt-objs" class="pt-section"></div>
+    <div id="pt-ref" class="pt-section"></div>
   </div>
-  <div id="gt-active" style="display:none"></div>
 </div>
 
-<!-- Weapon Rule Edit Modal -->
-<div class="overlay" id="m-weapon-rule">
-<div class="modal" style="max-width:480px">
-  <div class="modal-hdr">
-    <div class="ph2">Weapon Special Rule</div>
-    <button class="modal-close" onclick="closeModal('m-weapon-rule')">✕</button>
-  </div>
-  <div class="field"><label>Rule Name (e.g. RAPID FIRE 1, SUSTAINED HITS 2)</label>
-    <input class="inp" id="wre-name" placeholder="RULE NAME"></div>
-  <div class="field"><label>Description</label>
-    <textarea class="inp" id="wre-desc" style="min-height:80px" placeholder="Describe what this rule does…"></textarea></div>
-  <p style="font-size:11px;color:var(--ts);margin-bottom:10px">Leave description blank to delete a custom rule.</p>
-  <div style="display:flex;gap:8px;justify-content:flex-end">
-    <button class="btn btn-g" onclick="closeModal('m-weapon-rule')">Cancel</button>
-    <button class="btn btn-p" onclick="saveWeaponRuleEdit()">Save</button>
-  </div>
+<!-- PT: Pick Primary modal -->
+<div class="overlay" id="m-pt-pick-primary">
+<div class="modal" style="max-width:400px">
+  <div class="modal-hdr"><div class="ph2">Pick Primary Objective</div>
+    <button class="modal-close" onclick="closeModal('m-pt-pick-primary')">✕</button></div>
+  <div id="m-pt-pick-primary-list" style="max-height:55vh;overflow-y:auto"></div>
 </div></div>
 
-<!-- Army Export Modal -->
-<div class="overlay" id="m-export">
-<div class="modal" style="max-width:580px">
-  <div class="modal-hdr">
-    <div class="ph2" id="m-export-title">Export Army</div>
-    <button class="modal-close" onclick="closeModal('m-export')">✕</button>
-  </div>
-  <div class="field"><label>Army List (copy &amp; paste anywhere)</label>
-    <textarea class="inp" id="export-text" style="min-height:160px;font-family:monospace;font-size:11px" readonly></textarea>
-    <div style="display:flex;gap:6px;margin-top:6px">
-      <button class="btn btn-g btn-sm" onclick="copyExportText('export-text')">📋 Copy Text</button>
-      <button class="btn btn-g btn-sm" onclick="printArmyExport()">🖨 Print</button>
-    </div>
-  </div>
-  <div class="field" style="margin-top:10px"><label>Share Code (paste into WARCHIEF on another device to import)</label>
-    <textarea class="inp" id="export-code" style="min-height:60px;font-family:monospace;font-size:10px;word-break:break-all" readonly></textarea>
-    <button class="btn btn-g btn-sm" style="margin-top:6px" onclick="copyExportText('export-code')">📋 Copy Code</button>
-  </div>
-  <div class="field" style="margin-top:10px"><label>Import from Share Code</label>
-    <div style="display:flex;gap:6px">
-      <input class="inp" id="import-code-input" placeholder="Paste share code here…" style="flex:1">
-      <button class="btn btn-p btn-sm" onclick="importFromCode()">Import</button>
-    </div>
-  </div>
+<!-- PT: Pick Secondary modal -->
+<div class="overlay" id="m-pt-pick-sec">
+<div class="modal" style="max-width:400px">
+  <div class="modal-hdr"><div class="ph2">Pick Secondary Objective</div>
+    <button class="modal-close" onclick="closeModal('m-pt-pick-sec')">✕</button></div>
+  <div id="m-pt-pick-sec-list" style="max-height:55vh;overflow-y:auto"></div>
 </div></div>
-
-<!-- Detachment Edit Modal -->
-<div class="overlay" id="m-det-edit">
-<div class="modal" style="max-width:680px;width:96vw;max-height:88vh;display:flex;flex-direction:column">
-  <div class="modal-hdr" style="flex-shrink:0">
-    <div class="ph2" id="m-det-edit-title">Edit Detachment</div>
-    <button class="modal-close" onclick="closeModal('m-det-edit')">✕</button>
-  </div>
-  <div id="m-det-edit-body" style="flex:1;overflow-y:auto;padding-right:4px"></div>
-  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap;flex-shrink:0;padding-top:10px;border-top:1px solid var(--bdr)">
-    <button class="btn btn-d btn-sm" id="det-edit-delete-btn" onclick="deleteDetEdit()">🗑 Delete Detachment</button>
-    <button class="btn btn-g" onclick="closeModal('m-det-edit')">Cancel</button>
-    <button class="btn btn-p" onclick="saveDetEdit()">💾 Save Detachment</button>
-  </div>
-</div></div>
-
-<!-- Army Rule Edit Modal -->
-<div class="overlay" id="m-xar-edit">
-<div class="modal" style="max-width:520px">
-  <div class="modal-hdr">
-    <div class="ph2" id="m-xar-title">Extra Army Rule</div>
-    <button class="modal-close" onclick="closeModal('m-xar-edit')">✕</button>
-  </div>
-  <input type="hidden" id="xar-faction">
-  <input type="hidden" id="xar-idx">
-  <div class="field"><label>Rule Name</label><input class="inp" id="xar-name" placeholder="e.g. Shadow in the Warp"></div>
-  <div class="field"><label>Description</label><textarea class="inp" id="xar-desc" style="min-height:90px" placeholder="Full rule text…"></textarea></div>
-  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
-    <button class="btn btn-g" onclick="closeModal('m-xar-edit')">Cancel</button>
-    <button class="btn btn-p" onclick="saveXarEdit()">💾 Save</button>
-  </div>
-</div></div>
-
-<div class="overlay" id="m-army-rule-edit">
-<div class="modal" style="max-width:520px">
-  <div class="modal-hdr">
-    <div class="ph2" id="m-arre-title">Edit Army Rule</div>
-    <button class="modal-close" onclick="closeModal('m-army-rule-edit')">✕</button>
-  </div>
-  <div class="field"><label>Rule Name</label><input class="inp" id="arre-name"></div>
-  <div class="field"><label>Description</label><textarea class="inp" id="arre-desc" style="min-height:90px"></textarea></div>
-  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
-    <button class="btn btn-g" onclick="closeModal('m-army-rule-edit')">Cancel</button>
-    <button class="btn btn-p" onclick="saveArmyRuleEdit()">💾 Save Rule</button>
-  </div>
-</div></div>
-
-<!-- Codex Modal (Feature 5) -->
-<div class="overlay" id="m-codex">
-<div class="modal codex-modal" style="max-width:700px;width:95vw">
-  <div class="modal-hdr">
-    <div class="ph2" id="m-codex-title">Player Codex</div>
-    <button class="modal-close" onclick="closeModal('m-codex')">✕</button>
-  </div>
-  <div class="codex-tabs" id="codex-tabs"></div>
-  <div id="codex-body" style="max-height:65vh;overflow-y:auto"></div>
-</div>
-</div>
 
 <!-- PAGE: SETTINGS -->
 <div class="pg" id="pg-settings">
@@ -1271,14 +1202,19 @@ const WEAPON_TOOLTIPS = {"ANTI-INFANTRY 4": "An unmodified Wound roll of 4+ agai
 
 // ── STATE ───────────────────────────────────────────────
 let S = { units:[], armies:[], rules:[], objectives:{primary:[],secondary:[]},
-          theme:'n', apiKey:'', game:null, lastSetup:null, weaponRules:{}, fbConfig:null };
+          theme:'n', apiKey:'', pt:null, weaponRules:{}, fbConfig:null };
 // ── MULTIPLAYER STATE ─────────────────────────────────────
-let _fbApp = null, _fbDb = null, _mpActive = false, _mpRoom = null, _mpRole = null, _mpPlayerIdx = -1;
+let _fbApp = null, _fbDb = null; // Firebase — populated when MP session connects
 let _mpClientId = Math.random().toString(36).slice(2); // unique per browser tab
-let _mpHighSeq = 0;     // high-water mark: highest _stateSeq we have ever processed — never goes down
-let _mpTurnHighSeq = 0; // high-water mark for the /turns counter — prevents double-advance on local device
+let _mpSession = null;     // { code, role, playerId, status, playerCount, points }
+let _mpLobbyData = null;   // { meta:{}, players:{}, primaryObj } — live from Firebase
+let _mpListeners = [];     // { ref, ev, fn } triples for cleanup on leave
+let _mpActiveTab = 'battle'; // 'battle' | 'datasheets' — active sub-tab in live view
+let _mpViewPid   = null;     // player ID whose datasheets are currently shown
 let _TOOLTIPS = {}; // merged: built-in WEAPON_TOOLTIPS + user S.weaponRules
 let _dsFilt = 'All', _ruCat = 'All', _obCat = 'All';
+let _dsSort = 'name-az';   // current sort mode for datasheets
+let _dsRecentIds = [];     // unit IDs in most-recently-viewed order
 let _currentArmy = null;
 let _aiResult = null, _photoResult = null, _photoB64 = null;
 let _swapSelected = null;
@@ -1301,8 +1237,7 @@ function load() {
   S.objectives = JSON.parse(localStorage.getItem('wc_objs')   || 'null') || JSON.parse(JSON.stringify(DEFAULT_OBJECTIVES));
   S.theme      = localStorage.getItem('wc_theme') || 'n';
   S.apiKey     = localStorage.getItem('wc_key')   || '';
-  S.game       = JSON.parse(localStorage.getItem('wc_game')   || 'null');
-  S.lastSetup  = JSON.parse(localStorage.getItem('wc_last_setup') || 'null');
+  S.pt         = JSON.parse(localStorage.getItem('wc_pt')     || 'null');
   S.weaponRules = JSON.parse(localStorage.getItem('wc_weapon_rules') || '{}');
   S.fbConfig    = JSON.parse(localStorage.getItem('wc_fbconfig')     || 'null');
   _TOOLTIPS = Object.assign({}, WEAPON_TOOLTIPS, S.weaponRules);
@@ -1320,20 +1255,10 @@ function save() {
   if (S.apiKey)   localStorage.setItem('wc_key',      S.apiKey);
   if (S.fbConfig) localStorage.setItem('wc_fbconfig', JSON.stringify(S.fbConfig));
   localStorage.setItem('wc_weapon_rules', JSON.stringify(S.weaponRules||{}));
-  if (S.game)   localStorage.setItem('wc_game', JSON.stringify(S.game));
-  else          localStorage.removeItem('wc_game');
+  if (S.pt)     localStorage.setItem('wc_pt',   JSON.stringify(S.pt));
+  else          localStorage.removeItem('wc_pt');
 }
-function saveGame() {
-  save();
-  if (_mpActive && _fbDb && _mpRoom && S.game) {
-    S.game._stateSeq = (S.game._stateSeq || 0) + 1;
-    _mpHighSeq = S.game._stateSeq; // our own push sets the high-water mark immediately
-    const payload = Object.assign({}, S.game, {_mp_sender: _mpClientId});
-    _fbDb.ref('rooms/' + _mpRoom + '/game').set(payload).catch(e => {
-      console.error('[MP] sync failed:', e);
-    });
-  }
-}
+
 
 // ── THEME ────────────────────────────────────────────────
 function applyTheme(t) {
@@ -1355,7 +1280,7 @@ function nav(page) {
   if (page === 'settings') { const s = document.getElementById('ni-settings'); if(s) s.classList.add('active'); }
   const renders = { home:null, ds:renderDSLib, ab:renderArmies, sc:renderShowcase,
                     det:renderDetachments, ru:renderRules, ob:renderObjectives,
-                    gt:renderGameSetup, settings:renderSettings };
+                    pt:renderPT, mp:renderMP, settings:renderFbStatus };
   if (renders[page]) renders[page]();
 }
 
@@ -1483,13 +1408,27 @@ function renderRuleContent(content, cat) {
 // ── DATASHEETS ───────────────────────────────────────────
 function renderDSLib() {
   const q = (document.getElementById('ds-search')||{value:''}).value.toLowerCase();
-  let units = S.units;
+  let units = [...S.units];
   if (_dsFilt !== 'All') units = units.filter(u => u.faction === _dsFilt);
   if (q) units = units.filter(u =>
     u.name.toLowerCase().includes(q) ||
     u.faction.toLowerCase().includes(q) ||
     (u.keywords||[]).some(k => k.toLowerCase().includes(q))
   );
+  // Apply sort
+  if (_dsSort === 'name-az') units.sort((a,b) => a.name.localeCompare(b.name));
+  else if (_dsSort === 'name-za') units.sort((a,b) => b.name.localeCompare(a.name));
+  else if (_dsSort === 'pts-asc') units.sort((a,b) => (a.pts||0) - (b.pts||0));
+  else if (_dsSort === 'pts-desc') units.sort((a,b) => (b.pts||0) - (a.pts||0));
+  else if (_dsSort === 'recent') {
+    units.sort((a,b) => {
+      const ai = _dsRecentIds.indexOf(a.id), bi = _dsRecentIds.indexOf(b.id);
+      if (ai === -1 && bi === -1) return a.name.localeCompare(b.name);
+      if (ai === -1) return 1;
+      if (bi === -1) return -1;
+      return ai - bi; // lower index = more recent
+    });
+  }
   const grid = document.getElementById('ds-grid');
   if (!grid) return;
   if (!units.length) { grid.innerHTML = '<div style="color:var(--ts);padding:20px">No units found.</div>'; return; }
@@ -1530,6 +1469,8 @@ function setDSFilter(el) {
 function showUnitDetail(id) {
   const u = S.units.find(x=>x.id===id);
   if (!u) return;
+  // Track recently viewed (most recent at front)
+  _dsRecentIds = [id, ..._dsRecentIds.filter(x => x !== id)].slice(0, 50);
   document.getElementById('ds-lib').style.display = 'none';
   const d = document.getElementById('ds-detail');
   d.style.display = 'block';
@@ -3133,1437 +3074,593 @@ function deleteObjective(id) {
   save(); renderObjectives(); toast('Objective deleted');
 }
 
-// ── GAME TRACKER ─────────────────────────────────────────
-function renderGameSetup() {
-  document.getElementById('gt-setup').style.display = 'block';
-  document.getElementById('gt-active').style.display = 'none';
-  // Feature 6: Show Resume Game card if a game is in progress
-  const ra = document.getElementById('gt-resume-area');
-  if (ra) {
-    if (S.game) {
-      const g = S.game;
-      const totals = g.players.map(p=>({name:p.name, vp:p.scores.reduce((a,b)=>a+b,0)}));
-      ra.innerHTML = `<div class="resume-card">
-        <div class="resume-title">⚔ Game in Progress — Round ${g.round} of 5</div>
-        <div class="resume-info">${totals.map(t=>`${escH(t.name)}: ${t.vp} VP`).join(' · ')}</div>
-        <div class="btn-row">
-          <button class="btn btn-p" onclick="resumeGame()">▶ Resume Game</button>
-          <button class="btn btn-d btn-sm" onclick="abandonGame()">✕ Abandon</button>
-        </div>
-      </div>`;
-    } else if (S.lastSetup) {
-      const names = S.lastSetup.map(p=>escH(p.name)).join(' vs ');
-      ra.innerHTML = `<div class="rematch-card">
-        <div class="resume-title" style="color:var(--tp)">🔁 Rematch Available</div>
-        <div class="resume-info" style="color:var(--ts)">${names}</div>
-        <div class="btn-row">
-          <button class="btn btn-g btn-sm" onclick="fillRematch()">Load Previous Players</button>
-          <button class="btn btn-g btn-sm" onclick="S.lastSetup=null;localStorage.removeItem('wc_last_setup');renderGameSetup()">✕ Clear</button>
-        </div>
-      </div>`;
-    } else {
-      ra.innerHTML = '';
-    }
-  }
-  renderPlayerSetupRows();
-  renderArmyImportRows();
-  // Show MP card if Firebase is configured
-  const mpCard = document.getElementById('gt-mp-card');
-  if (mpCard) {
-    mpCard.style.display = S.fbConfig?.apiKey ? '' : 'none';
-    if (_mpActive) _mpUpdateSetupUI();
+// ══════════════════════════════════════════════════════════════
+// PERSONAL TRACKER
+// ══════════════════════════════════════════════════════════════
+
+let _ptTab = 'pt-army';      // currently active PT sub-tab
+let _ptRefArmyIds = [];      // temp list of reference army IDs during setup
+
+function ptSave() {
+  if (S.pt) localStorage.setItem('wc_pt', JSON.stringify(S.pt));
+  else localStorage.removeItem('wc_pt');
+  // Mirror CP, VP, secondaries to Firebase when in an active MP session
+  if (_mpSession?.status === 'active' && _fbDb && S.pt) _mpSyncPTToFb();
+}
+
+function renderPT() {
+  const setup  = document.getElementById('pt-setup');
+  const active = document.getElementById('pt-active');
+  if (!setup || !active) return;
+  if (!S.pt) {
+    setup.style.display  = '';
+    active.style.display = 'none';
+    _ptRefArmyIds = [];
+    ptFillSetupForm();
+  } else {
+    setup.style.display  = 'none';
+    active.style.display = '';
+    renderPTActive();
   }
 }
-function resumeGame() {
-  document.getElementById('gt-setup').style.display = 'none';
-  renderActiveGame();
+
+function ptFillSetupForm() {
+  const armySel = document.getElementById('pt-army-sel');
+  const refSel  = document.getElementById('pt-ref-add-sel');
+  if (!armySel) return;
+  const opts = S.armies.map(a =>
+    '<option value="' + a.id + '">' + escH(a.name || 'Unnamed') + ' (' + escH(a.faction || '') + ')</option>'
+  ).join('');
+  armySel.innerHTML = '<option value="">— Select army —</option>' + opts;
+  if (refSel) refSel.innerHTML = '<option value="">+ Add opponent\'s army…</option>' + opts;
+  ptOnArmyChange();
+  ptRenderRefList();
 }
-function abandonGame() {
-  if (!confirm('Abandon current game? All progress will be lost.')) return;
-  S.game = null; saveGame();
-  document.getElementById('gt-resume-area').innerHTML = '';
-  toast('Game abandoned');
+
+function ptOnArmyChange() {
+  const armySel = document.getElementById('pt-army-sel');
+  const detField = document.getElementById('pt-det-field');
+  const detSel   = document.getElementById('pt-det-sel');
+  if (!armySel || !detField || !detSel) return;
+  const army = S.armies.find(a => String(a.id) === armySel.value);
+  if (!army || !army.faction) { detField.style.display = 'none'; return; }
+  const fd   = FACTION_DATA[army.faction];
+  const dets = fd ? (fd.detachments || []) : [];
+  if (!dets.length) { detField.style.display = 'none'; return; }
+  detSel.innerHTML = dets.map((d, i) =>
+    '<option value="' + i + '">' + escH(d.name || 'Detachment ' + (i + 1)) + '</option>'
+  ).join('');
+  detField.style.display = '';
 }
-function renderPlayerSetupRows() {
-  const n = parseInt(document.getElementById('gt-numplayers').value)||2;
-  const allFactions = Object.keys(FACTION_DATA).concat(['Other']).filter((f,i,a)=>a.indexOf(f)===i);
-  const factOpts = allFactions.map(f=>`<option>${escH(f)}</option>`).join('');
-  document.getElementById('gt-player-rows').innerHTML = Array.from({length:n},(_,i)=>`
-    <div class="inp-row" style="margin-top:8px">
-      <div class="field"><label>Player ${i+1} Name</label>
-        <input class="inp" id="gt-pname-${i}" placeholder="Player ${i+1}" oninput="mpSyncSetup()">
-      </div>
-      <div class="field"><label>Faction</label>
-        <select class="inp" id="gt-pfact-${i}" onchange="mpSyncSetup()">${factOpts}</select>
-      </div>
-    </div>`).join('');
-  // set defaults
-  ['Orks','Dark Angels','Tyranids','Death Guard'].forEach((f,i)=>{
-    const sel = document.getElementById('gt-pfact-'+i);
-    if (sel) sel.value = f;
-  });
-  renderArmyImportRows();
-  renderTurnOrderSetup();
+
+function ptAddRefArmy() {
+  const sel = document.getElementById('pt-ref-add-sel');
+  if (!sel || !sel.value) return;
+  const id = parseInt(sel.value);
+  if (_ptRefArmyIds.includes(id)) { toast('Already added'); sel.value = ''; return; }
+  _ptRefArmyIds.push(id);
+  ptRenderRefList();
+  sel.value = '';
 }
-let _setupTurnOrder = [0,1,2,3]; // player index ordering
-function renderTurnOrderSetup() {
-  const el = document.getElementById('gt-turn-order'); if (!el) return;
-  const n = parseInt(document.getElementById('gt-numplayers').value)||2;
-  _setupTurnOrder = _setupTurnOrder.filter(i=>i<n);
-  while (_setupTurnOrder.length < n) _setupTurnOrder.push(_setupTurnOrder.length);
-  const ordinals = ['1st','2nd','3rd','4th'];
-  el.innerHTML = _setupTurnOrder.map((pi,pos)=>{
-    const name = document.getElementById('gt-pname-'+pi)?.value || ('Player '+(pi+1));
-    return '<div class="turn-order-row">'
-      + '<div class="turn-pos">' + ordinals[pos] + '</div>'
-      + '<div class="turn-name">' + escH(name) + '</div>'
-      + (pos>0 ? '<button class="turn-mv-btn" onclick="moveTurnOrder('+pos+',-1)">▲</button>' : '<button class="turn-mv-btn" style="opacity:.3" disabled>▲</button>')
-      + (pos<n-1 ? '<button class="turn-mv-btn" onclick="moveTurnOrder('+pos+',1)">▼</button>' : '<button class="turn-mv-btn" style="opacity:.3" disabled>▼</button>')
+
+function ptRemoveRefArmy(id) {
+  _ptRefArmyIds = _ptRefArmyIds.filter(x => x !== id);
+  ptRenderRefList();
+}
+
+function ptRenderRefList() {
+  const list = document.getElementById('pt-ref-list');
+  if (!list) return;
+  list.innerHTML = _ptRefArmyIds.map(id => {
+    const a = S.armies.find(x => x.id === id);
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">'
+      + '<span style="font-size:13px;flex:1">' + escH(a ? (a.name || 'Army ' + id) : 'Army ' + id) + '</span>'
+      + '<button class="btn btn-d btn-sm" onclick="ptRemoveRefArmy(' + id + ')">Remove</button>'
       + '</div>';
   }).join('');
 }
-function moveTurnOrder(pos, dir) {
-  const swap = pos + dir;
-  const n = parseInt(document.getElementById('gt-numplayers').value)||2;
-  if (swap < 0 || swap >= n) return;
-  [_setupTurnOrder[pos], _setupTurnOrder[swap]] = [_setupTurnOrder[swap], _setupTurnOrder[pos]];
-  renderTurnOrderSetup();
-}
-function renderArmyImportRows() {
-  const n = parseInt((document.getElementById('gt-numplayers')||{value:'2'}).value)||2;
-  const armyOpts = ['<option value="">— None —</option>',
-    ...S.armies.map(a=>`<option value="${a.id}">${escH(a.name)} (${escH(a.faction)})</option>`)].join('');
-  const el = document.getElementById('gt-army-imports');
-  if (!el) return;
-  el.innerHTML = Array.from({length:n},(_,i)=>`
-    <div class="inp-row" style="margin-bottom:6px">
-      <div style="font-size:13px;color:var(--ts);display:flex;align-items:center">Player ${i+1}</div>
-      <select class="inp" id="gt-army-${i}" onchange="mpSyncSetup()">${armyOpts}</select>
-    </div>`).join('');
-}
-function startBattle() {
-  const n = parseInt(document.getElementById('gt-numplayers').value)||2;
-  const startingCp = parseInt(document.getElementById('gt-startcp')?.value)||0;
-  const turnOrder = _setupTurnOrder.filter(i=>i<n).slice(0,n);
-  if (turnOrder.length < n) { for(let i=0;i<n;i++) if(!turnOrder.includes(i)) turnOrder.push(i); }
-  const players = Array.from({length:n},(_,i)=>({
-    name: document.getElementById('gt-pname-'+i)?.value || 'Player '+(i+1),
-    faction: document.getElementById('gt-pfact-'+i)?.value || 'Unknown',
-    cp: startingCp, cpSpent: 0,
-    scores: [0,0,0,0,0],
-    secObjs: [], secDrawn: false,
-    infantryKilled: 0,
-    armyId: document.getElementById('gt-army-'+i)?.value || '',
-    units: [], usedStrats: []
-  }));
-  // populate units from armies
-  players.forEach(p => {
-    if (!p.armyId) return;
-    const army = S.armies.find(a=>String(a.id)===String(p.armyId));
-    if (!army) return;
-    army.units.forEach(au => {
-      const u = S.units.find(x=>x.id===au.id);
-      if (!u) return;
-      for (let c=0; c<au.count; c++) {
-        p.units.push({
-          uid: u.id, name: u.name,
-          startingW: parseInt(u.stats?.W)||1,
-          startingModels: parseInt((u.models||'1').split('-')[0])||1,
-          currentW: parseInt(u.stats?.W)||1,
-          currentModels: parseInt((u.models||'1').split('-')[0])||1,
-          keywords: u.keywords||[],
-          state: 'alive', isWarlord: false,
-          instanceId: genId(), usedAbils: {},
-          subModels: (u.subModels||[]).map(sm=>({
-            name:sm.name, count:sm.count||1,
-            startingW:parseInt(sm.stats?.W)||1, currentW:parseInt(sm.stats?.W)||1,
-            startingModels:sm.count||1, currentModels:sm.count||1, state:'alive'           }))
-        });
-      }
-    });
+
+function ptStartSession() {
+  const armySel = document.getElementById('pt-army-sel');
+  const detSel  = document.getElementById('pt-det-sel');
+  const gnameEl = document.getElementById('pt-gname');
+  if (!armySel || !armySel.value) { toast('Select your army first'); return; }
+  const army = S.armies.find(a => String(a.id) === armySel.value);
+  if (!army) { toast('Army not found'); return; }
+  const detIdx = detSel ? (parseInt(detSel.value) || 0) : 0;
+
+  // Build unit instances
+  const units = [];
+  (army.units || []).forEach(au => {
+    const u = S.units.find(x => x.id === au.id);
+    if (!u) return;
+    const maxW = parseInt(u.stats && u.stats.W) || 1;
+    const maxM = parseInt((u.models || '1').split('-')[0]) || 1;
+    for (let c = 0; c < (au.count || 1); c++) {
+      units.push({ uid: u.id, name: u.name, maxWounds: maxW, wounds: maxW, destroyed: false, usedAbils: {}, maxModels: maxM, modelCount: maxM });
+    }
   });
-  const autoPri  = document.getElementById('gt-autopri')?.checked !== false;
-  const autoSec  = document.getElementById('gt-autosec')?.checked !== false;
-  const autoScore= document.getElementById('gt-autovp')?.checked !== false;
-  let priObj = null;
-  if (autoPri && S.objectives.primary.length) {
-    priObj = S.objectives.primary[Math.floor(Math.random()*S.objectives.primary.length)];
+
+  S.pt = {
+    gameName:        (gnameEl && gnameEl.value.trim()) || 'My Battle',
+    myArmyId:        parseInt(armySel.value),
+    myDetachmentIdx: detIdx,
+    opponentArmyIds: [..._ptRefArmyIds],
+    cp:              0,
+    round:           1,
+    vpRounds:        [0, 0, 0, 0, 0],
+    primaryObj:      null,
+    secondaryObjs:   [],
+    units,
+  };
+  _ptRefArmyIds = [];
+  _ptTab = 'pt-army';
+  ptSave();
+  renderPT();
+}
+
+function ptClearSession() {
+  if (!confirm('Clear this session? All tracked data will be lost.')) return;
+  S.pt = null;
+  ptSave();
+  renderPT();
+}
+
+function ptNextRound() {
+  if (!S.pt) return;
+  if (S.pt.round >= 5) { toast('Already at round 5 — last round'); return; }
+  S.pt.round++;
+  ptSave();
+  renderPTActive();
+}
+
+function ptSetCP(delta) {
+  if (!S.pt) return;
+  S.pt.cp = Math.max(0, S.pt.cp + delta);
+  ptSave();
+  renderPTActive();
+}
+
+function ptSpendCP(cost) {
+  if (!S.pt) return;
+  if (S.pt.cp < cost) { toast('Not enough CP'); return; }
+  S.pt.cp -= cost;
+  ptSave();
+  renderPTActive();
+}
+
+function ptAddWound(unitIdx, delta) {
+  if (!S.pt) return;
+  const u = S.pt.units[unitIdx];
+  if (!u || u.destroyed) return;
+  u.wounds = Math.max(0, Math.min(u.maxWounds, u.wounds + delta));
+  ptSave();
+  renderPTActive();
+}
+
+function ptAddModel(unitIdx, delta) {
+  if (!S.pt) return;
+  const u = S.pt.units[unitIdx];
+  if (!u || u.destroyed) return;
+  u.modelCount = Math.max(0, Math.min(u.maxModels || 1, (u.modelCount != null ? u.modelCount : u.maxModels || 1) + delta));
+  ptSave();
+  renderPTActive();
+}
+
+function ptDestroyUnit(unitIdx) {
+  if (!S.pt) return;
+  const u = S.pt.units[unitIdx];
+  if (!u) return;
+  u.destroyed = !u.destroyed;
+  u.wounds = u.destroyed ? 0 : u.maxWounds;
+  ptSave();
+  renderPTActive();
+}
+
+function ptToggleSecAchieved(si) {
+  if (!S.pt) return;
+  const sec = S.pt.secondaryObjs[si];
+  if (!sec) return;
+  sec.achieved = !sec.achieved;
+  ptSave();
+  renderPTObjsTab();
+}
+
+function ptSwapSec(si) {
+  if (!S.pt) return;
+  const existIds = new Set(S.pt.secondaryObjs.map(s => s.id));
+  const pool = S.objectives.secondary.filter(o => !existIds.has(o.id));
+  if (!pool.length) { toast('No other secondaries available'); return; }
+  S.pt.secondaryObjs[si] = Object.assign({}, pool[Math.floor(Math.random() * pool.length)], { achieved: false });
+  ptSave();
+  renderPTObjsTab();
+}
+
+function ptShuffleSecondaries() {
+  if (!S.pt) return;
+  const pool = [...S.objectives.secondary];
+  const picked = [];
+  while (picked.length < 2 && pool.length) {
+    const i = Math.floor(Math.random() * pool.length);
+    picked.push(Object.assign({}, pool.splice(i, 1)[0], { achieved: false }));
   }
-  const firstPi = turnOrder[0];
-  S.game = { round:1, turnIdx:0, turnOrder, autoScore, autoSec, priObj, log:[], players, roundNotes:{}, _stateSeq:0 };
-  // Grant +1CP to first player (their Command phase begins)
-  players[firstPi].cp++;
-  addLog(players[firstPi].name + ' gains 1 CP (Command phase — Round 1)', 0);
-  // Save setup for rematch
-  S.lastSetup = players.map(p=>({name:p.name, faction:p.faction, armyId:p.armyId}));
-  localStorage.setItem('wc_last_setup', JSON.stringify(S.lastSetup));
-  if (autoPri && priObj) addLog(`Game started — Primary: ${priObj.name}`, 0);
-  else addLog('Game started', 0);
-  // Draw secondaries only for the first player (others draw on their turn)
-  if (autoSec) drawSecondaries(firstPi);
-  saveGame();
-  document.getElementById('gt-setup').style.display = 'none';
-  renderActiveGame();
-}
-function fillRematch() {
-  if (!S.lastSetup) return;
-  S.lastSetup.forEach((p,i) => {
-    const nameEl = document.getElementById('gt-pname-'+i);
-    const factEl = document.getElementById('gt-pfact-'+i);
-    const armyEl = document.getElementById('gt-army-'+i);
-    if (nameEl) nameEl.value = p.name;
-    if (factEl && p.faction) factEl.value = p.faction;
-    if (armyEl && p.armyId) armyEl.value = p.armyId;
-  });
-  toast('Previous players loaded — edit as needed');
+  S.pt.secondaryObjs = picked;
+  ptSave();
+  renderPTObjsTab();
 }
 
-function renderActiveGame() {
-  const g = S.game; if (!g) return;
-  const el = document.getElementById('gt-active');
-  el.style.display = 'block';
-
-  // Scoreboard
-  const rounds = [1,2,3,4,5];
-  let scoreboard = `<div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table class="score-tbl"><thead><tr><th>Player</th>${rounds.map(r=>`<th>R${r}</th>`).join('')}<th>Total</th></tr></thead><tbody>`;
-  g.players.forEach((p,pi)=>{
-    const total = p.scores.reduce((a,b)=>a+b,0);
-    scoreboard += `<tr><td style="font-weight:700;color:var(--tp);text-align:left;padding-left:8px">${escH(p.name)}<br><span style="font-size:10px;color:var(--ts)">${escH(p.faction)}</span></td>`;
-    p.scores.forEach((sc,ri)=>{
-      scoreboard += `<td><input type="number" class="score-tbl" style="width:40px;background:var(--sur);border:none;color:var(--tp);text-align:center;padding:2px;border-radius:3px" value="${sc}" min="0" onchange="updateScore(${pi},${ri},this.value)"></td>`;
-    });
-    scoreboard += `<td class="score-total">${total}</td></tr>`;
-  });
-  scoreboard += '</tbody></table></div>';
-
-  // Player panels
-  const activePi = g.turnOrder[g.turnIdx];
-  // Sort panels: active player first, then others in turn order
-  const panelOrder = [activePi, ...g.turnOrder.filter(i=>i!==activePi)];
-  const panels = panelOrder.map(pi=>renderPlayerPanel(g.players[pi],pi,pi===activePi)).join('');
-
-  // Log
-  const logHtml = g.log.slice(-30).reverse().map(e=>
-    `<div class="log-entry"><span class="log-r">R${e.round}</span><span>${escH(e.msg)}${e.vp?` <span class="log-vp">+${e.vp}VP</span>`:''}</span></div>`
+function ptOpenPickPrimary() {
+  const list = document.getElementById('m-pt-pick-primary-list');
+  if (!list) return;
+  list.innerHTML = S.objectives.primary.map(o =>
+    '<button class="btn btn-g" style="width:100%;text-align:left;margin-bottom:6px;padding:10px" onclick="ptPickPrimary(' + o.id + ')">'
+    + '<strong>' + escH(o.name) + '</strong>'
+    + '<div style="font-size:11px;color:var(--ts);margin-top:2px">' + escH(o.desc || o.score || '') + '</div>'
+    + '</button>'
   ).join('');
-
-  el.innerHTML = `
-    <div class="card" style="margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-        <div class="round-badge pulse">⚔ Round ${g.round} of 5 — ${escH(g.players[g.turnOrder[g.turnIdx]].name)}'s Turn</div>
-        <div class="btn-row">
-          ${(()=>{ const activePi=g.turnOrder[g.turnIdx]; const activeName=escH(g.players[activePi].name||('Player '+(activePi+1))); const myTurn=!_mpActive||_mpPlayerIdx<0||_mpPlayerIdx===activePi; if(myTurn) return '<button class="btn btn-p btn-sm" onclick="endTurn()">End '+activeName+'’s Turn ▶</button>'; return '<button class="btn btn-sm" disabled style="opacity:0.45;cursor:not-allowed">Waiting for '+activeName+'…</button>'; })()}
-          <button class="btn btn-d btn-sm" onclick="endGame()">End Game</button>
-          ${_mpActive ? `<span class="mp-room-badge" style="background:#1a3a1a;border:1px solid #2ecc71;color:#2ecc71;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700;letter-spacing:1px;transition:background 0.3s">🟢 ${_mpRoom}</span>` : `<button class="btn btn-g btn-sm" onclick="mpShowPanel()" title="Go Online">🌐</button>`}
-        </div>
-      </div>
-      ${g.priObj ? `<div class="sec-obj-card" style="margin-top:12px;border-left-color:var(--blue)">
-        <div style="font-size:10px;color:var(--blue);font-weight:700;margin-bottom:2px">PRIMARY OBJECTIVE</div>
-        <div class="sec-obj-name">${escH(g.priObj.name)}</div>
-        <div class="sec-obj-score">${escH(g.priObj.score)}</div>
-      </div>` : ''}
-      <div style="margin-top:10px">
-        <div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;margin-bottom:4px">ROUND ${g.round} NOTES</div>
-        <textarea class="inp" style="min-height:46px;font-size:12px;width:100%;box-sizing:border-box" placeholder="Jot anything down for this round…" onblur="saveRoundNote(this.value)">${escH((g.roundNotes||{})[g.round]||'')}</textarea>
-      </div>
-    </div>
-    <div class="card" style="margin-bottom:12px">
-      <div class="ph2" style="margin-bottom:10px">Scoreboard</div>
-      ${scoreboard}
-    </div>
-    ${panels}
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <div class="ph2">Battle Log</div>
-        <button class="btn btn-g btn-sm" onclick="clearLog()">Clear</button>
-      </div>
-      <div style="max-height:180px;overflow-y:auto">${logHtml||'<div style="color:var(--tm);font-size:12px">No entries yet.</div>'}</div>
-    </div>`;
+  document.getElementById('m-pt-pick-primary').classList.add('open');
 }
 
-function renderPlayerPanel(p, pi, isActive) {
-  // CP pips (show up to 10)
-  const maxPips = Math.max(10, p.cp+3);
-  const pips = Array.from({length:maxPips},(_,i)=>`<span class="pip ${i<p.cp?'on':''}"></span>`).join('');
-
-  // Secondary objectives
-  let secHtml = '';
-  if (!(p.secObjs&&p.secObjs.length)) {
-    secHtml = isActive
-      ? `<button class="btn btn-g btn-sm" onclick="drawSecondaries(${pi})">🎲 Draw Secondaries</button>`
-      : `<div style="font-size:11px;color:var(--ts)">No active secondaries.</div>`;
-  } else {
-    secHtml = (p.secObjs||[]).map((o,si)=>{
-      const actionBtns = isActive ? `
-        <div class="btn-row" style="margin-top:6px;flex-wrap:wrap">
-          <button class="btn btn-sm" style="background:var(--green,#2ecc71);color:#fff;border:none" onclick="achieveSecondary(${pi},${si})">✓ Achieved</button>
-          <button class="btn btn-g btn-sm" onclick="openSwap(${pi},${si})">↔ Swap −1CP</button>
-          <button class="btn btn-g btn-sm" onclick="forfeitSecondary(${pi},${si})">✕ Discard +1CP</button>
-        </div>` : '';
-      return `<div class="sec-obj-card">
-        <div class="sec-obj-name">${escH(o.name)}</div>
-        <div class="sec-obj-score">${escH(o.score||o.desc)}</div>
-        ${actionBtns}
-      </div>`;
-    }).join('');
-  }
-
-  // Unit tracker
-  let unitsHtml = '';
-  if (p.units && p.units.length) {
-    unitsHtml = `<div class="section-hdr">Units on the Battlefield</div>`;
-    unitsHtml += p.units.map((u,ui)=>{
-      if (u.state==='dead') return `<div class="ut-unit ut-dead"><div class="ut-name">☠ ${escH(u.name)}</div></div>`;
-      const isChar = u.keywords.includes('CHARACTER');
-      const isVeh  = u.keywords.includes('VEHICLE');
-      const isMon  = u.keywords.includes('MONSTER');
-      const isInf  = u.keywords.includes('INFANTRY');
-      const kwTags = [isChar&&'CHARACTER',isVeh&&'VEHICLE',isMon&&'MONSTER',isInf&&'INFANTRY',u.isWarlord&&'WARLORD'].filter(Boolean)
-        .map(k=>`<span class="ut-kw">${k}</span>`).join('');
-      return `<div class="ut-unit">
-        <div class="ut-name">${escH(u.name)}</div>
-        <div class="ut-kws">${kwTags}</div>
-        ${u.startingModels>1 ? `<div class="counter-row">Models:
-          <button class="counter-btn" onclick="adjModels(${pi},${ui},-1)">−</button>
-          <span class="counter-val">${u.currentModels}/${u.startingModels}</span>
-          <button class="counter-btn" onclick="adjModels(${pi},${ui},1)">+</button>
-        </div>` : ''}
-        ${u.startingW>1 ? `<div class="counter-row" style="margin-top:4px">Wounds:
-          <button class="counter-btn" onclick="adjWounds(${pi},${ui},-1)">−</button>
-          <span class="counter-val">${u.currentW}/${u.startingW}</span>
-          <button class="counter-btn" onclick="adjWounds(${pi},${ui},1)">+</button>
-        </div>` : ''}
-        ${(u.subModels||[]).filter(sm=>sm.state!=='dead').map((sm,si)=>`
-          <div class="submodel-tracker">
-            <div class="submodel-name">↳ ${escH(sm.name)}</div>
-            ${sm.startingModels>1?`<div class="counter-row">Models:
-              <button class="counter-btn" onclick="adjSubModel(${pi},${ui},${si},'m',-1)">−</button>
-              <span class="counter-val">${sm.currentModels}/${sm.startingModels}</span>
-              <button class="counter-btn" onclick="adjSubModel(${pi},${ui},${si},'m',1)">+</button>
-            </div>`:''}
-            ${sm.startingW>1?`<div class="counter-row" style="margin-top:4px">Wounds:
-              <button class="counter-btn" onclick="adjSubModel(${pi},${ui},${si},'w',-1)">−</button>
-              <span class="counter-val">${sm.currentW}/${sm.startingW}</span>
-              <button class="counter-btn" onclick="adjSubModel(${pi},${ui},${si},'w',1)">+</button>
-            </div>`:''}
-            <button class="btn btn-d btn-sm" style="margin-top:4px" onclick="adjSubModel(${pi},${ui},${si},'dead',0)">☠ Remove</button>
-          </div>`).join('')}
-        <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
-          ${isChar ? `<button class="btn btn-sm ${u.isWarlord?'btn-p':'btn-g'}" onclick="toggleWarlord(${pi},${ui})">${u.isWarlord?'★ Warlord':'☆ Set Warlord'}</button>` : ''}
-          <button class="btn btn-d btn-sm" onclick="markDestroyed(${pi},${ui})">☠ Mark Destroyed</button>
-        </div>
-        ${(()=>{
-          const ud = S.units.find(x=>x.id===u.uid);
-          const tracked = (ud?.abilities||[]).filter(ab=>ab.track);
-          if (!tracked.length) return '';
-          const ua = u.usedAbils||{};
-          const pills = tracked.map(ab => {
-            const uses = ua[ab.n]||0;
-            const max = ab.track==='charges'?(ab.trackUses||2):1;
-            const used = uses >= max;
-            const icon = ab.track==='once_battle'?'⚡':ab.track==='once_round'?'↻':'◎';
-            const label = ab.track==='charges'?`${icon} ${ab.n} (${max-uses}/${max})`:`${icon} ${ab.n}`;
-            return `<span class="abil-pill${used?' used':''}" onclick="toggleAbilUsed(${pi},${ui},'${ab.n.replace(/'/g,"\'")}',${max})" title="${escH(ab.d)}">${escH(label)}</span>`;
-          }).join('');
-          return `<div class="abil-pills">${pills}</div>`;
-        })()}
-      </div>`;
-    }).join('');
-  }
-
-  const vpTotal = p.scores.reduce((a,b)=>a+b,0);
-  const curRound = S.game ? S.game.round : 1;
-  const curRoundVP = p.scores[curRound-1]||0;
-  return `<div class="player-panel${isActive?' active-turn':''}">
-    ${isActive ? '<div class="active-turn-banner">⚔ Active Turn</div>' : ''}
-    <div class="panel-hdr">
-      <div style="display:flex;flex-direction:column;gap:4px">
-        <div class="panel-name">${escH(p.name)}</div>
-        ${fbadge(p.faction)}
-      </div>
-      <div class="vp-badge">🏆 ${vpTotal} VP</div>
-    </div>
-    <div class="section-hdr" style="margin-top:10px">Victory Points — Round ${curRound}</div>
-    <div class="vp-quick-row">
-      <span class="vp-quick-label">Round ${curRound} VP:</span>
-      <button class="vp-counter-btn" onclick="addVP(${pi},-1)">−</button>
-      <span class="vp-counter-val">${curRoundVP}</span>
-      <button class="vp-counter-btn" onclick="addVP(${pi},1)">+</button>
-    </div>
-    <div class="section-hdr">Command Points <span style="font-size:11px;color:var(--tm)">Spent this game: ${p.cpSpent}</span></div>
-    <div class="pip-row" style="margin-bottom:8px">${pips}</div>
-    <div class="btn-row" style="margin-bottom:10px">
-      <button class="btn btn-p btn-sm" onclick="addCP(${pi})">+ CP</button>
-      <button class="btn btn-g btn-sm" onclick="openSpendCP(${pi})">Spend CP</button>
-    </div>
-    <div class="section-hdr">Secondary Objectives</div>
-    ${secHtml}
-    ${unitsHtml}
-    <div style="margin-top:10px">
-      <button class="btn btn-g btn-sm" onclick="openPlayerCodex(${pi})" style="width:100%">📖 Open Codex</button>
-    </div>
-  </div>`;
+function ptPickPrimary(id) {
+  if (!S.pt) return;
+  const obj = S.objectives.primary.find(o => o.id === id);
+  if (!obj) return;
+  S.pt.primaryObj = Object.assign({}, obj);
+  ptSave();
+  closeModal('m-pt-pick-primary');
+  renderPTObjsTab();
 }
 
-// ── FEATURE 5: PLAYER CODEX ──────────────────────────────
-function stratCategory(type) {
-  const t = (type||'').toLowerCase();
-  if (t.includes('battle tactic')) return 'battle';
-  if (t.includes('strategic ploy') || t.includes('strategic')) return 'ploy';
-  if (t.includes('wargear')) return 'wargear';
-  if (t.includes('epic deed') || t.includes('epic')) return 'epic';
-  return 'other';
+function ptShufflePrimary() {
+  if (!S.pt || !S.objectives.primary.length) return;
+  S.pt.primaryObj = Object.assign({}, S.objectives.primary[Math.floor(Math.random() * S.objectives.primary.length)]);
+  ptSave();
+  renderPTObjsTab();
 }
-function setStratPhase(phase) { _stratPhaseFilter = phase; _codexActiveSection = 'codex-sec-stratagems'; openPlayerCodex(_codexPlayerIdx); }
-function codexSpendCP(pi, cost) {
-  if (!S.game) return;
-  const p = S.game.players[pi];
-  if (p.cp < cost) { toast('Not enough CP!'); return; }
-  p.cp -= cost; p.cpSpent += cost;
-  saveGame(); renderActiveGame();
-  toast(`${cost}CP spent — ${p.cp}CP remaining`);
-  openPlayerCodex(pi); // refresh codex so CP badge is current
-}
-function saveRoundNote(val) {
-  if (!S.game) return;
-  if (!S.game.roundNotes) S.game.roundNotes = {};
-  S.game.roundNotes[S.game.round] = val;
-  saveGame();
-}
-function toggleAbilUsed(pi, ui, abilName, maxUses) {
-  if (!S.game) return;
-  const u = S.game.players[pi].units[ui]; if (!u) return;
-  if (!u.usedAbils) u.usedAbils = {};
-  const cur = u.usedAbils[abilName]||0;
-  u.usedAbils[abilName] = cur >= maxUses ? 0 : cur+1;
-  saveGame(); renderActiveGame();
-}
-function toggleStratUsed(pi, stratName) {
-  if (!S.game) return;
-  const p = S.game.players[pi];
-  if (!p.usedStrats) p.usedStrats = [];
-  const idx = p.usedStrats.indexOf(stratName);
-  if (idx >= 0) p.usedStrats.splice(idx,1); else p.usedStrats.push(stratName);
-  saveGame(); openPlayerCodex(pi);
-}
-function openPlayerCodex(pi) {
-  _codexPlayerIdx = pi;
-  const g = S.game; if (!g) return;
-  const p = g.players[pi];
-  document.getElementById('m-codex-title').textContent = `${p.name}'s Codex — ${p.faction}`;
-  const fd = FACTION_DATA[p.faction];
-  // Find detachment from linked army
-  let detachment = null;
-  let armyUnits = [];
-  if (p.armyId) {
-    const army = S.armies.find(a=>String(a.id)===String(p.armyId));
-    if (army) {
-      if (fd) {
-        detachment = fd.detachments.find(d=>d.name===army.detachment);
-        // Fallback: if no detachment matched (old army without field), use first available
-        if (!detachment && fd.detachments.length) detachment = fd.detachments[0];
-      }
-      armyUnits = (army.units||[]).map(au => {
-        const u = S.units.find(x=>x.id===au.id);
-        return u ? {...u, armyCount:au.count, wargearSelected:au.wargearSelected||[], enhancement:au.enhancement||null, _loadout:au.loadout||null, _subModelLoadout:au.subModelLoadout||[]} : null;
-      }).filter(Boolean);
-    }
-  }
-  // Build tabs
-  const tabs = ['Rules','Stratagems','Units'];
-  document.getElementById('codex-tabs').innerHTML = tabs.map((t,i)=>{
-    const secId = 'codex-sec-'+t.toLowerCase();
-    return `<button class="codex-tab${secId===_codexActiveSection?' active':''}" onclick="switchCodexTab(this,'${secId}')">${t}</button>`;
-  }).join('');
-  // Build sections
-  let rulesHtml = '';
-  if (fd) {
-    rulesHtml += `<div style="margin-bottom:14px">
-      <div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">ARMY RULE</div>
-      <div style="font-family:var(--fd);font-size:14px;color:var(--ft);margin-bottom:4px">${escH(fd.army_rule_name)}</div>
-      <div style="font-size:12px;color:var(--ts);line-height:1.5">${escH(fd.army_rule_desc)}</div>
-    </div>`;
-    if (detachment) {
-      rulesHtml += `<div style="margin-bottom:14px">
-        <div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">DETACHMENT RULE — ${escH(detachment.name)}</div>
-        <div style="font-family:var(--fd);font-size:14px;color:var(--ft);margin-bottom:4px">${escH(detachment.rule_name)}</div>
-        <div style="font-size:12px;color:var(--ts);line-height:1.5">${escH(detachment.rule_desc)}</div>
-      </div>`;
-      // Show assigned enhancements
-      const assignedEnhs = armyUnits.filter(u=>u.enhancement).map(u=>{
-        const enh = detachment.enhancements.find(e=>e.name===u.enhancement);
-        return enh ? `<div style="margin-bottom:8px">
-          <span style="font-weight:700;color:var(--ft)">${escH(enh.name)}</span>
-          <span style="font-size:11px;color:var(--ts)"> → ${escH(u.name)}</span>
-          <div style="font-size:11px;color:var(--ts);margin-top:2px">${escH(enh.desc)}</div>
-        </div>` : '';
-      }).filter(Boolean);
-      if (assignedEnhs.length) {
-        rulesHtml += `<div>
-          <div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">ENHANCEMENTS</div>
-          ${assignedEnhs.join('')}
-        </div>`;
-      }
-    }
-  } else {
-    rulesHtml = `<div style="color:var(--ts);padding:20px;text-align:center">No faction data for ${escH(p.faction)}.</div>`;
-  }
 
-  let stratsHtml = '';
-  if (detachment && detachment.stratagems) {
-    const cats = ['all','battle','ploy','wargear','epic','other'];
-    const catLabels = {all:'All',battle:'Battle Tactic',ploy:'Strategic Ploy',wargear:'Wargear',epic:'Epic Deed',other:'Other'};
-    const catTabs = cats.map(c=>`<button class="strat-phase-tab${_stratPhaseFilter===c?' active':''}" onclick="setStratPhase('${c}')">${catLabels[c]}</button>`).join('');
-    const filtered = detachment.stratagems.filter(st=>_stratPhaseFilter==='all'||stratCategory(st.type)===_stratPhaseFilter);
-    const pCP = g.players[pi].cp;
-    const usedStrats = g.players[pi].usedStrats||[];
-    const stCards = filtered.length ? filtered.map(st=>{
-      const isUsed = usedStrats.includes(st.name);
-      return `<div class="codex-strat-item${isUsed?' strat-used':''}">
-        <div class="codex-strat-top">
-          <div class="codex-strat-name">${escH(st.name)}${isUsed?' <span style="font-size:10px;color:var(--ts)">(used)</span>':''}</div>
-          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-            <span class="cp-badge">${st.cp}CP</span>
-            <button class="codex-spend-btn${pCP<st.cp||isUsed?' disabled':''}" onclick="codexSpendCP(${pi},${st.cp})" ${pCP<st.cp||isUsed?'disabled':''}>− Use</button>
-            <button class="codex-spend-btn${isUsed?' active':''}" onclick="toggleStratUsed(${pi},${JSON.stringify(st.name)})" title="${isUsed?'Mark available':'Mark as used'}">${isUsed?'↩ Unmark':'✓ Mark Used'}</button>
-          </div>
-        </div>
-        <div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px">WHEN</div>
-        <div style="font-size:10px;color:var(--fp);margin-bottom:2px">${escH(st.type)}</div>
-        ${st.target?`<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">TARGET</div><div style="font-size:10px;color:var(--ts);margin-bottom:2px">${escH(st.target)}</div>`:''}
-        <div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">EFFECT</div>
-        <div class="codex-strat-desc">${escH(st.desc)}</div>
-      </div>`;
-    }).join('')
-      : `<div style="color:var(--ts);padding:16px;text-align:center;font-size:12px">No ${_stratPhaseFilter==='all'?'':catLabels[_stratPhaseFilter]+' '}stratagems.</div>`;
-    stratsHtml = `<div class="strat-phase-tabs">${catTabs}</div>${stCards}`;
-  } else {
-    stratsHtml = `<div style="color:var(--ts);padding:20px;text-align:center">${detachment?'No stratagems found.':'No detachment selected.'}</div>`;
-  }
-  // Core stratagems — universal, shown for all players
-  const _coreStrats = DEFAULT_CORE_STRATAGEMS || [];
-  if (_coreStrats.length) {
-    const _pCP = g.players[pi].cp;
-    const _coreCards = _coreStrats.map(st => {
-      const _ts = st.type.replace(' Stratagem','');
-      return '<div class="codex-strat-item">'
-        + '<div class="codex-strat-top">'
-        +   '<div class="codex-strat-name">' + escH(st.name) + '</div>'
-        +   '<div style="display:flex;align-items:center;gap:6px;flex-shrink:0">'
-        +     '<span class="cp-badge">' + st.cp + 'CP</span>'
-        +     '<button class="codex-spend-btn' + (_pCP < st.cp ? ' disabled' : '') + '"'
-        +       ' onclick="codexSpendCP(' + pi + ',' + st.cp + ')"'
-        +       (_pCP < st.cp ? ' disabled' : '') + '>&#8722; Use</button>'
-        +   '</div>'
-        + '</div>'
-        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">TYPE</div>'
-        + '<div style="font-size:10px;color:var(--fp);margin-bottom:2px">' + escH(_ts) + '</div>'
-        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">WHEN</div>'
-        + '<div style="font-size:10px;color:var(--fp);margin-bottom:2px">' + escH(st.when) + '</div>'
-        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">TARGET</div>'
-        + '<div style="font-size:10px;color:var(--ts);margin-bottom:2px">' + escH(st.target) + '</div>'
-        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">EFFECT</div>'
-        + '<div class="codex-strat-desc">' + escH(st.effect) + '</div>'
-        + '</div>';
-    }).join('');
-    stratsHtml += '<div style="margin-top:12px">'
-      + '<div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;border-top:1px solid var(--bdr);padding-top:10px;margin-bottom:8px">CORE STRATAGEMS</div>'
-      + _coreCards + '</div>';
-  }
-
-  let unitsHtml2 = '';
-  if (armyUnits.length) {
-    unitsHtml2 = armyUnits.map(u => {
-      const statKeys = ['M','T','SV','W','LD','OC'];
-      const statsRow = statKeys.map(k => `<div class="codex-stat"><span>${k}</span>${escH(u.stats?u.stats[k]||'—':'—')}</div>`).join('');
-      const hasWeapons = (u.ranged&&u.ranged.length)||(u.melee&&u.melee.length);
-      let weapRow = '';
-      if (hasWeapons) {
-        // Filter weapons by loadout — only when at least one weapon has been assigned
-        const ld = u._loadout;
-        const smLd = (u._subModelLoadout||[]).flat();
-        const allLd = [...(ld||[]), ...smLd];
-        const _rSet = allLd.length ? new Set(allLd.flatMap(m=>Array.isArray(m.ranged)?m.ranged:(m.ranged?[m.ranged]:[]))) : null;
-        const _mSet = allLd.length ? new Set(allLd.flatMap(m=>Array.isArray(m.melee)?m.melee:(m.melee?[m.melee]:[]))) : null;
-        const activeR = _rSet&&_rSet.size ? _rSet : null; // null = no filter (nothing assigned yet)
-        const activeM = _mSet&&_mSet.size ? _mSet : null;
-        const allW = [
-          ...(u.ranged||[]).filter(w=>!activeR||activeR.has(w.n)).map(w=>({...w,wtype:'Ranged'})),
-          ...(u.melee||[]).filter(w=>!activeM||activeM.has(w.n)).map(w=>({...w,wtype:'Melee'}))
-        ];
-        weapRow = `<table class="codex-weap-tbl"><thead><tr><th>Weapon</th><th>R</th><th>A</th><th>S</th><th>AP</th><th>D</th><th>Special</th></tr></thead><tbody>
-          ${allW.map(w=>`<tr>
-            <td>${escH(w.n)}<span style="color:var(--ts);font-size:9px"> [${w.wtype[0]}]</span></td>
-            <td>${escH(w.r)}</td><td>${escH(w.a)}</td><td>${escH(w.s)}</td><td>${escH(w.ap)}</td><td>${escH(w.d)}</td>
-            <td>${(w.special||[]).map(sp=>`<span class="special-tag" data-tip="${escH(weaponTip(sp))}" style="font-size:9px">${escH(sp)}</span>`).join(' ')}</td>
-          </tr>`).join('')}
-        </tbody></table>`;
-      }
-      const enhBadge = u.enhancement ? `<span style="font-size:10px;background:var(--fg);color:var(--ft);border:1px solid var(--fp);border-radius:4px;padding:1px 6px;margin-left:6px">✦ ${escH(u.enhancement)}</span>` : '';
-      const wgBadges = (u.wargearSelected||[]).map(w=>`<span style="font-size:10px;background:var(--sur);color:var(--ts);border:1px solid var(--bdr);border-radius:4px;padding:1px 6px">${escH(w)}</span>`).join(' ');
-      const _rAr = armyRuleName(u.faction);
-      const ruleTagSection = (_rAr||(u.core_rules&&u.core_rules.length)||(u.faction_abilities&&u.faction_abilities.length)) ? `
-        <div style="display:flex;flex-wrap:wrap;gap:2px;margin-bottom:6px">
-          ${_rAr?`<span class="fa-tag" data-tip="${escH(armyRuleTip(u.faction))}">${escH(_rAr)}</span>`:''}
-          ${(u.core_rules||[]).map(r=>`<span class="core-tag" data-tip="${escH(coreRuleTip(r))}">${escH(r)}</span>`).join('')}
-          ${(u.faction_abilities||[]).map(fa=>`<span class="fa-tag" data-tip="${escH(facAbilTip(u.faction,fa))}">${escH(fa)}</span>`).join('')}
-        </div>` : '';
-      const abilSection = (u.abilities&&u.abilities.length) ? `
-        <div style="margin-top:8px">
-          <div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">ABILITIES</div>
-          ${u.abilities.map(a=>`<div style="margin-bottom:5px">
-            <span style="font-size:11px;font-weight:700;color:var(--ft)">${escH(a.n)}:</span>
-            <span style="font-size:11px;color:var(--ts);line-height:1.5"> ${escH(a.d)}</span>
-          </div>`).join('')}
-        </div>` : '';
-      const wgAbilSection = (u.wargear_abilities&&u.wargear_abilities.length) ? `
-        <div style="margin-top:8px">
-          <div style="font-size:9px;color:#d97706;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">WARGEAR ABILITIES</div>
-          ${u.wargear_abilities.map(a=>`<div style="margin-bottom:5px;padding-left:6px;border-left:2px solid rgba(217,119,6,0.5)">
-            <span style="font-size:11px;font-weight:700;color:#d97706">${escH(a.n)}:</span>
-            <span style="font-size:11px;color:var(--ts);line-height:1.5"> ${escH(a.d)}</span>
-          </div>`).join('')}
-        </div>` : '';
-      const wgOptSection = u.wargear_options ? `
-        <div style="margin-top:6px">
-          <div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px">WARGEAR</div>
-          <div style="font-size:11px;color:var(--ts);line-height:1.5;white-space:pre-wrap">${escH(u.wargear_options)}</div>
-        </div>` : '';
-      return `<div class="codex-unit-card">
-        <div class="codex-unit-name">${escH(u.name)} ×${u.armyCount}${enhBadge}</div>
-        <div class="codex-stat-row">${statsRow}${u.stats&&u.stats.INV&&u.stats.INV!=='None'?`<div class="codex-stat"><span>INV</span>${escH(u.stats.INV)}</div>`:''}</div>
-        ${wgBadges?`<div style="margin-bottom:6px">${wgBadges}</div>`:''}
-        ${ruleTagSection}
-        ${weapRow}
-        ${abilSection}
-        ${wgAbilSection}
-        ${wgOptSection}
-      </div>`;
-    }).join('');
-  } else {
-    unitsHtml2 = `<div style="color:var(--ts);padding:20px;text-align:center">No army imported for this player.</div>`;
-  }
-
-  const _act = _codexActiveSection;
-  document.getElementById('codex-body').innerHTML = `
-    <div class="codex-section${_act==='codex-sec-rules'?' active':''}" id="codex-sec-rules">${rulesHtml}</div>
-    <div class="codex-section${_act==='codex-sec-stratagems'?' active':''}" id="codex-sec-stratagems">${stratsHtml}</div>
-    <div class="codex-section${_act==='codex-sec-units'?' active':''}" id="codex-sec-units">${unitsHtml2}</div>`;
-  openModal('m-codex');
+function ptOpenPickSec() {
+  const list = document.getElementById('m-pt-pick-sec-list');
+  if (!list || !S.pt) return;
+  if (S.pt.secondaryObjs.length >= 2) { toast('Already have 2 secondaries — use Swap to change one'); return; }
+  const existIds = new Set(S.pt.secondaryObjs.map(s => s.id));
+  const pool = S.objectives.secondary.filter(o => !existIds.has(o.id));
+  list.innerHTML = pool.map(o =>
+    '<button class="btn btn-g" style="width:100%;text-align:left;margin-bottom:6px;padding:10px" onclick="ptAddPickedSec(' + o.id + ')">'
+    + '<strong>' + escH(o.name) + '</strong>'
+    + '<div style="font-size:11px;color:var(--ts);margin-top:2px">' + escH(o.desc || o.score || '') + '</div>'
+    + '</button>'
+  ).join('');
+  document.getElementById('m-pt-pick-sec').classList.add('open');
 }
-function switchCodexTab(btn, secId) {
-  _codexActiveSection = secId;
-  document.querySelectorAll('.codex-tab').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.codex-section').forEach(s=>s.classList.remove('active'));
-  btn.classList.add('active');
-  const sec = document.getElementById(secId);
+
+function ptAddPickedSec(id) {
+  if (!S.pt) return;
+  const obj = S.objectives.secondary.find(o => o.id === id);
+  if (!obj) return;
+  S.pt.secondaryObjs.push(Object.assign({}, obj, { achieved: false }));
+  ptSave();
+  closeModal('m-pt-pick-sec');
+  renderPTObjsTab();
+}
+
+function ptSetRoundVP(ri, val) {
+  if (!S.pt) return;
+  S.pt.vpRounds[ri] = Math.max(0, parseInt(val) || 0);
+  ptSave();
+  const total = S.pt.vpRounds.reduce((a, b) => a + b, 0);
+  const vpEl = document.getElementById('pt-hdr-vp');
+  if (vpEl) vpEl.textContent = total;
+}
+
+function ptSwitchTab(tabId) {
+  _ptTab = tabId;
+  document.querySelectorAll('.pt-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.pt-section').forEach(s => s.classList.remove('active'));
+  const key = tabId.replace('pt-', '');
+  const btn = document.getElementById('pt-tab-' + key);
+  const sec = document.getElementById(tabId);
+  if (btn) btn.classList.add('active');
   if (sec) sec.classList.add('active');
 }
 
-function updateScore(pi, ri, val) {
-  S.game.players[pi].scores[ri] = parseInt(val)||0;
-  saveGame();
-}
-function addCP(pi) {
-  const p = S.game.players[pi]; p.cp++;
-  addLog(`${p.name} gained 1 CP (now ${p.cp})`, 0);
-  saveGame(); renderActiveGame();
-}
-function openSpendCP(pi) {
-  document.getElementById('mcp-pi').value = pi;
-  document.getElementById('mcp-amt').value = '1';
-  openModal('m-cp');
-}
-function confirmSpendCP() {
-  const pi = parseInt(document.getElementById('mcp-pi').value);
-  const amt = parseInt(document.getElementById('mcp-amt').value)||1;
-  const reason = document.getElementById('mcp-reason').value;
-  const p = S.game.players[pi];
-  if (p.cp < amt) { toast('Not enough CP!'); return; }
-  p.cp -= amt; p.cpSpent += amt;
-  addLog(`${p.name} spent ${amt}CP — ${reason}`, 0);
-  saveGame(); closeModal('m-cp'); renderActiveGame();
-}
-function drawSecondaries(pi) {
-  const p = S.game.players[pi];
-  if (!p.secObjs) p.secObjs = [];
-  // Top up to 2 — draw only what's needed
-  const need = 2 - p.secObjs.length;
-  if (need <= 0) return;
-  const usedIds = new Set((p.secObjs||[]).map(o=>o.id));
-  const pool = S.objectives.secondary.filter(o=>!usedIds.has(o.id));
-  const drawn = [];
-  while (drawn.length < need && pool.length) {
-    const idx = Math.floor(Math.random()*pool.length);
-    drawn.push(pool.splice(idx,1)[0]);
-  }
-  p.secObjs = [...p.secObjs, ...drawn];
-  p.secDrawn = true;
-  if (drawn.length) addLog(`${p.name} draws: ${drawn.map(o=>o.name).join(', ')}`, 0);
-  // No save/render here — caller handles it
-}
-function openSwap(pi, si) {
-  _swapSelected = null;
-  document.getElementById('swap-pi').value = pi;
-  document.getElementById('swap-idx').value = si;
-  const p = S.game.players[pi];
-  const current = (p.secObjs||[])[si];
-  const used = (p.secObjs||[]).map(o=>o.id);
-  const available = S.objectives.secondary.filter(o=>!used.includes(o.id));
-  document.getElementById('swap-list').innerHTML = available.map(o=>`
-    <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:6px;padding:10px;cursor:pointer;transition:.15s"
-      onclick="selectSwapObj('${escH(o.id)}',this)">
-      <div style="font-weight:700;font-size:12px;color:var(--ft)">${escH(o.name)}</div>
-      <div style="font-size:11px;color:var(--ts)">${escH(o.score)}</div>
-    </div>`).join('') || '<div style="color:var(--ts);padding:10px">No other objectives available.</div>';
-  openModal('m-swap');
-}
-function selectSwapObj(id, el) {
-  _swapSelected = id;
-  document.querySelectorAll('#swap-list > div').forEach(d=>d.style.borderColor='var(--bdr)');
-  el.style.borderColor = 'var(--fp)';
-}
-function doSwap(cpCost) {
-  if (!_swapSelected) { toast('Select an objective first'); return; }
-  const pi = parseInt(document.getElementById('swap-pi').value);
-  const si = parseInt(document.getElementById('swap-idx').value);
-  const p = S.game.players[pi];
-  if (cpCost > 0 && p.cp < cpCost) { toast('Not enough CP!'); return; }
-  const newObj = S.objectives.secondary.find(o=>o.id===_swapSelected);
-  if (!newObj) return;
-  const old = p.secObjs[si];
-  p.secObjs[si] = newObj;
-  if (cpCost > 0) { p.cp -= cpCost; p.cpSpent += cpCost; addLog(`${p.name} spent 1 CP`, 0); }
-  addLog(`${p.name} swapped ${old?.name} → ${newObj.name}`, 0);
-  saveGame(); closeModal('m-swap'); renderActiveGame();
-}
-function adjModels(pi, ui, d) {
-  const u = S.game.players[pi].units[ui];
-  u.currentModels = Math.max(0, Math.min(u.startingModels, u.currentModels+d));
-  saveGame(); renderActiveGame();
-}
-function adjWounds(pi, ui, d) {
-  const u = S.game.players[pi].units[ui];
-  u.currentW = Math.max(0, Math.min(u.startingW, u.currentW+d));
-  saveGame(); renderActiveGame();
-}
-function adjSubModel(pi, ui, si, type, d) {
-  const sm = S.game.players[pi].units[ui].subModels[si]; if (!sm) return;
-  if (type==='dead') { sm.state='dead'; addLog(`${sm.name} removed`, 0); }
-  else if (type==='m') sm.currentModels = Math.max(0, Math.min(sm.startingModels, sm.currentModels+d));
-  else if (type==='w') sm.currentW = Math.max(0, Math.min(sm.startingW, sm.currentW+d));
-  saveGame(); renderActiveGame();
-}
-function toggleWarlord(pi, ui) {
-  const u = S.game.players[pi].units[ui];
-  u.isWarlord = !u.isWarlord;
-  addLog(`${u.name} ${u.isWarlord?'designated as':'removed from'} Warlord`, 0);
-  saveGame(); renderActiveGame();
-}
-function markDestroyed(pi, ui) {
-  const g = S.game;
-  const p = g.players[pi];
-  const u = p.units[ui];
-  u.state = 'dead';
-  addLog(`${u.name} (${p.name}) destroyed`, 0);
-  if (g.autoScore) autoScoreVP(pi, u);
-  saveGame(); renderActiveGame();
-}
-function autoScoreVP(deadPlayerIdx, deadUnit) {
-  const g = S.game;
-  // score goes to opponents' secondary obj holders
-  g.players.forEach((scorer, scorerIdx) => {
-    if (scorerIdx === deadPlayerIdx) return;
-    (scorer.secObjs||[]).forEach(obj => {
-      if (!obj.autoKw) return;
-      let vp = 0;
-      if (obj.autoKw === 'CHARACTER' && deadUnit.keywords.includes('CHARACTER')) {
-        vp = 5;
-        if (deadUnit.isWarlord) vp += 10;
-        scorer.scores[g.round-1] += vp;
-        addLog(`Auto VP: ${obj.name} — ${deadUnit.name} destroyed${deadUnit.isWarlord?' (Warlord bonus!)':''}`, vp);
-      }
-      if (obj.autoKw === 'VEHICLE_MONSTER' && (deadUnit.keywords.includes('VEHICLE')||deadUnit.keywords.includes('MONSTER'))) {
-        const w = deadUnit.startingW;
-        vp = w<=9 ? 2 : w<=17 ? 4 : 6;
-        scorer.scores[g.round-1] += vp;
-        addLog(`Auto VP: ${obj.name} — ${deadUnit.name} (W${w})`, vp);
-      }
-      if (obj.autoKw === 'INFANTRY' && deadUnit.keywords.includes('INFANTRY')) {
-        scorer.infantryKilled = (scorer.infantryKilled||0) + deadUnit.startingModels;
-        vp = Math.floor(scorer.infantryKilled/5) - Math.floor((scorer.infantryKilled - deadUnit.startingModels)/5);
-        if (vp > 0) {
-          scorer.scores[g.round-1] += vp;
-          addLog(`Auto VP: ${obj.name} — ${scorer.infantryKilled} infantry killed total`, vp);
-        }
-      }
-    });
-  });
-}
-function checkUnitCount() {
-  const g = S.game;
-  g.players.forEach((scorer, si) => {
-    (scorer.secObjs||[]).forEach(obj => {
-      if (obj.autoKw !== 'UNIT_COUNT') return;
-      const myAlive = g.players[si].units.filter(u=>u.state==='alive').length;
-      const maxOpp = Math.max(...g.players.filter((_,i)=>i!==si).map(p=>p.units.filter(u=>u.state==='alive').length));
-      if (myAlive > maxOpp) {
-        scorer.scores[g.round-1] += 3;
-        addLog(`Auto VP: ${obj.name} — ${scorer.name} has more units`, 3);
-      }
-    });
-  });
-}
-// Advance turn state locally (shared logic for both solo and MP receive path)
-function _advanceTurnLocally() {
-  const g = S.game; if (!g) return;
-  const activePi = g.turnOrder[g.turnIdx];
-  const p = g.players[activePi];
-  g.turnIdx++;
-  if (g.turnIdx >= g.turnOrder.length) {
-    g.turnIdx = 0;
-    if (g.round >= 5) { save(); endGame(); return; }
-    g.round++;
-    addLog('--- Battle Round ' + g.round + ' begins ---', 0);
-    g.players.forEach(pl => {
-      pl.units.forEach(u => {
-        if (!u.usedAbils) return;
-        const ud = S.units.find(x=>x.id===u.uid);
-        (ud?.abilities||[]).forEach(ab => { if (ab.track==='once_round') delete u.usedAbils[ab.n]; });
-      });
-    });
-  }
-  const nextPi = g.turnOrder[g.turnIdx];
-  const nextP = g.players[nextPi];
-  nextP.cp++;
-  addLog(nextP.name + ' gains 1 CP (Command phase — Round ' + g.round + ')', 0);
-  if (g.autoSec) drawSecondaries(nextPi);
-  save();
-  if (document.getElementById('gt-active')?.style.display !== 'none') renderActiveGame();
+function renderPTActive() {
+  if (!S.pt) return;
+  const pt = S.pt;
+  const total = pt.vpRounds.reduce((a, b) => a + b, 0);
+  const nameEl  = document.getElementById('pt-hdr-name');
+  const roundEl = document.getElementById('pt-hdr-round');
+  const cpEl    = document.getElementById('pt-hdr-cp');
+  const vpEl    = document.getElementById('pt-hdr-vp');
+  if (nameEl)  nameEl.textContent  = pt.gameName;
+  if (roundEl) roundEl.textContent = pt.round;
+  if (cpEl)    cpEl.textContent    = pt.cp;
+  if (vpEl)    vpEl.textContent    = total;
+  renderPTArmyTab();
+  renderPTObjsTab();
+  renderPTRefTab();
+  ptSwitchTab(_ptTab);
 }
 
-function endTurn() {
-  const g = S.game;
-  const activePi = g.turnOrder[g.turnIdx];
-  const p = g.players[activePi];
-  addLog(`${p.name} ends their turn`, 0);
-  if (_mpActive && _fbDb && _mpRoom) {
-    // MP mode: signal turn advance via dedicated /turns path, then sync full state
-    _advanceTurnLocally();
-    _mpTurnHighSeq++;
-    _fbDb.ref('rooms/' + _mpRoom + '/turns').set(_mpTurnHighSeq);
-    saveGame(); // sync player data (CP, VP, log) to all devices
-  } else {
-    // Solo mode: advance locally and save
-    _advanceTurnLocally();
-    saveGame();
-  }
-}
-function forfeitSecondary(pi, si) {
-  const g = S.game;
-  const p = g.players[pi];
-  const obj = (p.secObjs||[])[si];
-  if (!obj) return;
-  p.secObjs.splice(si, 1);
-  p.cp++;
-  addLog(`${p.name} discards ${obj.name} for +1 CP`, 0);
-  saveGame(); renderActiveGame();
-}
-function achieveSecondary(pi, si) {
-  const g = S.game;
-  const p = g.players[pi];
-  const obj = (p.secObjs||[])[si];
-  if (!obj) return;
-  p.secObjs.splice(si, 1);
-  addLog(`${p.name} achieved ${obj.name}!`, 0);
-  saveGame(); renderActiveGame();
-}
-function nextRound() {
-  // Legacy manual advance — use endTurn() for normal play
-  endTurn();
-}
-function prevRound() {
-  const g = S.game;
-  if (g.round <= 1) return;
-  g.round--; saveGame(); renderActiveGame();
-}
-function endGame() {
-  const g = S.game;
-  const totals = g.players.map(p=>({name:p.name, vp:p.scores.reduce((a,b)=>a+b,0)}));
-  totals.sort((a,b)=>b.vp-a.vp);
-  const winner = totals[0];
-  addLog(`⚔ GAME OVER — ${winner.name} wins with ${winner.vp} VP!`, 0);
-  toast(`Game Over! ${winner.name} wins with ${winner.vp} VP`);
-  // Signal other devices before we null S.game (saveGame skips push when game is null)
-  if (_mpActive && _fbDb && _mpRoom) {
-    _fbDb.ref('rooms/' + _mpRoom + '/game').set({_mp_game_over: true, _mp_sender: _mpClientId});
-  }
-  setTimeout(() => {
-    S.game = null; save();
-    document.getElementById('gt-active').style.display = 'none';
-    renderGameSetup();
-  }, 3000);
-}
-function addVP(pi, delta) {
-  const g = S.game; if (!g) return;
-  const p = g.players[pi];
-  const ri = g.round - 1;
-  p.scores[ri] = Math.max(0, (p.scores[ri]||0) + delta);
-  if (delta > 0) addLog(`${p.name} scores ${delta} VP (Round ${g.round})`, delta);
-  else if (delta < 0) addLog(`${p.name} loses ${Math.abs(delta)} VP (Round ${g.round})`, 0);
-  saveGame(); renderActiveGame();
-}
-function addLog(msg, vp) {
-  if (!S.game) return;
-  S.game.log.push({ round: S.game.round, msg, vp: vp||0 });
-}
-function clearLog() { if (S.game) { S.game.log = []; saveGame(); renderActiveGame(); } }
+function renderPTArmyTab() {
+  const el = document.getElementById('pt-army');
+  if (!el || !S.pt) return;
+  const pt   = S.pt;
+  const army = S.armies.find(a => a.id === pt.myArmyId);
+  const fd   = army ? FACTION_DATA[army.faction] : null;
+  const dets = fd ? (fd.detachments || []) : [];
+  const det  = dets[pt.myDetachmentIdx] || null;
 
-// ── SETTINGS ─────────────────────────────────────────────
-function renderSettings() {
-  const key = document.getElementById('set-apikey');
-  if (key) key.value = S.apiKey ? S.apiKey.substring(0,8)+'…' : '';
-  updateSettingsInfo();
-  renderFbStatus();
-}
-function updateSettingsInfo() {
-  const ks = document.getElementById('set-keystatus');
-  if (ks) ks.innerHTML = S.apiKey
-    ? '<span class="api-status ok">✓ API key saved</span>'
-    : '<span class="api-status none">✗ No key saved</span>';
-  const uc = document.getElementById('set-unitcount');
-  if (uc) uc.textContent = S.units.length;
-  const ac = document.getElementById('set-armycount');
-  if (ac) ac.textContent = S.armies.length;
-  const st = document.getElementById('set-storage');
-  if (st) {
-    let total = 0;
-    for (let k in localStorage) { if (k.startsWith('wc_')) total += (localStorage[k]||'').length; }
-    st.textContent = total > 1024 ? (total/1024).toFixed(1)+'kb' : total+'b';
+  // ── Rules ──
+  let html = '';
+  if (fd) {
+    html += '<div class="card" style="margin-bottom:10px">'
+      + '<div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">ARMY RULE</div>'
+      + '<div style="font-family:var(--fd);font-size:14px;color:var(--ft);margin-bottom:4px">' + escH(fd.army_rule_name || '') + '</div>'
+      + '<div style="font-size:12px;color:var(--ts);line-height:1.5">' + escH(fd.army_rule_desc || '') + '</div>'
+      + '</div>';
   }
-}
-function saveApiKey() {
-  const v = document.getElementById('set-apikey').value.trim();
-  if (!v || v.includes('…')) { toast('Enter a valid API key'); return; }
-  S.apiKey = v; save(); updateSettingsInfo(); toast('API key saved!');
-}
-function refreshUnitData() {
-  if (!confirm('Reload all default datasheets from this version of the app? Your armies, rules, objectives, and settings are kept. Any custom edits you made directly to unit datasheets will be lost.')) return;
-  localStorage.removeItem('wc_units');
-  S.units = JSON.parse(JSON.stringify(DEFAULT_UNITS));
-  save(); updateSettingsInfo();
-  toast('Unit data refreshed from defaults!');
-  renderUnitList();
-}
-function clearAllData() {
-  if (!confirm('Clear ALL data? Units, armies, rules, objectives, and settings will be reset to defaults.')) return;
-  localStorage.removeItem('wc_units'); localStorage.removeItem('wc_armies');
-  localStorage.removeItem('wc_rules'); localStorage.removeItem('wc_objs');
-  localStorage.removeItem('wc_theme'); localStorage.removeItem('wc_key');
-  localStorage.removeItem('wc_game'); localStorage.removeItem('wc_factions');
-  localStorage.removeItem('wc_last_setup'); localStorage.removeItem('wc_weapon_rules');
-  S.weaponRules = {}; _TOOLTIPS = Object.assign({}, WEAPON_TOOLTIPS);
-  FACTION_DATA = JSON.parse(JSON.stringify(FACTION_DATA_DEFAULT));
-  S.lastSetup = null;
-  load(); updateSettingsInfo(); toast('All data cleared — defaults restored');
-}
+  if (det) {
+    html += '<div class="card" style="margin-bottom:10px">'
+      + '<div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">DETACHMENT RULE — ' + escH(det.name || '') + '</div>'
+      + '<div style="font-family:var(--fd);font-size:14px;color:var(--ft);margin-bottom:4px">' + escH(det.rule_name || '') + '</div>'
+      + '<div style="font-size:12px;color:var(--ts);line-height:1.5">' + escH(det.rule_desc || '') + '</div>'
+      + '</div>';
 
-// ── EXPORT / IMPORT ──────────────────────────────────────
-function openExportModal() {
-  const factions = Object.keys(FACTION_DATA);
-  const unitFactions = [...new Set(S.units.map(u=>u.faction))].sort();
-  const html = `
-  <div class="exp-section">
-    <label class="exp-hdr">
-      <input type="checkbox" id="exp-units" checked onchange="toggleExpSection('exp-units','exp-units-detail')">
-      <span>📋 Datasheets</span><span class="badge">${'${S.units.length}'}</span>
-    </label>
-    <div id="exp-units-detail" class="exp-detail">
-      <label class="exp-sub"><input type="checkbox" id="exp-units-all" checked onchange="toggleExpAllUnits()"> All factions</label>
-      <div id="exp-unit-factions" class="exp-faction-list" style="display:none">
-        ${unitFactions.map(f=>`<label class="exp-sub"><input type="checkbox" class="exp-uf" value="${escH(f)}" checked> ${escH(f)} (${S.units.filter(u=>u.faction===f).length})</label>`).join('')}
-      </div>
-    </div>
-  </div>
-  <div class="exp-section">
-    <label class="exp-hdr">
-      <input type="checkbox" id="exp-det" checked onchange="toggleExpSection('exp-det','exp-det-detail')">
-      <span>🛡️ Detachment Rules</span><span class="badge">${factions.length} factions</span>
-    </label>
-    <div id="exp-det-detail" class="exp-detail exp-faction-list">
-      ${factions.map(f=>`<label class="exp-sub"><input type="checkbox" class="exp-df" value="${escH(f)}" checked> ${escH(f)}</label>`).join('')}
-    </div>
-  </div>
-  <div class="exp-section">
-    <label class="exp-hdr">
-      <input type="checkbox" id="exp-rules" checked>
-      <span>📖 Core Rules</span><span class="badge">${'${S.rules.length}'}</span>
-    </label>
-  </div>
-  <div class="exp-section">
-    <label class="exp-hdr">
-      <input type="checkbox" id="exp-wrules" checked>
-      <span>⚔️ Weapon Rules</span><span class="badge">${'${Object.keys(_TOOLTIPS).length}'}</span>
-    </label>
-  </div>
-  <div class="exp-section">
-    <label class="exp-hdr">
-      <input type="checkbox" id="exp-objs" checked>
-      <span>🎯 Objectives</span>
-    </label>
-  </div>
-  <div style="margin-top:16px">
-    <button class="btn btn-p btn-full" onclick="doExport()">📤 Download .warchief file</button>
-  </div>`;
-  document.getElementById('m-export-body').innerHTML = html;
-  openModal('m-data-export');
-}
-function toggleExpSection(cbId, detailId) {
-  const on = document.getElementById(cbId).checked;
-  const el = document.getElementById(detailId);
-  if (el) { el.style.opacity = on ? '1' : '0.4'; el.style.pointerEvents = on ? '' : 'none'; }
-}
-function toggleExpAllUnits() {
-  const all = document.getElementById('exp-units-all').checked;
-  document.getElementById('exp-unit-factions').style.display = all ? 'none' : 'grid';
-}
-function doExport() {
-  const pkg = { warchief_export:true, version:'1.0', exported_at:new Date().toISOString(), data:{} };
-  if (document.getElementById('exp-units')?.checked) {
-    const allUnits = document.getElementById('exp-units-all')?.checked;
-    if (allUnits) {
-      pkg.data.units = S.units.map(u => {const c=Object.assign({},u); delete c.img; return c;});
-    } else {
-      const selF = [...document.querySelectorAll('.exp-uf:checked')].map(el=>el.value);
-      pkg.data.units = S.units.filter(u=>selF.includes(u.faction)).map(u=>{const c=Object.assign({},u);delete c.img;return c;});
+    // Detachment stratagems
+    if (det.stratagems && det.stratagems.length) {
+      const stCards = det.stratagems.map(st => {
+        const ok = pt.cp >= st.cp;
+        return '<div class="codex-strat-item">'
+          + '<div class="codex-strat-top">'
+          + '<div class="codex-strat-name">' + escH(st.name) + '</div>'
+          + '<div style="display:flex;align-items:center;gap:6px;flex-shrink:0">'
+          + '<span class="cp-badge">' + st.cp + 'CP</span>'
+          + '<button class="codex-spend-btn' + (ok ? '' : ' disabled') + '"' + (ok ? '' : ' disabled') + ' onclick="ptSpendCP(' + st.cp + ')">&#8722; Use</button>'
+          + '</div></div>'
+          + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px">WHEN</div>'
+          + '<div style="font-size:10px;color:var(--fp);margin-bottom:2px">' + escH(st.type || '') + '</div>'
+          + (st.target ? '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">TARGET</div><div style="font-size:10px;color:var(--ts);margin-bottom:2px">' + escH(st.target) + '</div>' : '')
+          + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">EFFECT</div>'
+          + '<div class="codex-strat-desc">' + escH(st.desc || '') + '</div>'
+          + '</div>';
+      }).join('');
+      html += '<div class="card" style="margin-bottom:10px">'
+        + '<div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">DETACHMENT STRATAGEMS</div>'
+        + stCards + '</div>';
     }
   }
-  if (document.getElementById('exp-det')?.checked) {
-    const selF = [...document.querySelectorAll('.exp-df:checked')].map(el=>el.value);
-    pkg.data.detachments = {};
-    selF.forEach(f=>{ if(FACTION_DATA[f]) pkg.data.detachments[f]=FACTION_DATA[f]; });
+
+  // Core stratagems
+  const coreStrats = DEFAULT_CORE_STRATAGEMS || [];
+  if (coreStrats.length) {
+    const cCards = coreStrats.map(st => {
+      const ok = pt.cp >= st.cp;
+      return '<div class="codex-strat-item">'
+        + '<div class="codex-strat-top">'
+        + '<div class="codex-strat-name">' + escH(st.name) + '</div>'
+        + '<div style="display:flex;align-items:center;gap:6px;flex-shrink:0">'
+        + '<span class="cp-badge">' + st.cp + 'CP</span>'
+        + '<button class="codex-spend-btn' + (ok ? '' : ' disabled') + '"' + (ok ? '' : ' disabled') + ' onclick="ptSpendCP(' + st.cp + ')">&#8722; Use</button>'
+        + '</div></div>'
+        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">WHEN</div>'
+        + '<div style="font-size:10px;color:var(--fp);margin-bottom:2px">' + escH(st.when || '') + '</div>'
+        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">TARGET</div>'
+        + '<div style="font-size:10px;color:var(--ts);margin-bottom:2px">' + escH(st.target || '') + '</div>'
+        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">EFFECT</div>'
+        + '<div class="codex-strat-desc">' + escH(st.effect || '') + '</div>'
+        + '</div>';
+    }).join('');
+    html += '<div class="card" style="margin-bottom:10px">'
+      + '<div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">CORE STRATAGEMS</div>'
+      + cCards + '</div>';
   }
-  if (document.getElementById('exp-rules')?.checked) pkg.data.rules = S.rules;
-  if (document.getElementById('exp-wrules')?.checked) pkg.data.weapon_rules = Object.assign({}, WEAPON_TOOLTIPS, S.weaponRules||{});
-  if (document.getElementById('exp-objs')?.checked) pkg.data.objectives = S.objectives;
-  const fname = 'warchief_' + new Date().toISOString().slice(0,10) + '.warchief';
-  const blob = new Blob([JSON.stringify(pkg,null,2)],{type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href=url; a.download=fname; a.click();
-  URL.revokeObjectURL(url);
-  closeModal('m-data-export');
-  toast('Exported: ' + fname);
-}
-function exportSingleUnit(id) {
-  const u = S.units.find(x=>x.id===id); if (!u) return;
-  const copy = Object.assign({},u); delete copy.img;
-  const pkg = { warchief_export:true, version:'1.0', exported_at:new Date().toISOString(),
-                data:{ units:[copy] } };
-  const fname = 'warchief_unit_' + u.name.replace(/\s+/g,'_').toLowerCase() + '.warchief';
-  const blob = new Blob([JSON.stringify(pkg,null,2)],{type:'application/json'});
-  const url = URL.createObjectURL(blob); const a = document.createElement('a');
-  a.href=url; a.download=fname; a.click(); URL.revokeObjectURL(url);
-  toast('Exported: ' + u.name);
-}
-function exportSingleRule(id) {
-  const r = S.rules.find(x=>x.id===id); if (!r) return;
-  const pkg = { warchief_export:true, version:'1.0', exported_at:new Date().toISOString(),
-                data:{ rules:[r] } };
-  const fname = 'warchief_rule_' + r.name.replace(/\s+/g,'_').toLowerCase() + '.warchief';
-  const blob = new Blob([JSON.stringify(pkg,null,2)],{type:'application/json'});
-  const url = URL.createObjectURL(blob); const a = document.createElement('a');
-  a.href=url; a.download=fname; a.click(); URL.revokeObjectURL(url);
-  toast('Exported rule: ' + r.name);
-}
-function exportSingleWeaponRule(name) {
-  const val = _TOOLTIPS[name]; if (!val) return;
-  const pkg = { warchief_export:true, version:'1.0', exported_at:new Date().toISOString(),
-                data:{ weapon_rules:{ [name]: val } } };
-  const fname = 'warchief_wrule_' + name.replace(/\s+/g,'_').toLowerCase() + '.warchief';
-  const blob = new Blob([JSON.stringify(pkg,null,2)],{type:'application/json'});
-  const url = URL.createObjectURL(blob); const a = document.createElement('a');
-  a.href=url; a.download=fname; a.click(); URL.revokeObjectURL(url);
-  toast('Exported weapon rule: ' + name);
-}
-function exportSingleObjective(id) {
-  const all = [...(S.objectives.primary||[]),...(S.objectives.secondary||[])];
-  const o = all.find(x=>x.id===id); if (!o) return;
-  const bucket = o.type==='Primary' ? {primary:[o],secondary:[]} : {primary:[],secondary:[o]};
-  const pkg = { warchief_export:true, version:'1.0', exported_at:new Date().toISOString(),
-                data:{ objectives:bucket } };
-  const fname = 'warchief_obj_' + o.name.replace(/\s+/g,'_').toLowerCase() + '.warchief';
-  const blob = new Blob([JSON.stringify(pkg,null,2)],{type:'application/json'});
-  const url = URL.createObjectURL(blob); const a = document.createElement('a');
-  a.href=url; a.download=fname; a.click(); URL.revokeObjectURL(url);
-  toast('Exported objective: ' + o.name);
-}
-function exportSingleDetachment(faction, detIdx) {
-  const fd = FACTION_DATA[faction]; if (!fd) return;
-  const det = fd.detachments[detIdx]; if (!det) return;
-  // Package as a faction entry containing only this one detachment
-  const factionSlice = Object.assign({}, fd, { detachments:[det] });
-  const pkg = { warchief_export:true, version:'1.0', exported_at:new Date().toISOString(),
-                data:{ detachments:{ [faction]: factionSlice } } };
-  const fname = 'warchief_det_' + det.name.replace(/\s+/g,'_').toLowerCase() + '.warchief';
-  const blob = new Blob([JSON.stringify(pkg,null,2)],{type:'application/json'});
-  const url = URL.createObjectURL(blob); const a = document.createElement('a');
-  a.href=url; a.download=fname; a.click(); URL.revokeObjectURL(url);
-  toast('Exported detachment: ' + det.name);
-}
-let _importPkg = null;
-function handleImportFile(ev) {
-  const file = ev.target.files[0]; if (!file) return;
-  ev.target.value = '';
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const pkg = JSON.parse(e.target.result);
-      if (!pkg.warchief_export) throw new Error('Not a valid WARCHIEF export file');
-      _importPkg = pkg; showImportPreview(pkg);
-    } catch(err) { toast('Import failed: ' + err.message); }
-  };
-  reader.readAsText(file);
-}
-function showImportPreview(pkg) {
-  const d = pkg.data || {};
-  let rows = [];
-  if (d.units)        rows.push(`<div class="imp-row">📋 <strong>${d.units.length}</strong> datasheets</div>`);
-  if (d.detachments)  rows.push(`<div class="imp-row">🛡️ Detachments for: <strong>${Object.keys(d.detachments).join(', ')}</strong></div>`);
-  if (d.rules)        rows.push(`<div class="imp-row">📖 <strong>${d.rules.length}</strong> core rules</div>`);
-  if (d.weapon_rules) rows.push(`<div class="imp-row">⚔️ <strong>${Object.keys(d.weapon_rules).length}</strong> weapon rules</div>`);
-  if (d.objectives)   rows.push(`<div class="imp-row">🎯 Objectives data</div>`);
-  const exportedAt = pkg.exported_at ? new Date(pkg.exported_at).toLocaleString() : 'Unknown date';
-  let conflicts = [];
-  if (d.units) d.units.forEach(u => { if (S.units.find(x=>x.name===u.name&&x.faction===u.faction)) conflicts.push(`${u.faction}: ${u.name}`); });
-  let html = `<p style="font-size:11px;color:var(--tm);margin-bottom:10px">Exported: ${exportedAt}</p>`;
-  html += `<div class="imp-summary">${rows.join('')}</div>`;
-  if (conflicts.length) {
-    html += `<div class="imp-conflict">
-      <div style="font-size:12px;font-weight:600;color:var(--ft);margin-bottom:6px">⚠ ${conflicts.length} duplicate(s) detected</div>
-      <div style="font-size:11px;color:var(--ts);max-height:70px;overflow-y:auto;margin-bottom:10px">${conflicts.join('<br>')}</div>
-      <div class="field" style="margin-bottom:0">
-        <label>When a unit already exists:</label>
-        <select class="inp" id="imp-conflict-mode">
-          <option value="skip">Skip — keep my version</option>
-          <option value="overwrite">Overwrite — use imported version</option>
-        </select>
-      </div>
-    </div>`;
-  }
-  html += `<button class="btn btn-p btn-full" onclick="confirmImport()">✓ Import Now</button>`;
-  document.getElementById('m-import-body').innerHTML = html;
-  openModal('m-data-import');
-}
-function confirmImport() {
-  if (!_importPkg) return;
-  const d = _importPkg.data || {};
-  const mode = (document.getElementById('imp-conflict-mode')?.value) || 'skip';
-  let msgs = [];
-  if (d.units) {
-    let added=0,skipped=0,overwritten=0;
-    d.units.forEach(u => {
-      const idx = S.units.findIndex(x=>x.name===u.name&&x.faction===u.faction);
-      if (idx>=0) {
-        if (mode==='overwrite') { S.units[idx]=Object.assign({},u,{id:S.units[idx].id,img:S.units[idx].img}); overwritten++; }
-        else skipped++;
-      } else { S.units.push(Object.assign({},u,{id:genId()})); added++; }
-    });
-    msgs.push(`Units: +${added} added, ${overwritten} updated, ${skipped} skipped`);
-  }
-  if (d.detachments) {
-    Object.entries(d.detachments).forEach(([f,data])=>{
-      FACTION_DATA[f] = FACTION_DATA[f] ? Object.assign({},FACTION_DATA[f],data) : data;
-    });
-    saveFactions();
-    msgs.push(`Detachments merged for ${Object.keys(d.detachments).join(', ')}`);
-  }
-  if (d.rules) {
-    let rAdded=0;
-    d.rules.forEach(r=>{ if(!S.rules.find(x=>x.name===r.name)){S.rules.push(r);rAdded++;} });
-    msgs.push(`Rules: +${rAdded} added`);
-  }
-  if (d.weapon_rules) {
-    S.weaponRules = Object.assign({}, S.weaponRules||{}, d.weapon_rules);
-    _TOOLTIPS = Object.assign({}, WEAPON_TOOLTIPS, S.weaponRules);
-    msgs.push(`Weapon rules: ${Object.keys(d.weapon_rules).length} merged`);
-  }
-  if (d.objectives) {
-    const src = d.objectives;
-    if (src.primary) S.objectives.primary = [...(S.objectives.primary||[]),...src.primary.filter(r=>!S.objectives.primary?.find(x=>x.name===r.name))];
-    if (src.secondary) S.objectives.secondary = [...(S.objectives.secondary||[]),...src.secondary.filter(r=>!S.objectives.secondary?.find(x=>x.name===r.name))];
-    msgs.push('Objectives merged');
-  }
-  save(); _importPkg = null; closeModal('m-data-import');
-  toast('Import complete — ' + msgs.join(' · '));
+
+  // ── Units ──
+  html += '<div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin:14px 0 8px">MY UNITS</div>';
+
+  const unitsHtml = pt.units.map((pu, ui) => {
+    const uData = S.units.find(x => x.id === pu.uid);
+    if (!uData) return '';
+    const st = uData.stats || {};
+    const statsRow = ['M','T','SV','W','LD','OC'].map(k =>
+      '<div class="codex-stat"><span>' + k + '</span>' + escH(st[k] || '—') + '</div>'
+    ).join('');
+    const invBadge = (st.INV && st.INV !== 'None')
+      ? '<div class="codex-stat"><span>INV</span>' + escH(st.INV) + '</div>' : '';
+
+    // Wound pips
+    const pips = Array.from({ length: pu.maxWounds }, (_, i) =>
+      '<div class="pt-wound-pip' + (i >= pu.wounds ? ' lost' : '') + '"></div>'
+    ).join('');
+
+    // Loadout filtering (match game tracker codex behaviour)
+    const au = army ? (army.units || []).find(x => x.id === pu.uid) : null;
+    const ld = au ? (au.loadout || []) : [];
+    const smLd = au ? ((au.subModelLoadout || []).flat()) : [];
+    const allLd = [...ld, ...smLd];
+    const _rSet = allLd.length ? new Set(allLd.flatMap(m => Array.isArray(m.ranged) ? m.ranged : (m.ranged ? [m.ranged] : []))) : null;
+    const _mSet = allLd.length ? new Set(allLd.flatMap(m => Array.isArray(m.melee)  ? m.melee  : (m.melee  ? [m.melee]  : []))) : null;
+    const activeR = _rSet && _rSet.size ? _rSet : null;
+    const activeM = _mSet && _mSet.size ? _mSet : null;
+    const rangedW = (uData.ranged || []).filter(w => !activeR || activeR.has(w.n));
+    const meleeW  = (uData.melee  || []).filter(w => !activeM || activeM.has(w.n));
+
+    // Weapon tables with ranged/melee divider
+    const weapHdr = '<thead><tr><th>Weapon</th><th>R</th><th>A</th><th>BS/WS</th><th>S</th><th>AP</th><th>D</th></tr></thead>';
+    const weapRow = w => '<tr><td>' + escH(w.n) + '</td>'
+      + '<td>' + escH(w.r) + '</td><td>' + escH(w.a) + '</td><td>' + escH(w.skill || w.ws || '') + '</td>'
+      + '<td>' + escH(w.s) + '</td><td>' + escH(w.ap) + '</td><td>' + escH(w.d) + '</td></tr>';
+    let weapHtml = '';
+    if (rangedW.length) {
+      weapHtml += '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 2px">RANGED WEAPONS</div>'
+        + '<table class="codex-weap-tbl"><tbody>' + weapHdr + rangedW.map(weapRow).join('') + '</tbody></table>';
+    }
+    if (meleeW.length) {
+      weapHtml += '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 2px">MELEE WEAPONS</div>'
+        + '<table class="codex-weap-tbl"><tbody>' + weapHdr + meleeW.map(weapRow).join('') + '</tbody></table>';
+    }
+
+    // Abilities — core_rules (tags), faction_abilities (tags), unit abilities, wargear_abilities
+    let abilHtml = '';
+    const coreRules = uData.core_rules || [];
+    const factionAbils = uData.faction_abilities || [];
+    const wargearAbils = uData.wargear_abilities || [];
+    if (coreRules.length || factionAbils.length || wargearAbils.length) {
+      const tags = [...coreRules, ...factionAbils, ...wargearAbils];
+      abilHtml += '<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px">'
+        + tags.map(t => '<span style="background:var(--bdr);border-radius:4px;padding:2px 6px;font-size:10px;color:var(--ts);font-weight:600">' + escH(t) + '</span>').join('')
+        + '</div>';
+    }
+    if (uData.abilities && uData.abilities.length) {
+      abilHtml += '<div style="margin-top:8px">'
+        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">ABILITIES</div>'
+        + uData.abilities.map(a =>
+          '<div style="margin-bottom:4px"><span style="font-size:11px;font-weight:700;color:var(--ft)">' + escH(a.n) + ':</span>'
+          + ' <span style="font-size:11px;color:var(--ts)">' + escH(a.d) + '</span></div>'
+        ).join('') + '</div>';
+    }
+
+    // Model tracker (only show if unit has more than 1 model)
+    const curModels = pu.modelCount != null ? pu.modelCount : (pu.maxModels || 1);
+    const maxModels = pu.maxModels || 1;
+    const modelBar = (!pu.destroyed && maxModels > 1)
+      ? '<div class="pt-wound-bar" style="margin-top:6px">'
+        + '<div style="font-size:11px;color:var(--ts);flex:1">Models alive</div>'
+        + '<div style="display:flex;gap:4px;align-items:center">'
+        + '<button class="btn btn-d btn-sm" style="padding:2px 8px" onclick="ptAddModel(' + ui + ',-1)">−</button>'
+        + '<span style="font-size:12px;color:var(--ts);min-width:44px;text-align:center">' + curModels + '/' + maxModels + '</span>'
+        + '<button class="btn btn-g btn-sm" style="padding:2px 8px" onclick="ptAddModel(' + ui + ',1)">+</button>'
+        + '</div></div>' : '';
+
+    return '<div class="pt-unit-card' + (pu.destroyed ? ' destroyed' : '') + '">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
+      + '<div style="font-family:var(--fd);font-size:14px;color:var(--ft);font-weight:700">' + escH(pu.name) + '</div>'
+      + '<button class="btn btn-' + (pu.destroyed ? 'g' : 'd') + ' btn-sm" onclick="ptDestroyUnit(' + ui + ')">'
+      + (pu.destroyed ? '↩ Restore' : '☠ Destroy') + '</button>'
+      + '</div>'
+      + '<div class="codex-stat-row">' + statsRow + invBadge + '</div>'
+      + (!pu.destroyed
+        ? '<div class="pt-wound-bar"><div class="pt-wound-pips">' + pips + '</div>'
+          + '<div style="display:flex;gap:4px;align-items:center;flex-shrink:0">'
+          + '<button class="btn btn-d btn-sm" style="padding:2px 8px" onclick="ptAddWound(' + ui + ',-1)">−W</button>'
+          + '<span style="font-size:12px;color:var(--ts);min-width:44px;text-align:center">' + pu.wounds + '/' + pu.maxWounds + 'W</span>'
+          + '<button class="btn btn-g btn-sm" style="padding:2px 8px" onclick="ptAddWound(' + ui + ',1)">+W</button>'
+          + '</div></div>' : '')
+      + modelBar + weapHtml + abilHtml + '</div>';
+  }).join('');
+
+  el.innerHTML = html + (unitsHtml || '<div style="color:var(--ts);padding:10px;text-align:center">No units in this army.</div>');
 }
 
-// ── MULTIPLAYER ──────────────────────────────────────────
-function _mpInitFirebase() {
-  const cfg = S.fbConfig;
-  if (!cfg || !cfg.apiKey || !cfg.databaseURL) return false;
-  try {
-    if (!_fbApp) {
-      _fbApp = firebase.initializeApp(cfg, 'warchief_mp');
-      _fbDb  = firebase.database(_fbApp);
-    }
-    return true;
-  } catch(e) {
-    if (e.code === 'app/duplicate-app') {
-      _fbApp = firebase.app('warchief_mp');
-      _fbDb  = firebase.database(_fbApp);
-      return true;
-    }
-    console.error('[MP] Firebase init failed:', e);
-    return false;
-  }
+function renderPTObjsTab() {
+  const el = document.getElementById('pt-objs');
+  if (!el || !S.pt) return;
+  const pt    = S.pt;
+  const total = pt.vpRounds.reduce((a, b) => a + b, 0);
+
+  // Primary
+  const primHtml = pt.primaryObj
+    ? '<div class="pt-obj-card">'
+      + '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">PRIMARY OBJECTIVE</div>'
+      + '<div style="font-family:var(--fd);font-size:15px;color:var(--ft);margin-bottom:6px">' + escH(pt.primaryObj.name) + '</div>'
+      + '<div style="font-size:12px;color:var(--ts);line-height:1.5">' + escH(pt.primaryObj.desc || pt.primaryObj.score || '') + '</div>'
+      + '<div style="margin-top:8px;display:flex;gap:6px">'
+      + '<button class="btn btn-g btn-sm" onclick="ptOpenPickPrimary()">Change</button>'
+      + '<button class="btn btn-g btn-sm" onclick="ptShufflePrimary()">🎲 Shuffle</button>'
+      + '</div></div>'
+    : '<div class="card" style="margin-bottom:10px;text-align:center;padding:16px">'
+      + '<div style="color:var(--ts);margin-bottom:8px">No primary objective selected</div>'
+      + '<div style="display:flex;gap:6px;justify-content:center">'
+      + '<button class="btn btn-p btn-sm" onclick="ptOpenPickPrimary()">Pick Primary</button>'
+      + '<button class="btn btn-g btn-sm" onclick="ptShufflePrimary()">🎲 Shuffle</button>'
+      + '</div></div>';
+
+  // Secondaries
+  const secHtml = pt.secondaryObjs.map((s, i) =>
+    '<div class="pt-obj-card' + (s.achieved ? ' achieved' : '') + '">'
+    + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">'
+    + '<div><div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px">SECONDARY ' + (i + 1) + '</div>'
+    + '<div style="font-family:var(--fd);font-size:14px;color:var(--ft);margin-bottom:4px">' + escH(s.name) + '</div>'
+    + '<div style="font-size:11px;color:var(--ts);line-height:1.4">' + escH(s.desc || s.score || '') + '</div></div>'
+    + '<div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">'
+    + '<button class="btn btn-' + (s.achieved ? 'p' : 'g') + ' btn-sm" onclick="ptToggleSecAchieved(' + i + ')">' + (s.achieved ? '✓ Done' : 'Achieved') + '</button>'
+    + '<button class="btn btn-g btn-sm" onclick="ptSwapSec(' + i + ')">Swap</button>'
+    + '</div></div></div>'
+  ).join('');
+
+  // VP grid
+  const vpGrid = '<div class="pt-vp-grid">'
+    + pt.vpRounds.map((v, i) =>
+      '<div class="pt-vp-cell">'
+      + '<label>Round ' + (i + 1) + '</label>'
+      + '<input class="inp" type="number" min="0" value="' + v + '" oninput="ptSetRoundVP(' + i + ',this.value)" style="text-align:center;font-size:15px;font-weight:700;padding:4px">'
+      + '</div>'
+    ).join('') + '</div>'
+    + '<div style="text-align:right;font-size:13px;color:var(--ts);margin-top:4px">Total: <strong style="color:var(--ft);font-size:15px">' + total + ' VP</strong></div>';
+
+  el.innerHTML = '<div style="margin-bottom:10px">' + primHtml + '</div>'
+    + '<div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">SECONDARY OBJECTIVES</div>'
+    + (secHtml || '<div style="color:var(--ts);padding:8px 0;font-size:13px">No secondaries selected yet.</div>')
+    + '<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">'
+    + '<button class="btn btn-g btn-sm" onclick="ptOpenPickSec()">+ Pick Secondary</button>'
+    + '<button class="btn btn-g btn-sm" onclick="ptShuffleSecondaries()">🎲 Shuffle 2</button>'
+    + '</div>'
+    + '<div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin:16px 0 8px">VP PER ROUND</div>'
+    + '<div class="card">' + vpGrid + '</div>';
 }
 
-function _mpGenCode() {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  return Array.from({length:4}, ()=>chars[Math.floor(Math.random()*chars.length)]).join('');
-}
-
-function _mpApplyGame(g) {
-  if (!g || g._mp_sender === _mpClientId) return; // echo from ourselves — skip
-  // Reject stale Firebase re-fires using the high-water mark (never goes down, survives S.game replacements)
-  const _inSeq = g._stateSeq || 0;
-  if (_inSeq > 0 && _inSeq <= _mpHighSeq) return;
-  if (_inSeq > _mpHighSeq) _mpHighSeq = _inSeq;
-  // Game-over signal from another device
-  if (g._mp_game_over) {
-    if (S.game) {
-      const totals = S.game.players.map(p=>({name:p.name, vp:p.scores.reduce((a,b)=>a+b,0)}));
-      totals.sort((a,b)=>b.vp-a.vp);
-      const winner = totals[0];
-      toast('Game Over! ' + winner.name + ' wins with ' + winner.vp + ' VP');
-    } else {
-      toast('The host ended the game.');
-    }
-    setTimeout(() => {
-      S.game = null; save();
-      document.getElementById('gt-active').style.display = 'none';
-      renderGameSetup();
-    }, 3000);
+function renderPTRefTab() {
+  const el = document.getElementById('pt-ref');
+  if (!el || !S.pt) return;
+  const ids = S.pt.opponentArmyIds || [];
+  if (!ids.length) {
+    el.innerHTML = '<div style="color:var(--ts);padding:20px;text-align:center">'
+      + 'No reference armies added.<br><span style="font-size:12px">Start a new session and add opponent armies to see their datasheets here.</span></div>';
     return;
   }
-  const clean = Object.assign({}, g);
-  delete clean._mp_sender;
-  if (S.game) {
-    // Game already running locally — selectively merge so we never clobber turnIdx/round
-    // (turn advancement arrives via /turns, not via game state sync)
-    S.game.players  = clean.players;
-    S.game.log      = clean.log;
-    S.game.autoSec  = clean.autoSec;
-    S.game.autoScore = clean.autoScore;
-    S.game._stateSeq = clean._stateSeq;
-  } else {
-    // First load (joining a game in progress) — take everything as-is
-    S.game = clean;
-  }
-  save();
-  // Re-render without stealing focus from inputs the local player is editing
-  const focused = document.activeElement?.id || null;
-  const gtActive = document.getElementById('gt-active');
-  const gtSetup  = document.getElementById('gt-setup');
-  if (gtActive) {
-    if (gtActive.style.display === 'none' && gtSetup) {
-      // Game just started on another device — jump guests straight into the active game
-      gtSetup.style.display = 'none';
-    }
-    renderActiveGame();
-    if (focused) { const el = document.getElementById(focused); if (el) el.focus(); }
-  }
-  _mpFlashSync();
-}
-
-function _mpFlashSync() {
-  // Brief green pulse on the room badge to confirm sync received
-  const badge = document.querySelector('.mp-room-badge');
-  if (!badge) return;
-  badge.style.background = '#1a4a1a';
-  setTimeout(() => { badge.style.background = ''; }, 400);
-}
-
-function _mpApplySetup(setup) {
-  if (!setup || setup._sender === _mpClientId) return;
-  const n = parseInt(document.getElementById('gt-numplayers')?.value) || 2;
-  (setup.players || []).forEach((p, i) => {
-    if (i >= n) return;
-    const nameEl = document.getElementById('gt-pname-' + i);
-    const factEl = document.getElementById('gt-pfact-' + i);
-    const armyEl = document.getElementById('gt-army-' + i);
-    if (nameEl && p.name && document.activeElement !== nameEl) nameEl.value = p.name;
-    if (factEl && p.faction) factEl.value = p.faction;
-    if (armyEl && p.armyId) armyEl.value = p.armyId;
+  let html = '';
+  ids.forEach(aid => {
+    const army = S.armies.find(a => a.id === aid);
+    if (!army) return;
+    html += '<div style="font-family:var(--fd);font-size:15px;color:var(--ft);margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid var(--bdr)">'
+      + escH(army.name || 'Army') + '</div>';
+    (army.units || []).forEach(au => {
+      const u = S.units.find(x => x.id === au.id);
+      if (!u) return;
+      const st = u.stats || {};
+      const statsRow = ['M','T','SV','W','LD','OC'].map(k =>
+        '<div class="codex-stat"><span>' + k + '</span>' + escH(st[k] || '—') + '</div>'
+      ).join('');
+      const allW = [
+        ...(u.ranged || []).map(w => Object.assign({}, w, { wtype: 'R' })),
+        ...(u.melee  || []).map(w => Object.assign({}, w, { wtype: 'M' }))
+      ];
+      const weapHtml = allW.length
+        ? '<table class="codex-weap-tbl" style="margin-top:8px"><thead><tr>'
+          + '<th>Weapon</th><th>R</th><th>A</th><th>BS/WS</th><th>S</th><th>AP</th><th>D</th></tr></thead><tbody>'
+          + allW.map(w =>
+            '<tr><td>' + escH(w.n) + '<span style="color:var(--ts);font-size:9px"> [' + w.wtype + ']</span></td>'
+            + '<td>' + escH(w.r) + '</td><td>' + escH(w.a) + '</td><td>' + escH(w.skill || w.ws || '') + '</td>'
+            + '<td>' + escH(w.s) + '</td><td>' + escH(w.ap) + '</td><td>' + escH(w.d) + '</td></tr>'
+          ).join('') + '</tbody></table>' : '';
+      const abilHtml = (u.abilities && u.abilities.length)
+        ? '<div style="margin-top:8px">' + u.abilities.map(a =>
+            '<div style="margin-bottom:4px"><span style="font-size:11px;font-weight:700;color:var(--ft)">' + escH(a.n) + ':</span>'
+            + ' <span style="font-size:11px;color:var(--ts)">' + escH(a.d) + '</span></div>'
+          ).join('') + '</div>' : '';
+      html += '<div class="codex-unit-card">'
+        + '<div class="codex-unit-name">' + escH(u.name) + ' \xd7' + (au.count || 1) + '</div>'
+        + '<div class="codex-stat-row">' + statsRow
+        + (st.INV && st.INV !== 'None' ? '<div class="codex-stat"><span>INV</span>' + escH(st.INV) + '</div>' : '')
+        + '</div>' + weapHtml + abilHtml + '</div>';
+    });
   });
-  if (setup.startingCp) {
-    const cpEl = document.getElementById('gt-startcp');
-    if (cpEl) cpEl.value = setup.startingCp;
-  }
-  renderTurnOrderSetup();
+  el.innerHTML = html;
 }
 
-function _mpSubscribeSeats(code) {
-  _fbDb.ref('rooms/' + code + '/seats').on('value', snap => {
-    const seats = snap.val() || {};
-    // seats = { 0: clientId, 1: clientId, ... } — find my index by value
-    const myEntry = Object.entries(seats).find(([, cid]) => cid === _mpClientId);
-    if (myEntry) {
-      const myIdx = parseInt(myEntry[0]);
-      if (myIdx !== _mpPlayerIdx) {
-        _mpPlayerIdx = myIdx;
-        if (S.game && document.getElementById('gt-active')?.style.display !== 'none') {
-          renderActiveGame();
-        }
-        toast('You are Player ' + (myIdx + 1) + ' in this room');
-      }
-    }
-  });
-}
+// ── END PERSONAL TRACKER ─────────────────────────────────────
 
-function _mpSubscribe(code) {
-  _fbDb.ref('rooms/' + code + '/game').on('value', snap => _mpApplyGame(snap.val()));
-  _fbDb.ref('rooms/' + code + '/setup').on('value', snap => _mpApplySetup(snap.val()));
-  _fbDb.ref('rooms/' + code + '/turns').on('value', snap => {
-    const t = snap.val() || 0;
-    if (t > _mpTurnHighSeq) {
-      _mpTurnHighSeq = t;
-      // A different device advanced the turn — apply it locally
-      if (S.game && document.getElementById('gt-active')?.style.display !== 'none') {
-        _advanceTurnLocally();
-      }
-    }
-  });
-  _mpSubscribeSeats(code);
-}
 
-// Push current setup form state to Firebase (called on every name/faction/army change)
-function mpSyncSetup() {
-  if (!_mpActive || !_fbDb || !_mpRoom) return;
-  const n = parseInt(document.getElementById('gt-numplayers')?.value) || 2;
-  const players = Array.from({length:n}, (_,i) => ({
-    name:    document.getElementById('gt-pname-' + i)?.value || 'Player ' + (i+1),
-    faction: document.getElementById('gt-pfact-' + i)?.value || '',
-    armyId:  document.getElementById('gt-army-' + i)?.value || ''
-  }));
-  const startingCp = document.getElementById('gt-startcp')?.value || '6';
-  _fbDb.ref('rooms/' + _mpRoom + '/setup').set({ players, startingCp, _sender: _mpClientId });
-}
-
-function mpCreateRoom() {
-  if (!_mpInitFirebase()) { toast('Add Firebase config in Settings first'); nav('settings'); return; }
-  if (_mpActive) { toast('Already in a room — disconnect first'); return; }
-  const code = _mpGenCode();
-  _mpRoom = code; _mpRole = 'host'; _mpActive = true; _mpPlayerIdx = 0;
-  _fbDb.ref('rooms/' + code).set({ game: null, setup: null, turns: 0, createdAt: Date.now(), seats: {0: _mpClientId} });
-  _mpSubscribe(code);
-  _mpUpdateSetupUI();
-  toast('Room created! Share code: ' + code);
-}
-
-function mpJoinRoom() {
-  if (!_mpInitFirebase()) { toast('Add Firebase config in Settings first'); nav('settings'); return; }
-  const raw = document.getElementById('gt-joincode')?.value || '';
-  const code = raw.trim().toUpperCase().replace(/[^A-Z0-9]/g,'').substring(0,4);
-  if (code.length !== 4) { toast('Enter the 4-character room code'); return; }
-  if (_mpActive) mpLeaveRoom();
-  _mpRoom = code; _mpRole = 'guest'; _mpActive = true; _mpPlayerIdx = -1;
-  _mpSubscribe(code);
-  _mpUpdateSetupUI();
-  // Check if a game is already running — if so show player picker, otherwise auto-claim a seat
-  _fbDb.ref('rooms/' + code + '/game').once('value', snap => {
-    const g = snap.val();
-    if (g && !g._mp_game_over) {
-      // Game in progress — load it locally then ask which player they are
-      const clean = Object.assign({}, g); delete clean._mp_sender;
-      S.game = clean; save();
-      // Sync turn counter so we don't re-fire old turns
-      _fbDb.ref('rooms/' + code + '/turns').once('value', tsnap => {
-        _mpTurnHighSeq = tsnap.val() || 0;
-      });
-      document.getElementById('gt-setup').style.display = 'none';
-      renderActiveGame();
-      _mpShowSeatPicker(code, clean.players || []);
-    } else {
-      // No game yet — auto-claim the next available seat index
-      _mpAutoClaimSeat(code);
-    }
-  });
-  toast('Joined room ' + code);
-}
-
-function _mpAutoClaimSeat(code) {
-  _fbDb.ref('rooms/' + code + '/seats').once('value', snap => {
-    const seats = snap.val() || {};
-    // Already have a seat? (reconnect with same clientId)
-    const existing = Object.entries(seats).find(([, cid]) => cid === _mpClientId);
-    if (existing) return; // seat listener will handle it
-    // Find lowest unclaimed index
-    const takenIdxs = Object.keys(seats).map(Number);
-    let idx = 0;
-    while (takenIdxs.includes(idx)) idx++;
-    _fbDb.ref('rooms/' + code + '/seats/' + idx).set(_mpClientId);
-  });
-}
-
-function _mpShowSeatPicker(code, players) {
-  const list = document.getElementById('m-seat-pick-list');
-  if (!list) return;
-  list.innerHTML = players.map((p, idx) =>
-    '<button class="btn btn-g" style="width:100%;margin-bottom:8px;font-size:15px;padding:12px" onclick="_mpClaimSeat(\'' + code + '\',' + idx + ');closeModal(\'m-seat-pick\')">' +
-    escH(p.name || ('Player ' + (idx + 1))) + '</button>'
-  ).join('');
-  document.getElementById('m-seat-pick').classList.add('open');
-}
-
-function _mpClaimSeat(code, idx) {
-  _fbDb.ref('rooms/' + code + '/seats/' + idx).set(_mpClientId);
-  // _mpPlayerIdx will be confirmed by the seats listener
-}
-
-function mpLeaveRoom() {
-  if (_mpRoom && _fbDb) {
-    try {
-      _fbDb.ref('rooms/' + _mpRoom + '/game').off();
-      _fbDb.ref('rooms/' + _mpRoom + '/setup').off();
-      _fbDb.ref('rooms/' + _mpRoom + '/turns').off();
-      _fbDb.ref('rooms/' + _mpRoom + '/seats').off();
-    } catch(e) {}
-  }
-  _mpActive = false; _mpRoom = null; _mpRole = null; _mpPlayerIdx = -1; _mpHighSeq = 0; _mpTurnHighSeq = 0;
-  _mpUpdateSetupUI();
-  toast('Disconnected from room');
-  if (S.game) renderActiveGame();
-}
-
-function mpShowPanel() {
-  if (!_mpInitFirebase()) { toast('Configure multiplayer in Settings first'); nav('settings'); return; }
-  document.getElementById('gt-setup').style.display = 'block';
-  document.getElementById('gt-active').style.display = 'none';
-  document.getElementById('gt-mp-card').style.display = '';
-  document.getElementById('gt-mp-card').scrollIntoView({behavior:'smooth'});
-}
-
-function _mpUpdateSetupUI() {
-  const card = document.getElementById('gt-mp-card');
-  const panel = document.getElementById('gt-mp-status-panel');
-  const connected = document.getElementById('gt-mp-connected');
-  const codeDisplay = document.getElementById('gt-mp-code-display');
-  const roleLabel = document.getElementById('gt-mp-role-label');
-  if (!card) return;
-  card.style.display = '';
-  if (_mpActive && _mpRoom) {
-    if (panel) panel.style.display = 'none';
-    if (connected) connected.style.display = '';
-    if (codeDisplay) codeDisplay.textContent = _mpRoom;
-    if (roleLabel) roleLabel.textContent = _mpRole === 'host'
-      ? 'You created this room — share the code with your opponent'
-      : 'Connected as guest — syncing with host';
-  } else {
-    if (panel) panel.style.display = '';
-    if (connected) connected.style.display = 'none';
-  }
-}
 
 function saveFbConfig() {
   const raw = document.getElementById('set-fbconfig')?.value?.trim() || '';
@@ -4576,8 +3673,6 @@ function saveFbConfig() {
     S.fbConfig = cfg; save();
     toast('Firebase config saved! Multiplayer ready.');
     renderFbStatus();
-    const mpCard = document.getElementById('gt-mp-card');
-    if (mpCard) mpCard.style.display = '';
   } catch(e) {
     toast('Invalid config: ' + e.message);
   }
@@ -4595,9 +3690,666 @@ function renderFbStatus() {
   }
 }
 
+// ══════════════════════════════════════════════════════════════
+// MULTIPLAYER TRACKER
+// ══════════════════════════════════════════════════════════════
+
+function mpSave() {
+  if (_mpSession) localStorage.setItem('wc_mp', JSON.stringify(_mpSession));
+  else localStorage.removeItem('wc_mp');
+}
+
+function _mpInitFb() {
+  const cfg = S.fbConfig;
+  if (!cfg?.apiKey || !cfg?.databaseURL) return false;
+  try {
+    if (!_fbApp) {
+      _fbApp = firebase.initializeApp(cfg, 'warchief_mp');
+      _fbDb  = firebase.database(_fbApp);
+    }
+    return true;
+  } catch(e) {
+    if (e.code === 'app/duplicate-app') {
+      _fbApp = firebase.app('warchief_mp');
+      _fbDb  = firebase.database(_fbApp);
+      return true;
+    }
+    return false;
+  }
+}
+
+function _mpGenCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ'; // no I or O to avoid confusion
+  return Array.from({length:4}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
+}
+
+// ── MAIN RENDER ───────────────────────────────────────────────
+
+function renderMP() {
+  const el = document.getElementById('mp-wrap');
+  if (!el) return;
+
+  if (!S.fbConfig?.apiKey) {
+    el.innerHTML = '<h1 class="ph1" style="margin-bottom:8px">Multiplayer</h1>'
+      + '<div class="card" style="text-align:center;padding:28px">'
+      + '<div style="font-size:36px;margin-bottom:12px">🌐</div>'
+      + '<div style="font-family:var(--fd);font-size:16px;color:var(--ft);margin-bottom:8px">Firebase Setup Required</div>'
+      + '<div style="font-size:13px;color:var(--ts);line-height:1.6;margin-bottom:16px">Multiplayer uses Firebase Realtime Database. Add your config in Settings to enable it.</div>'
+      + '<button class="btn btn-p" onclick="nav(\'settings\')">Go to Settings →</button></div>';
+    return;
+  }
+  if (!_mpSession) { renderMPPreLobby(); return; }
+  if (_mpSession.status === 'lobby') { renderMPLobbyView(); return; }
+  renderMPActiveView();
+}
+
+// ── PRE-LOBBY ─────────────────────────────────────────────────
+
+function renderMPPreLobby() {
+  const el = document.getElementById('mp-wrap');
+  if (!el) return;
+  el.innerHTML =
+    '<h1 class="ph1" style="margin-bottom:4px">Multiplayer</h1>'
+    + '<p style="color:var(--ts);font-size:13px;margin-bottom:16px">Host a battle or join one with a room code.</p>'
+
+    + '<div class="card" style="margin-bottom:12px">'
+    + '<div class="ph2" style="margin-bottom:12px">⚔️ Host a Game</div>'
+    + '<div class="inp-row">'
+    + '<div class="field"><label>Number of Players</label>'
+    + '<select class="inp" id="mp-numplayers">'
+    + '<option value="2">2 Players</option><option value="3">3 Players</option><option value="4">4 Players</option>'
+    + '</select></div>'
+    + '<div class="field"><label>Points Limit</label>'
+    + '<select class="inp" id="mp-pts">'
+    + '<option value="500">500 pts</option><option value="1000">1000 pts</option>'
+    + '<option value="1500">1500 pts</option><option value="2000" selected>2000 pts</option>'
+    + '<option value="2500">2500 pts</option><option value="3000">3000 pts</option>'
+    + '</select></div>'
+    + '</div>'
+    + '<button class="btn btn-p btn-full" style="margin-top:8px" onclick="mpHostCreate()">Create Room →</button>'
+    + '</div>'
+
+    + '<div class="card">'
+    + '<div class="ph2" style="margin-bottom:12px">🚪 Join a Game</div>'
+    + '<div class="field"><label>Room Code</label>'
+    + '<input class="inp" id="mp-joincode" placeholder="e.g. WRKZ" maxlength="4"'
+    + ' style="text-transform:uppercase;letter-spacing:4px;font-weight:700;font-size:20px;text-align:center"'
+    + ' oninput="this.value=this.value.toUpperCase()">'
+    + '</div>'
+    + '<button class="btn btn-g btn-full" style="margin-top:8px" onclick="mpJoinRoom()">Join Room →</button>'
+    + '</div>';
+}
+
+function mpHostCreate() {
+  if (!_mpInitFb()) { toast('Firebase not configured — check Settings'); return; }
+  const playerCount = parseInt(document.getElementById('mp-numplayers')?.value || 2);
+  const points      = parseInt(document.getElementById('mp-pts')?.value || 2000);
+  const code        = _mpGenCode();
+
+  _mpSession = { code, role:'host', playerId:_mpClientId, status:'lobby', playerCount, points };
+  mpSave();
+
+  const meta = { hostId:_mpClientId, playerCount, points, matchRules:{}, status:'lobby', round:1, activeTurnPos:1 };
+  _fbDb.ref('rooms/'+code+'/meta').set(meta);
+  _fbDb.ref('rooms/'+code+'/players/'+_mpClientId).set(
+    { name:'', faction:'', armyId:null, armyData:null, turnPos:1, ready:false, isHost:true, confirmed:false, cp:0, vpRounds:[0,0,0,0,0], secondaryObjs:[] }
+  );
+  _mpLobbyListen(code);
+  renderMP();
+}
+
+function mpJoinRoom() {
+  if (!_mpInitFb()) { toast('Firebase not configured — check Settings'); return; }
+  const code = (document.getElementById('mp-joincode')?.value||'').trim().toUpperCase();
+  if (code.length !== 4) { toast('Enter the 4-letter room code'); return; }
+
+  _fbDb.ref('rooms/'+code+'/meta').get().then(snap => {
+    const meta = snap.val();
+    if (!meta) { toast('Room not found — check the code'); return; }
+    if (meta.status !== 'lobby') { toast('This game has already started'); return; }
+
+    _mpSession = { code, role:'join', playerId:_mpClientId, status:'lobby', playerCount:meta.playerCount, points:meta.points };
+    mpSave();
+
+    _fbDb.ref('rooms/'+code+'/players/'+_mpClientId).set(
+      { name:'', faction:'', armyId:null, armyData:null, turnPos:0, ready:false, isHost:false, confirmed:false, cp:0, vpRounds:[0,0,0,0,0], secondaryObjs:[] }
+    );
+    _mpLobbyListen(code);
+    renderMP();
+  }).catch(e => toast('Could not join: ' + e.message));
+}
+
+// ── LOBBY ─────────────────────────────────────────────────────
+
+function _mpLobbyListen(code) {
+  _mpListeners.forEach(({ref,ev,fn}) => ref.off(ev,fn));
+  _mpListeners = [];
+
+  const metaRef = _fbDb.ref('rooms/'+code+'/meta');
+  const metaFn  = snap => {
+    _mpLobbyData = _mpLobbyData || {};
+    _mpLobbyData.meta = snap.val() || {};
+    if (_mpLobbyData.meta.status === 'active' && _mpSession?.status === 'lobby') {
+      _mpActivateSession();
+    }
+    if (document.getElementById('pg-mp')?.classList.contains('active')) renderMP();
+  };
+  metaRef.on('value', metaFn);
+  _mpListeners.push({ref:metaRef, ev:'value', fn:metaFn});
+
+  const plRef = _fbDb.ref('rooms/'+code+'/players');
+  const plFn  = snap => {
+    _mpLobbyData = _mpLobbyData || {};
+    _mpLobbyData.players = snap.val() || {};
+    // Save other players' army data locally
+    Object.entries(_mpLobbyData.players).forEach(([pid, p]) => {
+      if (pid !== _mpSession?.playerId && p.armyData) _mpSaveSessionArmy(p.armyData);
+    });
+    if (document.getElementById('pg-mp')?.classList.contains('active')) renderMP();
+  };
+  plRef.on('value', plFn);
+  _mpListeners.push({ref:plRef, ev:'value', fn:plFn});
+
+  // Listen to primary objective — host writes it, all devices sync it to their PT
+  const priRef = _fbDb.ref('rooms/'+code+'/primaryObj');
+  const priFn  = snap => {
+    _mpLobbyData = _mpLobbyData || {};
+    _mpLobbyData.primaryObj = snap.val() || null;
+    // Sync to PT without triggering another FB write
+    if (_mpSession?.status === 'active' && S.pt && _mpLobbyData.primaryObj) {
+      S.pt.primaryObj = _mpLobbyData.primaryObj;
+      localStorage.setItem('wc_pt', JSON.stringify(S.pt));
+    }
+    if (document.getElementById('pg-mp')?.classList.contains('active')) renderMP();
+  };
+  priRef.on('value', priFn);
+  _mpListeners.push({ref:priRef, ev:'value', fn:priFn});
+}
+
+function _mpSaveSessionArmy(army) {
+  if (!army) return;
+  const existing = JSON.parse(localStorage.getItem('wc_mp_armies')||'[]');
+  const idx = existing.findIndex(a => a.id === army.id);
+  if (idx >= 0) existing[idx] = army; else existing.push(army);
+  localStorage.setItem('wc_mp_armies', JSON.stringify(existing));
+}
+
+function renderMPLobbyView() {
+  const el = document.getElementById('mp-wrap');
+  if (!el || !_mpSession) return;
+
+  if (!_mpLobbyData) {
+    el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--ts)">Connecting...</div>';
+    return;
+  }
+
+  const code    = _mpSession.code;
+  const isHost  = _mpSession.role === 'host';
+  const meta    = _mpLobbyData.meta    || {};
+  const players = _mpLobbyData.players || {};
+  const myId    = _mpSession.playerId;
+  const me      = players[myId] || {};
+
+  const allPlayers   = Object.values(players);
+  const joiners      = allPlayers.filter(p => !p.isHost);
+  const allReady     = joiners.length > 0 && joiners.every(p => p.ready);
+  const enoughJoined = allPlayers.length >= (meta.playerCount || 2);
+  const canStart     = isHost && me.confirmed && allReady && enoughJoined;
+
+  let html = '';
+
+  // Header
+  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">'
+    + '<h1 class="ph1" style="margin:0">Lobby</h1>'
+    + '<button class="btn btn-d btn-sm" onclick="mpLeave()">✕ Leave</button></div>';
+
+  // Room code
+  html += '<div class="card" style="text-align:center;margin-bottom:12px;padding:20px">'
+    + '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Share this code with your players</div>'
+    + '<div style="font-size:40px;font-weight:900;letter-spacing:10px;color:var(--fp);font-family:var(--fd)">' + escH(code) + '</div>'
+    + '<div style="font-size:12px;color:var(--ts);margin-top:6px">'+(meta.playerCount||'?')+' Players · '+(meta.points||'?')+' pts</div>'
+    + '</div>';
+
+  // Players connected list
+  html += '<div class="card" style="margin-bottom:12px">'
+    + '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">'
+    + 'Players ('+allPlayers.length+'/'+(meta.playerCount||'?')+')</div>';
+  Object.entries(players).forEach(([pid, p]) => {
+    if (pid === myId) return;
+    const badge = p.isHost ? '<span style="font-size:10px;color:var(--fp);font-weight:700;margin-left:4px">HOST</span>' : '';
+    const readyTag = p.ready
+      ? '<span style="font-size:11px;color:#2ecc71;font-weight:700">✓ Ready</span>'
+      : '<span style="font-size:11px;color:var(--ts)">Not ready</span>';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bdr)">'
+      + '<div>'
+      + '<div style="font-size:13px;font-weight:700;color:var(--ft)">'
+      + (p.name ? escH(p.name) : '<span style="color:var(--ts);font-style:italic">Joining...</span>') + badge + '</div>'
+      + (p.confirmed
+        ? '<div style="font-size:11px;color:var(--ts)">' + escH(p.faction||'') + ' · ' + escH((p.armyData&&p.armyData.name)||'') + ' · P'+p.turnPos+'</div>'
+        : '<div style="font-size:11px;color:var(--ts);font-style:italic">Selecting army...</div>')
+      + '</div>'
+      + readyTag + '</div>';
+  });
+  if (allPlayers.length <= 1) {
+    html += '<div style="color:var(--ts);font-size:13px;text-align:center;padding:12px 0">Waiting for players to join...</div>';
+  }
+  html += '</div>';
+
+  // My setup
+  const factions = [...new Set(S.armies.map(a=>a.faction))].sort();
+  const myFaction = me.faction || (factions[0]||'');
+  const myArmies  = S.armies.filter(a => a.faction === myFaction);
+  const factOpts  = factions.map(f =>
+    '<option value="'+escH(f)+'"'+(f===myFaction?' selected':'')+'>'+escH(f)+'</option>'
+  ).join('');
+  const armyOpts  = myArmies.length
+    ? myArmies.map(a => '<option value="'+a.id+'"'+(me.armyId===a.id?' selected':'')+'>'+escH(a.name)+'</option>').join('')
+    : '<option value="">— No armies for this faction —</option>';
+  const turnOpts  = Array.from({length: meta.playerCount||4}, (_,i) =>
+    '<option value="'+(i+1)+'"'+(me.turnPos===(i+1)?' selected':'')+'>P'+(i+1)+'</option>'
+  ).join('');
+
+  html += '<div class="card" style="margin-bottom:12px">'
+    + '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">'
+    + 'Your Setup' + (me.confirmed ? ' <span style="color:#2ecc71">✓ Confirmed</span>' : '') + '</div>'
+    + '<div class="field" style="margin-bottom:8px"><label>Your Name</label>'
+    + '<input class="inp" id="mp-myname" value="'+escH(me.name||'')+'" placeholder="Enter your name"></div>'
+    + '<div class="inp-row">'
+    + '<div class="field"><label>Faction</label>'
+    + '<select class="inp" id="mp-myfaction" onchange="mpUpdateArmyOpts()">'+factOpts+'</select></div>'
+    + '<div class="field"><label>Turn Position</label>'
+    + '<select class="inp" id="mp-myturnpos">'+turnOpts+'</select></div>'
+    + '</div>'
+    + '<div class="field" style="margin-bottom:12px"><label>Army</label>'
+    + '<select class="inp" id="mp-myarmy">'+armyOpts+'</select></div>'
+    + '<button class="btn btn-p btn-full" onclick="mpConfirmArmy()">✓ Confirm Army</button>'
+    + '</div>';
+
+  // Ready / Start Game
+  if (!isHost && me.confirmed) {
+    html += '<button class="btn btn-'+(me.ready?'g':'p')+' btn-full" style="margin-bottom:8px" onclick="mpSetReady('+(!me.ready)+')">'
+      + (me.ready ? '✓ Marked as Ready' : 'Mark as Ready') + '</button>';
+  }
+  if (isHost) {
+    let reason = '';
+    if (!me.confirmed)   reason = 'Confirm your own army first';
+    else if (!enoughJoined) reason = 'Waiting for more players to join';
+    else if (!allReady)  reason = 'Waiting for all players to ready up';
+    if (reason) html += '<div style="font-size:12px;color:var(--ts);text-align:center;margin-bottom:6px">'+escH(reason)+'</div>';
+    html += '<button class="btn btn-p btn-full'+(canStart?'':' disabled')+'"'
+      + (canStart?' onclick="mpStartGame()"':' disabled')+'>⚔️ Start Battle</button>';
+  }
+
+  el.innerHTML = html;
+}
+
+function mpUpdateArmyOpts() {
+  const faction = document.getElementById('mp-myfaction')?.value || '';
+  const sel = document.getElementById('mp-myarmy');
+  if (!sel) return;
+  const armies = S.armies.filter(a => a.faction === faction);
+  sel.innerHTML = armies.length
+    ? armies.map(a => '<option value="'+a.id+'">'+escH(a.name)+'</option>').join('')
+    : '<option value="">— No armies for this faction —</option>';
+}
+
+function mpConfirmArmy() {
+  if (!_mpInitFb() || !_mpSession) return;
+  const name    = document.getElementById('mp-myname')?.value?.trim() || '';
+  const faction = document.getElementById('mp-myfaction')?.value || '';
+  const armyId  = parseInt(document.getElementById('mp-myarmy')?.value);
+  const turnPos = parseInt(document.getElementById('mp-myturnpos')?.value || 1);
+  if (!name)             { toast('Enter your name first'); return; }
+  if (!armyId || isNaN(armyId)) { toast('Select an army first'); return; }
+  const army = S.armies.find(a => a.id === armyId);
+  if (!army) { toast('Army not found'); return; }
+
+  _fbDb.ref('rooms/'+_mpSession.code+'/players/'+_mpSession.playerId)
+    .update({ name, faction, armyId, armyData:army, turnPos, confirmed:true })
+    .then(() => toast('Army confirmed!'))
+    .catch(e => toast('Failed: ' + e.message));
+}
+
+function mpSetReady(ready) {
+  if (!_mpInitFb() || !_mpSession) return;
+  _fbDb.ref('rooms/'+_mpSession.code+'/players/'+_mpSession.playerId)
+    .update({ ready })
+    .then(() => { if (ready) toast('You\'re ready!'); })
+    .catch(e => toast('Failed: ' + e.message));
+}
+
+function mpStartGame() {
+  if (!_mpSession || _mpSession.role !== 'host') return;
+  _fbDb.ref('rooms/'+_mpSession.code+'/meta').update({ status:'active' })
+    .catch(e => toast('Could not start: ' + e.message));
+}
+
+function _mpActivateSession() {
+  if (!_mpSession || !_mpLobbyData) return;
+  const me = (_mpLobbyData.players||{})[_mpSession.playerId];
+  _mpSession.status = 'active';
+  mpSave();
+
+  // Populate Personal Tracker from this player's MP army selection
+  if (me?.armyData) {
+    const army = me.armyData;
+    const units = [];
+    (army.units||[]).forEach(au => {
+      const u = S.units.find(x => x.id === au.id);
+      if (!u) return;
+      const maxW = parseInt(u.stats?.W) || 1;
+      const maxM = parseInt((u.models||'1').split('-')[0]) || 1;
+      for (let c = 0; c < (au.count||1); c++) {
+        units.push({ uid:u.id, name:u.name, maxWounds:maxW, wounds:maxW, destroyed:false, usedAbils:{}, maxModels:maxM, modelCount:maxM });
+      }
+    });
+    S.pt = {
+      gameName: 'MP Battle · '+_mpSession.code,
+      myArmyId: army.id,
+      myDetachmentIdx: me.detachmentIdx || 0,
+      opponentArmyIds: [],
+      cp: 0, round: 1,
+      vpRounds: [0,0,0,0,0],
+      primaryObj: null, secondaryObjs: [],
+      units,
+    };
+    ptSave();
+  }
+  renderMP();
+  toast('Battle started! Your Tracker is ready.');
+}
+
+// ── MP SYNC ───────────────────────────────────────────────────
+
+function _mpSyncPTToFb() {
+  if (!_fbDb || !_mpSession?.code || !_mpSession?.playerId || !S.pt) return;
+  _fbDb.ref('rooms/'+_mpSession.code+'/players/'+_mpSession.playerId)
+    .update({ cp: S.pt.cp, vpRounds: S.pt.vpRounds, secondaryObjs: S.pt.secondaryObjs })
+    .catch(e => console.error('[MP] sync failed:', e));
+}
+
+// ── MP ACTIVE VIEW ────────────────────────────────────────────
+
+function mpSwitchTab(tab) {
+  _mpActiveTab = tab;
+  renderMPActiveView();
+}
+
+function mpSetRound(r) {
+  if (!_fbDb || !_mpSession) return;
+  _fbDb.ref('rooms/'+_mpSession.code+'/meta').update({ round: r, activeTurnPos: 1 })
+    .catch(e => toast('Could not update round'));
+}
+
+function mpSetActiveTurn(pos) {
+  if (!_fbDb || !_mpSession) return;
+  _fbDb.ref('rooms/'+_mpSession.code+'/meta').update({ activeTurnPos: pos })
+    .catch(e => toast('Could not update turn'));
+}
+
+function mpDrawPrimary() {
+  if (!_mpSession || !S.objectives.primary.length) return;
+  const obj = S.objectives.primary[Math.floor(Math.random()*S.objectives.primary.length)];
+  _fbDb.ref('rooms/'+_mpSession.code+'/primaryObj').set(Object.assign({}, obj))
+    .catch(e => toast('Could not draw objective'));
+}
+
+function mpSetViewPlayer(pid) {
+  _mpViewPid = pid;
+  renderMPActiveView();
+}
+
+function renderMPActiveView() {
+  const el = document.getElementById('mp-wrap');
+  if (!el || !_mpSession) return;
+
+  const code    = _mpSession.code;
+  const isHost  = _mpSession.role === 'host';
+  const meta    = _mpLobbyData?.meta    || {};
+  const players = _mpLobbyData?.players || {};
+  const priObj  = _mpLobbyData?.primaryObj || null;
+  const round   = meta.round || 1;
+  const actPos  = meta.activeTurnPos || 1;
+
+  const sorted = Object.entries(players)
+    .map(([pid,p]) => ({...p, pid}))
+    .sort((a,b) => (a.turnPos||0)-(b.turnPos||0));
+
+  let html = '';
+
+  // ── Header ──────────────────────────────────────────────────
+  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
+    + '<div>'
+    + '<h1 class="ph1" style="margin:0;font-size:18px">Multiplayer</h1>'
+    + '<div style="font-size:11px;color:var(--ts);letter-spacing:2px">Room: <strong style="color:var(--fp);letter-spacing:3px">'+escH(code)+'</strong></div>'
+    + '</div>'
+    + '<button class="btn btn-d btn-sm" onclick="mpLeave()">✕ Leave</button></div>';
+
+  // ── Round selector ──────────────────────────────────────────
+  html += '<div class="card" style="margin-bottom:10px;padding:10px 14px">'
+    + '<div style="display:flex;justify-content:space-between;align-items:center">'
+    + '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:1px">Battle Round</div>'
+    + '<div style="display:flex;gap:4px">';
+  for (let r=1;r<=5;r++) {
+    const act = round===r;
+    html += '<button class="btn btn-'+(act?'p':'g')+' btn-sm" style="min-width:32px;font-weight:700" onclick="mpSetRound('+r+')">'+r+'</button>';
+  }
+  html += '</div></div></div>';
+
+  // ── Sub-tabs ────────────────────────────────────────────────
+  html += '<div style="display:flex;border-bottom:2px solid var(--bdr);margin-bottom:12px">'
+    + '<button class="pt-tab'+(_mpActiveTab==='battle'?' active':'')+'" style="flex:1" onclick="mpSwitchTab(\'battle\')">⚔️ Battle</button>'
+    + '<button class="pt-tab'+(_mpActiveTab==='datasheets'?' active':'')+'" style="flex:1" onclick="mpSwitchTab(\'datasheets\')">📖 Datasheets</button>'
+    + '</div>';
+
+  // ── BATTLE TAB ───────────────────────────────────────────────
+  if (_mpActiveTab === 'battle') {
+
+    // Scoreboard
+    html += '<div style="margin-bottom:12px">';
+    sorted.forEach(p => {
+      const active   = p.turnPos === actPos;
+      const isMe     = p.pid === _mpSession.playerId;
+      const totalVP  = (p.vpRounds||[0,0,0,0,0]).reduce((a,b)=>a+b,0);
+      const border   = active ? 'var(--fp)' : 'var(--bdr)';
+      const shadow   = active ? 'box-shadow:0 0 12px rgba(74,158,255,0.3);' : '';
+      html += '<div style="border:2px solid '+border+';border-radius:8px;padding:10px 12px;margin-bottom:8px;background:var(--cs);'+shadow+'">'
+        + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
+        + '<div style="display:flex;align-items:center;gap:6px">'
+        + '<span style="background:var(--fp);color:#fff;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:700">P'+p.turnPos+'</span>'
+        + '<span style="font-family:var(--fd);font-size:14px;color:var(--ft);font-weight:700">'+escH(p.name||'Player')+'</span>'
+        + (isMe ? '<span style="font-size:10px;color:var(--ts)">(you)</span>' : '')
+        + (active ? '<span style="font-size:10px;color:var(--fp);font-weight:700;margin-left:4px">▶ ACTIVE</span>' : '')
+        + '</div>'
+        + '<div style="display:flex;gap:12px;align-items:center">'
+        + '<div style="text-align:center"><div style="font-size:9px;color:var(--ts);text-transform:uppercase">CP</div>'
+        + '<div style="font-size:18px;font-weight:700;color:var(--ft)">'+(p.cp||0)+'</div></div>'
+        + '<div style="text-align:center"><div style="font-size:9px;color:var(--ts);text-transform:uppercase">VP</div>'
+        + '<div style="font-size:18px;font-weight:700;color:var(--fp)">'+totalVP+'</div></div>'
+        + '</div></div>'
+        // VP per round mini-grid
+        + '<div style="display:flex;gap:3px;margin-bottom:6px">'
+        + (p.vpRounds||[0,0,0,0,0]).map((v,i)=>
+          '<div style="flex:1;text-align:center;background:var(--bdr);border-radius:4px;padding:3px 2px">'
+          + '<div style="font-size:9px;color:var(--ts)">R'+(i+1)+'</div>'
+          + '<div style="font-size:12px;font-weight:700;color:var(--ft)">'+v+'</div></div>'
+        ).join('')
+        + '</div>'
+        // Set active turn button
+        + (!active
+          ? '<button class="btn btn-g btn-sm" style="width:100%;font-size:11px" onclick="mpSetActiveTurn('+p.turnPos+')">Set Active Turn ▶</button>'
+          : '')
+        + '</div>';
+    });
+    html += '</div>';
+
+    // Primary Objective
+    html += '<div class="card" style="margin-bottom:10px">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
+      + '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:1px">Primary Objective</div>'
+      + (isHost ? '<button class="btn btn-g btn-sm" onclick="mpDrawPrimary()">🎲 '+(priObj?'Redraw':'Draw')+'</button>' : '')
+      + '</div>';
+    if (priObj) {
+      html += '<div style="font-family:var(--fd);font-size:15px;color:var(--ft);margin-bottom:4px">'+escH(priObj.name)+'</div>'
+        + '<div style="font-size:12px;color:var(--ts);line-height:1.5">'+escH(priObj.desc||priObj.score||'')+'</div>';
+    } else {
+      html += '<div style="font-size:13px;color:var(--ts);font-style:italic">'
+        + (isHost ? 'Tap Draw to share a primary objective with all players.' : 'Waiting for host to draw primary objective.')
+        + '</div>';
+    }
+    html += '</div>';
+
+    // Secondaries — all players
+    html += '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Secondary Objectives</div>';
+    sorted.forEach(p => {
+      const isMe = p.pid === _mpSession.playerId;
+      const secs = p.secondaryObjs || [];
+      html += '<div class="card" style="margin-bottom:8px">'
+        + '<div style="font-size:11px;font-weight:700;color:var(--ft);margin-bottom:6px">'
+        + 'P'+p.turnPos+' · '+escH(p.name||'Player')
+        + (isMe ? ' <span style="font-size:10px;color:var(--ts)">(you)</span>' : '')
+        + '</div>';
+      if (!secs.length) {
+        html += '<div style="font-size:12px;color:var(--ts);font-style:italic">'
+          + (isMe ? 'Draw secondaries in My Tracker →' : 'No secondaries drawn yet') + '</div>';
+      } else {
+        secs.forEach(s => {
+          html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bdr)">'
+            + '<div>'
+            + '<div style="font-size:12px;font-weight:700;color:'+(s.achieved?'#2ecc71':'var(--ft)')+'">'+escH(s.name)+(s.achieved?' ✓':'')+'</div>'
+            + '<div style="font-size:10px;color:var(--ts)">'+escH(s.desc||s.score||'')+'</div>'
+            + '</div></div>';
+        });
+      }
+      html += '</div>';
+    });
+  }
+
+  // ── DATASHEETS TAB ───────────────────────────────────────────
+  if (_mpActiveTab === 'datasheets') {
+    // Player selector buttons
+    const viewPid = _mpViewPid || _mpSession.playerId;
+    html += '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px">';
+    sorted.forEach(p => {
+      const sel = p.pid === viewPid;
+      html += '<button class="btn btn-'+(sel?'p':'g')+' btn-sm" onclick="mpSetViewPlayer(\''+p.pid+'\')">P'+p.turnPos+' '+escH(p.name||'Player')+'</button>';
+    });
+    html += '</div>';
+
+    const vp = players[viewPid];
+    if (!vp?.armyData) {
+      html += '<div style="color:var(--ts);text-align:center;padding:20px;font-style:italic">No army data available.</div>';
+    } else {
+      html += _mpRenderArmyRef(vp.armyData, vp.faction, vp.detachmentIdx||0);
+    }
+  }
+
+  el.innerHTML = html;
+}
+
+function _mpRenderArmyRef(army, faction, detIdx) {
+  const fd  = FACTION_DATA[faction] || null;
+  const det = fd ? (fd.detachments||[])[detIdx] || null : null;
+  let html = '';
+
+  // Army name
+  html += '<div style="font-family:var(--fd);font-size:16px;color:var(--ft);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--bdr)">'
+    + escH(army.name||'Army') + ' <span style="font-size:12px;color:var(--ts)">· '+escH(faction||'')+'</span></div>';
+
+  // Detachment rule
+  if (det?.rule_name) {
+    html += '<div class="card" style="margin-bottom:8px">'
+      + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px">DETACHMENT — '+escH(det.name||'')+'</div>'
+      + '<div style="font-size:13px;font-weight:700;color:var(--ft);margin-bottom:2px">'+escH(det.rule_name)+'</div>'
+      + '<div style="font-size:11px;color:var(--ts);line-height:1.5">'+escH(det.rule_desc||'')+'</div>'
+      + '</div>';
+  }
+
+  // Stratagems (collapsed to save space — tap to expand)
+  if (det?.stratagems?.length) {
+    html += '<div class="card" style="margin-bottom:8px">'
+      + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">STRATAGEMS</div>'
+      + det.stratagems.map(st =>
+        '<div class="codex-strat-item" style="margin-bottom:6px">'
+        + '<div style="display:flex;justify-content:space-between;align-items:center">'
+        + '<div style="font-size:12px;font-weight:700;color:var(--ft)">'+escH(st.name)+'</div>'
+        + '<span class="cp-badge">'+st.cp+'CP</span></div>'
+        + '<div style="font-size:10px;color:var(--ts);margin-top:2px">'+escH(st.desc||'')+'</div>'
+        + '</div>'
+      ).join('')
+      + '</div>';
+  }
+
+  // Units
+  html += '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">UNITS</div>';
+  (army.units||[]).forEach(au => {
+    const u = S.units.find(x => x.id === au.id);
+    if (!u) return;
+    const st = u.stats || {};
+    const statsRow = ['M','T','SV','W','LD','OC'].map(k=>
+      '<div class="codex-stat"><span>'+k+'</span>'+escH(st[k]||'—')+'</div>'
+    ).join('') + (st.INV&&st.INV!=='None'?'<div class="codex-stat"><span>INV</span>'+escH(st.INV)+'</div>':'');
+
+    // Loadout filtering
+    const ld = au.loadout||[]; const smLd = (au.subModelLoadout||[]).flat();
+    const allLd = [...ld,...smLd];
+    const rSet = allLd.length ? new Set(allLd.flatMap(m=>Array.isArray(m.ranged)?m.ranged:(m.ranged?[m.ranged]:[]))) : null;
+    const mSet = allLd.length ? new Set(allLd.flatMap(m=>Array.isArray(m.melee)?m.melee:(m.melee?[m.melee]:[]))) : null;
+    const rW = (u.ranged||[]).filter(w=>!rSet||!rSet.size||rSet.has(w.n));
+    const mW = (u.melee||[]).filter(w=>!mSet||!mSet.size||mSet.has(w.n));
+    const wHdr = '<thead><tr><th>Weapon</th><th>R</th><th>A</th><th>BS/WS</th><th>S</th><th>AP</th><th>D</th></tr></thead>';
+    const wRow = w => '<tr><td>'+escH(w.n)+'</td><td>'+escH(w.r)+'</td><td>'+escH(w.a)+'</td><td>'+escH(w.skill||w.ws||'')+'</td><td>'+escH(w.s)+'</td><td>'+escH(w.ap)+'</td><td>'+escH(w.d)+'</td></tr>';
+    let wHtml = '';
+    if (rW.length) wHtml += '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin:6px 0 2px">RANGED</div><table class="codex-weap-tbl">'+wHdr+'<tbody>'+rW.map(wRow).join('')+'</tbody></table>';
+    if (mW.length) wHtml += '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin:6px 0 2px">MELEE</div><table class="codex-weap-tbl">'+wHdr+'<tbody>'+mW.map(wRow).join('')+'</tbody></table>';
+
+    // Abilities
+    const tags = [...(u.core_rules||[]),...(u.faction_abilities||[])];
+    const tagHtml = tags.length ? '<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:6px">'+tags.map(t=>'<span style="background:var(--bdr);border-radius:4px;padding:2px 5px;font-size:10px;color:var(--ts)">'+escH(t)+'</span>').join('')+'</div>' : '';
+    const abilHtml = (u.abilities||[]).length ? '<div style="margin-top:6px">'+u.abilities.map(a=>'<div style="margin-bottom:3px"><span style="font-size:11px;font-weight:700;color:var(--ft)">'+escH(a.n)+':</span> <span style="font-size:11px;color:var(--ts)">'+escH(a.d)+'</span></div>').join('')+'</div>' : '';
+
+    html += '<div class="codex-unit-card" style="margin-bottom:8px">'
+      + '<div style="font-family:var(--fd);font-size:14px;color:var(--ft);font-weight:700;margin-bottom:6px">'+escH(u.name)+' ×'+(au.count||1)+'</div>'
+      + '<div class="codex-stat-row">'+statsRow+'</div>'
+      + wHtml + tagHtml + abilHtml + '</div>';
+  });
+
+  return html;
+}
+
+function mpLeave() {
+  if (!confirm('Leave this room? You will need to rejoin with the code.')) return;
+  _mpListeners.forEach(({ref,ev,fn}) => ref.off(ev,fn));
+  _mpListeners = [];
+  if (_mpSession && _fbDb) {
+    _fbDb.ref('rooms/'+_mpSession.code+'/players/'+_mpSession.playerId).remove();
+  }
+  _mpSession = null;
+  _mpLobbyData = null;
+  localStorage.removeItem('wc_mp_armies');
+  mpSave();
+  renderMP();
+}
+
 // ── INIT ─────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
   load();
+  // Restore MP session from localStorage
+  const savedMp = localStorage.getItem('wc_mp');
+  if (savedMp) {
+    try {
+      _mpSession = JSON.parse(savedMp);
+      if (_mpSession?.code && _mpInitFb()) {
+        // Re-attach listeners and refresh status from Firebase
+        _mpLobbyListen(_mpSession.code);
+        _fbDb.ref('rooms/'+_mpSession.code+'/meta').get().then(snap => {
+          const meta = snap.val();
+          if (!meta) { _mpSession = null; mpSave(); }
+          else { _mpSession.status = meta.status; mpSave(); }
+        }).catch(() => {});
+      }
+    } catch(e) { _mpSession = null; localStorage.removeItem('wc_mp'); }
+  }
   nav('home');
 });
 
