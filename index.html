@@ -372,6 +372,7 @@ select.inp{cursor:pointer}
 .codex-weap-tbl{width:100%;border-collapse:collapse;font-size:11px;margin-top:6px}
 .codex-weap-tbl th{color:var(--ts);font-weight:600;padding:2px 6px;text-align:left;border-bottom:1px solid var(--bdr)}
 .codex-weap-tbl td{padding:2px 6px;color:var(--tp);border-bottom:1px solid rgba(255,255,255,0.03)}
+.codex-weap-tbl tbody tr:hover td{background:rgba(255,255,255,0.06);color:var(--ft);transition:background 0.1s}
 .codex-strat-item{background:var(--card);border:1px solid var(--bdr);border-radius:6px;padding:10px;margin-bottom:8px}
 .codex-strat-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
 .codex-strat-name{font-weight:700;font-size:12px;color:var(--ft)}
@@ -750,7 +751,8 @@ select.inp{cursor:pointer}
           <button class="btn btn-g btn-sm" style="padding:2px 9px" onclick="ptSetCP(1)">+</button>
         </div>
         <div class="pt-stat-chip">VP<strong id="pt-hdr-vp">0</strong></div>
-        <button class="btn btn-g btn-sm" onclick="ptNextRound()">+Round</button>
+        <button class="btn btn-g btn-sm" onclick="ptPrevRound()">←</button>
+        <button class="btn btn-g btn-sm" onclick="ptNextRound()">Round →</button>
         <button class="btn btn-d btn-sm" onclick="ptClearSession()">Clear</button>
       </div>
     </div>
@@ -3214,6 +3216,14 @@ function ptNextRound() {
   renderPTActive();
 }
 
+function ptPrevRound() {
+  if (!S.pt) return;
+  if (S.pt.round <= 1) { toast('Already at round 1'); return; }
+  S.pt.round--;
+  ptSave();
+  renderPTActive();
+}
+
 function ptSetCP(delta) {
   if (!S.pt) return;
   S.pt.cp = Math.max(0, S.pt.cp + delta);
@@ -3390,7 +3400,7 @@ function renderPTArmyTab() {
   const dets = fd ? (fd.detachments || []) : [];
   const det  = dets[pt.myDetachmentIdx] || null;
 
-  // ── Rules ──
+  // ── 1. Army Rule ──
   let html = '';
   if (fd) {
     html += '<div class="card" style="margin-bottom:10px">'
@@ -3399,63 +3409,17 @@ function renderPTArmyTab() {
       + '<div style="font-size:12px;color:var(--ts);line-height:1.5">' + escH(fd.army_rule_desc || '') + '</div>'
       + '</div>';
   }
+
+  // ── 2. Detachment Rule ──
   if (det) {
     html += '<div class="card" style="margin-bottom:10px">'
       + '<div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">DETACHMENT RULE — ' + escH(det.name || '') + '</div>'
       + '<div style="font-family:var(--fd);font-size:14px;color:var(--ft);margin-bottom:4px">' + escH(det.rule_name || '') + '</div>'
       + '<div style="font-size:12px;color:var(--ts);line-height:1.5">' + escH(det.rule_desc || '') + '</div>'
       + '</div>';
-
-    // Detachment stratagems
-    if (det.stratagems && det.stratagems.length) {
-      const stCards = det.stratagems.map(st => {
-        const ok = pt.cp >= st.cp;
-        return '<div class="codex-strat-item">'
-          + '<div class="codex-strat-top">'
-          + '<div class="codex-strat-name">' + escH(st.name) + '</div>'
-          + '<div style="display:flex;align-items:center;gap:6px;flex-shrink:0">'
-          + '<span class="cp-badge">' + st.cp + 'CP</span>'
-          + '<button class="codex-spend-btn' + (ok ? '' : ' disabled') + '"' + (ok ? '' : ' disabled') + ' onclick="ptSpendCP(' + st.cp + ')">&#8722; Use</button>'
-          + '</div></div>'
-          + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px">WHEN</div>'
-          + '<div style="font-size:10px;color:var(--fp);margin-bottom:2px">' + escH(st.type || '') + '</div>'
-          + (st.target ? '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">TARGET</div><div style="font-size:10px;color:var(--ts);margin-bottom:2px">' + escH(st.target) + '</div>' : '')
-          + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">EFFECT</div>'
-          + '<div class="codex-strat-desc">' + escH(st.desc || '') + '</div>'
-          + '</div>';
-      }).join('');
-      html += '<div class="card" style="margin-bottom:10px">'
-        + '<div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">DETACHMENT STRATAGEMS</div>'
-        + stCards + '</div>';
-    }
   }
 
-  // Core stratagems
-  const coreStrats = DEFAULT_CORE_STRATAGEMS || [];
-  if (coreStrats.length) {
-    const cCards = coreStrats.map(st => {
-      const ok = pt.cp >= st.cp;
-      return '<div class="codex-strat-item">'
-        + '<div class="codex-strat-top">'
-        + '<div class="codex-strat-name">' + escH(st.name) + '</div>'
-        + '<div style="display:flex;align-items:center;gap:6px;flex-shrink:0">'
-        + '<span class="cp-badge">' + st.cp + 'CP</span>'
-        + '<button class="codex-spend-btn' + (ok ? '' : ' disabled') + '"' + (ok ? '' : ' disabled') + ' onclick="ptSpendCP(' + st.cp + ')">&#8722; Use</button>'
-        + '</div></div>'
-        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">WHEN</div>'
-        + '<div style="font-size:10px;color:var(--fp);margin-bottom:2px">' + escH(st.when || '') + '</div>'
-        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">TARGET</div>'
-        + '<div style="font-size:10px;color:var(--ts);margin-bottom:2px">' + escH(st.target || '') + '</div>'
-        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">EFFECT</div>'
-        + '<div class="codex-strat-desc">' + escH(st.effect || '') + '</div>'
-        + '</div>';
-    }).join('');
-    html += '<div class="card" style="margin-bottom:10px">'
-      + '<div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">CORE STRATAGEMS</div>'
-      + cCards + '</div>';
-  }
-
-  // ── Units ──
+  // ── 3. Units (datasheets — inserted before stratagems for quick access) ──
   html += '<div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin:14px 0 8px">MY UNITS</div>';
 
   const unitsHtml = pt.units.map((pu, ui) => {
@@ -3486,31 +3450,40 @@ function renderPTArmyTab() {
     const meleeW  = (uData.melee  || []).filter(w => !activeM || activeM.has(w.n));
 
     // Weapon tables with ranged/melee divider
-    const weapHdr = '<thead><tr><th>Weapon</th><th>R</th><th>A</th><th>BS/WS</th><th>S</th><th>AP</th><th>D</th></tr></thead>';
-    const weapRow = w => '<tr><td>' + escH(w.n) + '</td>'
-      + '<td>' + escH(w.r) + '</td><td>' + escH(w.a) + '</td><td>' + escH(w.skill || w.ws || '') + '</td>'
-      + '<td>' + escH(w.s) + '</td><td>' + escH(w.ap) + '</td><td>' + escH(w.d) + '</td></tr>';
+    const weapHdr = '<colgroup><col style="width:38%"><col style="width:9%"><col style="width:9%"><col style="width:14%"><col style="width:9%"><col style="width:9%"><col style="width:12%"></colgroup>'
+      + '<thead><tr><th>Weapon</th><th>R</th><th>A</th><th>BS/WS</th><th>S</th><th>AP</th><th>D</th></tr></thead>';
+    const weapRow = w => {
+      const specTags = (w.special||[]).map(sp => '<span class="special-tag" data-tip="'+escH(weaponTip(sp))+'">'+escH(sp)+'</span>').join('');
+      return '<tr><td>' + escH(w.n) + (specTags ? ' ' : '') + specTags + '</td>'
+        + '<td>' + escH(w.r) + '</td><td>' + escH(w.a) + '</td><td>' + escH(w.skill || w.ws || '') + '</td>'
+        + '<td>' + escH(w.s) + '</td><td>' + escH(w.ap) + '</td><td>' + escH(w.d) + '</td></tr>';
+    };
     let weapHtml = '';
     if (rangedW.length) {
       weapHtml += '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 2px">RANGED WEAPONS</div>'
-        + '<table class="codex-weap-tbl"><tbody>' + weapHdr + rangedW.map(weapRow).join('') + '</tbody></table>';
+        + '<table class="codex-weap-tbl" style="table-layout:fixed;width:100%">' + weapHdr + '<tbody>' + rangedW.map(weapRow).join('') + '</tbody></table>';
     }
     if (meleeW.length) {
       weapHtml += '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 2px">MELEE WEAPONS</div>'
-        + '<table class="codex-weap-tbl"><tbody>' + weapHdr + meleeW.map(weapRow).join('') + '</tbody></table>';
+        + '<table class="codex-weap-tbl" style="table-layout:fixed;width:100%">' + weapHdr + '<tbody>' + meleeW.map(weapRow).join('') + '</tbody></table>';
     }
 
-    // Abilities — core_rules (tags), faction_abilities (tags), unit abilities, wargear_abilities
+    // Abilities — core_rules (string tags), faction_abilities (string tags), unit abilities, wargear_abilities (objects)
     let abilHtml = '';
     const coreRules = uData.core_rules || [];
     const factionAbils = uData.faction_abilities || [];
-    const wargearAbils = uData.wargear_abilities || [];
-    if (coreRules.length || factionAbils.length || wargearAbils.length) {
-      const tags = [...coreRules, ...factionAbils, ...wargearAbils];
+    const _cr = DEFAULT_CORE_UNIT_RULES || {};
+    // Tag pills — core rules and faction abilities are plain strings
+    if (coreRules.length || factionAbils.length) {
+      const tags = [...coreRules, ...factionAbils];
       abilHtml += '<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px">'
-        + tags.map(t => '<span style="background:var(--bdr);border-radius:4px;padding:2px 6px;font-size:10px;color:var(--ts);font-weight:600">' + escH(t) + '</span>').join('')
+        + tags.map(t => {
+          const tip = _cr[t.toUpperCase()] || '';
+          return '<span class="special-tag" data-tip="' + escH(tip) + '">' + escH(t) + '</span>';
+        }).join('')
         + '</div>';
     }
+    // Unit abilities
     if (uData.abilities && uData.abilities.length) {
       abilHtml += '<div style="margin-top:8px">'
         + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">ABILITIES</div>'
@@ -3518,6 +3491,23 @@ function renderPTArmyTab() {
           '<div style="margin-bottom:4px"><span style="font-size:11px;font-weight:700;color:var(--ft)">' + escH(a.n) + ':</span>'
           + ' <span style="font-size:11px;color:var(--ts)">' + escH(a.d) + '</span></div>'
         ).join('') + '</div>';
+    }
+    // Wargear abilities (objects with n/d, not strings)
+    const wargearAbils = uData.wargear_abilities || [];
+    if (wargearAbils.length) {
+      abilHtml += '<div style="margin-top:8px">'
+        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">WARGEAR</div>'
+        + wargearAbils.map(a =>
+          '<div style="margin-bottom:4px"><span style="font-size:11px;font-weight:700;color:var(--ft)">' + escH(a.n) + ':</span>'
+          + ' <span style="font-size:11px;color:var(--ts)">' + escH(a.d) + '</span></div>'
+        ).join('') + '</div>';
+    }
+    // Keywords
+    const kwds = uData.keywords || [];
+    if (kwds.length) {
+      abilHtml += '<div style="margin-top:8px;font-size:9px;color:var(--ts);line-height:1.6">'
+        + '<span style="font-weight:700;color:var(--fp);text-transform:uppercase;letter-spacing:0.5px">Keywords: </span>'
+        + escH(kwds.join(', ')) + '</div>';
     }
 
     // Model tracker (only show if unit has more than 1 model)
@@ -3549,7 +3539,54 @@ function renderPTArmyTab() {
       + modelBar + weapHtml + abilHtml + '</div>';
   }).join('');
 
-  el.innerHTML = html + (unitsHtml || '<div style="color:var(--ts);padding:10px;text-align:center">No units in this army.</div>');
+  // ── 4. Stratagems (after units) ──
+  let stratHtml = '';
+  if (det && det.stratagems && det.stratagems.length) {
+    const stCards = det.stratagems.map(st => {
+      const ok = pt.cp >= st.cp;
+      return '<div class="codex-strat-item">'
+        + '<div class="codex-strat-top">'
+        + '<div class="codex-strat-name">' + escH(st.name) + '</div>'
+        + '<div style="display:flex;align-items:center;gap:6px;flex-shrink:0">'
+        + '<span class="cp-badge">' + st.cp + 'CP</span>'
+        + '<button class="codex-spend-btn' + (ok ? '' : ' disabled') + '"' + (ok ? '' : ' disabled') + ' onclick="ptSpendCP(' + st.cp + ')">&#8722; Use</button>'
+        + '</div></div>'
+        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px">WHEN</div>'
+        + '<div style="font-size:10px;color:var(--fp);margin-bottom:2px">' + escH(st.type || '') + '</div>'
+        + (st.target ? '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">TARGET</div><div style="font-size:10px;color:var(--ts);margin-bottom:2px">' + escH(st.target) + '</div>' : '')
+        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">EFFECT</div>'
+        + '<div class="codex-strat-desc">' + escH(st.desc || '') + '</div>'
+        + '</div>';
+    }).join('');
+    stratHtml += '<div class="card" style="margin-top:14px;margin-bottom:10px">'
+      + '<div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">DETACHMENT STRATAGEMS</div>'
+      + stCards + '</div>';
+  }
+  const coreStrats = DEFAULT_CORE_STRATAGEMS || [];
+  if (coreStrats.length) {
+    const cCards = coreStrats.map(st => {
+      const ok = pt.cp >= st.cp;
+      return '<div class="codex-strat-item">'
+        + '<div class="codex-strat-top">'
+        + '<div class="codex-strat-name">' + escH(st.name) + '</div>'
+        + '<div style="display:flex;align-items:center;gap:6px;flex-shrink:0">'
+        + '<span class="cp-badge">' + st.cp + 'CP</span>'
+        + '<button class="codex-spend-btn' + (ok ? '' : ' disabled') + '"' + (ok ? '' : ' disabled') + ' onclick="ptSpendCP(' + st.cp + ')">&#8722; Use</button>'
+        + '</div></div>'
+        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">WHEN</div>'
+        + '<div style="font-size:10px;color:var(--fp);margin-bottom:2px">' + escH(st.when || '') + '</div>'
+        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">TARGET</div>'
+        + '<div style="font-size:10px;color:var(--ts);margin-bottom:2px">' + escH(st.target || '') + '</div>'
+        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px">EFFECT</div>'
+        + '<div class="codex-strat-desc">' + escH(st.effect || '') + '</div>'
+        + '</div>';
+    }).join('');
+    stratHtml += '<div class="card" style="margin-bottom:10px">'
+      + '<div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">CORE STRATAGEMS</div>'
+      + cCards + '</div>';
+  }
+
+  el.innerHTML = html + (unitsHtml || '<div style="color:var(--ts);padding:10px;text-align:center">No units in this army.</div>') + stratHtml;
 }
 
 function renderPTObjsTab() {
@@ -3618,41 +3655,90 @@ function renderPTRefTab() {
       + 'No reference armies added.<br><span style="font-size:12px">Start a new session and add opponent armies to see their datasheets here.</span></div>';
     return;
   }
+  const _cr = DEFAULT_CORE_UNIT_RULES || {};
+  const refWHdr = '<colgroup><col style="width:38%"><col style="width:9%"><col style="width:9%"><col style="width:14%"><col style="width:9%"><col style="width:9%"><col style="width:12%"></colgroup>'
+    + '<thead><tr><th>Weapon</th><th>R</th><th>A</th><th>BS/WS</th><th>S</th><th>AP</th><th>D</th></tr></thead>';
+  const refWRow = w => {
+    const specTags = (w.special||[]).map(sp => '<span class="special-tag" data-tip="'+escH(weaponTip(sp))+'">'+escH(sp)+'</span>').join('');
+    return '<tr><td>'+escH(w.n)+(specTags?' ':'')+specTags+'</td>'
+      +'<td>'+escH(w.r)+'</td><td>'+escH(w.a)+'</td><td>'+escH(w.skill||w.ws||'')+'</td>'
+      +'<td>'+escH(w.s)+'</td><td>'+escH(w.ap)+'</td><td>'+escH(w.d)+'</td></tr>';
+  };
   let html = '';
   ids.forEach(aid => {
     const army = S.armies.find(a => a.id === aid);
     if (!army) return;
-    html += '<div style="font-family:var(--fd);font-size:15px;color:var(--ft);margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid var(--bdr)">'
-      + escH(army.name || 'Army') + '</div>';
+    const fd = army.faction ? (FACTION_DATA[army.faction] || null) : null;
+
+    // Army name + rule
+    html += '<div style="font-family:var(--fd);font-size:15px;color:var(--ft);margin:18px 0 8px;padding-bottom:6px;border-bottom:2px solid var(--bdr)">'
+      + escH(army.name || 'Army')
+      + (army.faction ? ' <span style="font-size:11px;color:var(--ts);font-weight:400">· '+escH(army.faction)+'</span>' : '')
+      + '</div>';
+    if (fd) {
+      html += '<div class="card" style="margin-bottom:8px">'
+        + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px">ARMY RULE</div>'
+        + '<div style="font-size:13px;font-weight:700;color:var(--ft);margin-bottom:2px">' + escH(fd.army_rule_name || '') + '</div>'
+        + '<div style="font-size:11px;color:var(--ts);line-height:1.5">' + escH(fd.army_rule_desc || '') + '</div>'
+        + '</div>';
+      // Show first detachment rule as a reference (opponent's detachment unknown, but gives context)
+      const det0 = (fd.detachments || [])[0];
+      if (det0 && det0.rule_name) {
+        html += '<div class="card" style="margin-bottom:10px">'
+          + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px">DETACHMENT — ' + escH(det0.name || '') + '</div>'
+          + '<div style="font-size:13px;font-weight:700;color:var(--ft);margin-bottom:2px">' + escH(det0.rule_name) + '</div>'
+          + '<div style="font-size:11px;color:var(--ts);line-height:1.5">' + escH(det0.rule_desc || '') + '</div>'
+          + '</div>';
+      }
+    }
+
+    // Units
+    html += '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">UNITS</div>';
     (army.units || []).forEach(au => {
       const u = S.units.find(x => x.id === au.id);
       if (!u) return;
       const st = u.stats || {};
       const statsRow = ['M','T','SV','W','LD','OC'].map(k =>
         '<div class="codex-stat"><span>' + k + '</span>' + escH(st[k] || '—') + '</div>'
-      ).join('');
-      const allW = [
-        ...(u.ranged || []).map(w => Object.assign({}, w, { wtype: 'R' })),
-        ...(u.melee  || []).map(w => Object.assign({}, w, { wtype: 'M' }))
-      ];
-      const weapHtml = allW.length
-        ? '<table class="codex-weap-tbl" style="margin-top:8px"><thead><tr>'
-          + '<th>Weapon</th><th>R</th><th>A</th><th>BS/WS</th><th>S</th><th>AP</th><th>D</th></tr></thead><tbody>'
-          + allW.map(w =>
-            '<tr><td>' + escH(w.n) + '<span style="color:var(--ts);font-size:9px"> [' + w.wtype + ']</span></td>'
-            + '<td>' + escH(w.r) + '</td><td>' + escH(w.a) + '</td><td>' + escH(w.skill || w.ws || '') + '</td>'
-            + '<td>' + escH(w.s) + '</td><td>' + escH(w.ap) + '</td><td>' + escH(w.d) + '</td></tr>'
-          ).join('') + '</tbody></table>' : '';
-      const abilHtml = (u.abilities && u.abilities.length)
-        ? '<div style="margin-top:8px">' + u.abilities.map(a =>
-            '<div style="margin-bottom:4px"><span style="font-size:11px;font-weight:700;color:var(--ft)">' + escH(a.n) + ':</span>'
-            + ' <span style="font-size:11px;color:var(--ts)">' + escH(a.d) + '</span></div>'
-          ).join('') + '</div>' : '';
-      html += '<div class="codex-unit-card">'
+      ).join('') + (st.INV && st.INV !== 'None' ? '<div class="codex-stat"><span>INV</span>' + escH(st.INV) + '</div>' : '');
+
+      // Weapons — ranged and melee split, with special tags
+      const rW = u.ranged || [];
+      const mW = u.melee  || [];
+      let weapHtml = '';
+      if (rW.length) weapHtml += '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 2px">RANGED</div>'
+        + '<table class="codex-weap-tbl" style="table-layout:fixed;width:100%">'+refWHdr+'<tbody>'+rW.map(refWRow).join('')+'</tbody></table>';
+      if (mW.length) weapHtml += '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 2px">MELEE</div>'
+        + '<table class="codex-weap-tbl" style="table-layout:fixed;width:100%">'+refWHdr+'<tbody>'+mW.map(refWRow).join('')+'</tbody></table>';
+
+      // Faction ability pills with hover tooltips
+      const pillTags = [...(u.core_rules||[]), ...(u.faction_abilities||[])];
+      const pillHtml = pillTags.length
+        ? '<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px">'
+          + pillTags.map(t => '<span class="special-tag" data-tip="'+escH(_cr[t.toUpperCase()]||'')+'">'+escH(t)+'</span>').join('')
+          + '</div>' : '';
+
+      // Unit abilities (Leader, Infiltrators, Feel No Pain, etc.)
+      const uAbilHtml = (u.abilities && u.abilities.length)
+        ? '<div style="margin-top:8px">'
+          + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">ABILITIES</div>'
+          + u.abilities.map(a =>
+              '<div style="margin-bottom:4px"><span style="font-size:11px;font-weight:700;color:var(--ft)">' + escH(a.n) + ':</span>'
+              + ' <span style="font-size:11px;color:var(--ts)">' + escH(a.d) + '</span></div>'
+            ).join('') + '</div>' : '';
+
+      // Wargear abilities
+      const wgAbils = u.wargear_abilities || [];
+      const wgHtml = wgAbils.length
+        ? '<div style="margin-top:6px">'
+          + '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px">WARGEAR</div>'
+          + wgAbils.map(a => '<div style="margin-bottom:3px"><span style="font-size:11px;font-weight:700;color:var(--ft)">'+escH(a.n)+':</span> <span style="font-size:11px;color:var(--ts)">'+escH(a.d)+'</span></div>').join('')
+          + '</div>' : '';
+
+      html += '<div class="codex-unit-card" style="margin-bottom:8px">'
         + '<div class="codex-unit-name">' + escH(u.name) + ' \xd7' + (au.count || 1) + '</div>'
-        + '<div class="codex-stat-row">' + statsRow
-        + (st.INV && st.INV !== 'None' ? '<div class="codex-stat"><span>INV</span>' + escH(st.INV) + '</div>' : '')
-        + '</div>' + weapHtml + abilHtml + '</div>';
+        + '<div class="codex-stat-row">' + statsRow + '</div>'
+        + weapHtml + pillHtml + uAbilHtml + wgHtml + '</div>';
     });
   });
   el.innerHTML = html;
@@ -4297,21 +4383,30 @@ function _mpRenderArmyRef(army, faction, detIdx) {
     const mSet = allLd.length ? new Set(allLd.flatMap(m=>Array.isArray(m.melee)?m.melee:(m.melee?[m.melee]:[]))) : null;
     const rW = (u.ranged||[]).filter(w=>!rSet||!rSet.size||rSet.has(w.n));
     const mW = (u.melee||[]).filter(w=>!mSet||!mSet.size||mSet.has(w.n));
-    const wHdr = '<thead><tr><th>Weapon</th><th>R</th><th>A</th><th>BS/WS</th><th>S</th><th>AP</th><th>D</th></tr></thead>';
-    const wRow = w => '<tr><td>'+escH(w.n)+'</td><td>'+escH(w.r)+'</td><td>'+escH(w.a)+'</td><td>'+escH(w.skill||w.ws||'')+'</td><td>'+escH(w.s)+'</td><td>'+escH(w.ap)+'</td><td>'+escH(w.d)+'</td></tr>';
+    const wHdr = '<colgroup><col style="width:38%"><col style="width:9%"><col style="width:9%"><col style="width:14%"><col style="width:9%"><col style="width:9%"><col style="width:12%"></colgroup>'
+      + '<thead><tr><th>Weapon</th><th>R</th><th>A</th><th>BS/WS</th><th>S</th><th>AP</th><th>D</th></tr></thead>';
+    const wRow = w => {
+      const specTags = (w.special||[]).map(sp=>'<span class="special-tag" data-tip="'+escH(weaponTip(sp))+'">'+escH(sp)+'</span>').join('');
+      return '<tr><td>'+escH(w.n)+(specTags?' ':'')+specTags+'</td><td>'+escH(w.r)+'</td><td>'+escH(w.a)+'</td><td>'+escH(w.skill||w.ws||'')+'</td><td>'+escH(w.s)+'</td><td>'+escH(w.ap)+'</td><td>'+escH(w.d)+'</td></tr>';
+    };
     let wHtml = '';
-    if (rW.length) wHtml += '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin:6px 0 2px">RANGED</div><table class="codex-weap-tbl">'+wHdr+'<tbody>'+rW.map(wRow).join('')+'</tbody></table>';
-    if (mW.length) wHtml += '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin:6px 0 2px">MELEE</div><table class="codex-weap-tbl">'+wHdr+'<tbody>'+mW.map(wRow).join('')+'</tbody></table>';
+    if (rW.length) wHtml += '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin:6px 0 2px">RANGED</div><table class="codex-weap-tbl" style="table-layout:fixed;width:100%">'+wHdr+'<tbody>'+rW.map(wRow).join('')+'</tbody></table>';
+    if (mW.length) wHtml += '<div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin:6px 0 2px">MELEE</div><table class="codex-weap-tbl" style="table-layout:fixed;width:100%">'+wHdr+'<tbody>'+mW.map(wRow).join('')+'</tbody></table>';
 
-    // Abilities
+    // Abilities — core_rules/faction_abilities are strings; wargear_abilities are objects {n,d}
+    const _cr2 = DEFAULT_CORE_UNIT_RULES || {};
     const tags = [...(u.core_rules||[]),...(u.faction_abilities||[])];
-    const tagHtml = tags.length ? '<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:6px">'+tags.map(t=>'<span style="background:var(--bdr);border-radius:4px;padding:2px 5px;font-size:10px;color:var(--ts)">'+escH(t)+'</span>').join('')+'</div>' : '';
+    const tagHtml = tags.length ? '<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:6px">'+tags.map(t=>'<span class="special-tag" data-tip="'+escH(_cr2[t.toUpperCase()]||'')+'">'+escH(t)+'</span>').join('')+'</div>' : '';
     const abilHtml = (u.abilities||[]).length ? '<div style="margin-top:6px">'+u.abilities.map(a=>'<div style="margin-bottom:3px"><span style="font-size:11px;font-weight:700;color:var(--ft)">'+escH(a.n)+':</span> <span style="font-size:11px;color:var(--ts)">'+escH(a.d)+'</span></div>').join('')+'</div>' : '';
+    const wgAbilsMT = u.wargear_abilities||[];
+    const wgHtml = wgAbilsMT.length ? '<div style="margin-top:6px"><div style="font-size:9px;color:var(--fp);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px">WARGEAR</div>'+wgAbilsMT.map(a=>'<div style="margin-bottom:3px"><span style="font-size:11px;font-weight:700;color:var(--ft)">'+escH(a.n)+':</span> <span style="font-size:11px;color:var(--ts)">'+escH(a.d)+'</span></div>').join('')+'</div>' : '';
+    const kwdsMT = u.keywords||[];
+    const kwdHtml = kwdsMT.length ? '<div style="margin-top:6px;font-size:9px;color:var(--ts)"><span style="font-weight:700;color:var(--fp);text-transform:uppercase;letter-spacing:0.5px">Keywords: </span>'+escH(kwdsMT.join(', '))+'</div>' : '';
 
     html += '<div class="codex-unit-card" style="margin-bottom:8px">'
       + '<div style="font-family:var(--fd);font-size:14px;color:var(--ft);font-weight:700;margin-bottom:6px">'+escH(u.name)+' ×'+(au.count||1)+'</div>'
       + '<div class="codex-stat-row">'+statsRow+'</div>'
-      + wHtml + tagHtml + abilHtml + '</div>';
+      + wHtml + tagHtml + abilHtml + wgHtml + kwdHtml + '</div>';
   });
 
   return html;
