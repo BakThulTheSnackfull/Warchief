@@ -125,6 +125,7 @@ select.inp{cursor:pointer}
 /* TOAST */
 #toast{position:fixed;bottom:22px;right:22px;background:var(--sur);border:1px solid var(--fp);border-radius:8px;padding:11px 18px;color:var(--ft);font-size:13px;z-index:9999;transform:translateY(60px);opacity:0;transition:.3s;pointer-events:none;max-width:320px}
 #toast.show{transform:none;opacity:1}
+#tip-popup{display:none;position:fixed;background:#1a1a2e;color:#e0e0e0;padding:8px 12px;border-radius:8px;font-size:12px;line-height:1.5;max-width:min(300px,calc(100vw - 24px));z-index:10000;border:1px solid rgba(255,255,255,0.18);box-shadow:0 4px 20px rgba(0,0,0,0.7);pointer-events:none;word-wrap:break-word}
 
 /* MODALS */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
@@ -168,12 +169,12 @@ select.inp{cursor:pointer}
 .wtbl th{background:var(--sur);color:var(--ts);padding:5px 8px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px}
 .wtbl td{padding:5px 8px;border-bottom:1px solid var(--bdr);color:var(--tp)}
 .wtbl tr:hover td{background:var(--sur)}
-.special-tag{display:inline-block;background:rgba(255,255,255,.07);border-radius:10px;padding:2px 7px;font-size:10px;color:var(--ts);margin:1px;cursor:default;position:relative}
+.special-tag{display:inline-block;background:rgba(255,255,255,.07);border-radius:10px;padding:2px 7px;font-size:10px;color:var(--ts);margin:1px;cursor:pointer;position:relative;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .special-tag:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:0;background:#000;color:#fff;padding:5px 8px;border-radius:5px;font-size:11px;white-space:nowrap;z-index:200;max-width:300px;white-space:normal;min-width:180px}
 
 /* ABILITIES */
 .abil{background:var(--sur);border-radius:6px;padding:10px;margin-bottom:6px}
-.abil-name{font-weight:700;color:var(--ft);font-size:12px;margin-bottom:3px}.core-tag{display:inline-block;background:rgba(56,189,248,.12);color:#38bdf8;border:1px solid rgba(56,189,248,.35);border-radius:10px;padding:2px 8px;font-size:10px;font-weight:600;margin:2px;cursor:default;position:relative}.core-tag:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:0;background:#1a1a2e;color:#e0e0e0;padding:6px 10px;border-radius:6px;font-size:11px;z-index:300;min-width:200px;max-width:320px;white-space:normal;line-height:1.4;border:1px solid rgba(56,189,248,.3);font-weight:400}.fa-tag{display:inline-block;background:rgba(var(--fp-rgb,74,158,255),.12);color:var(--fp);border:1px solid rgba(var(--fp-rgb,74,158,255),.35);border-radius:10px;padding:2px 8px;font-size:10px;font-weight:600;margin:2px;cursor:default;position:relative}.fa-tag:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:0;background:#1a1a2e;color:#e0e0e0;padding:6px 10px;border-radius:6px;font-size:11px;z-index:300;min-width:200px;max-width:320px;white-space:normal;line-height:1.4;border:1px solid rgba(74,158,255,.3);font-weight:400}.wg-badge{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;background:rgba(217,119,6,0.15);color:#d97706;border:1px solid rgba(217,119,6,0.4);border-radius:4px;padding:1px 5px;margin-right:4px;vertical-align:middle;flex-shrink:0}
+.abil-name{font-weight:700;color:var(--ft);font-size:12px;margin-bottom:3px}.core-tag{display:inline-block;background:rgba(56,189,248,.12);color:#38bdf8;border:1px solid rgba(56,189,248,.35);border-radius:10px;padding:2px 8px;font-size:10px;font-weight:600;margin:2px;cursor:pointer;position:relative;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.core-tag:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:0;background:#1a1a2e;color:#e0e0e0;padding:6px 10px;border-radius:6px;font-size:11px;z-index:300;min-width:200px;max-width:320px;white-space:normal;line-height:1.4;border:1px solid rgba(56,189,248,.3);font-weight:400}.fa-tag{display:inline-block;background:rgba(var(--fp-rgb,74,158,255),.12);color:var(--fp);border:1px solid rgba(var(--fp-rgb,74,158,255),.35);border-radius:10px;padding:2px 8px;font-size:10px;font-weight:600;margin:2px;cursor:pointer;position:relative;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.fa-tag:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:0;background:#1a1a2e;color:#e0e0e0;padding:6px 10px;border-radius:6px;font-size:11px;z-index:300;min-width:200px;max-width:320px;white-space:normal;line-height:1.4;border:1px solid rgba(74,158,255,.3);font-weight:400}.wg-badge{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;background:rgba(217,119,6,0.15);color:#d97706;border:1px solid rgba(217,119,6,0.4);border-radius:4px;padding:1px 5px;margin-right:4px;vertical-align:middle;flex-shrink:0}
 .abil-desc{font-size:12px;color:var(--ts);line-height:1.5}
 
 /* ARMY BUILDER */
@@ -993,6 +994,8 @@ select.inp{cursor:pointer}
 
 <!-- TOAST -->
 <div id="toast"></div>
+<!-- TOOLTIP POPUP (JS-driven, works on touch devices) -->
+<div id="tip-popup"></div>
 
 <!-- ============ MODALS ============ -->
 
@@ -5031,6 +5034,47 @@ window.addEventListener('DOMContentLoaded', () => {
     } catch(e) { _mpSession = null; localStorage.removeItem('wc_mp'); }
   }
   nav('home');
+
+  // ── TOOLTIP POPUP (touch-friendly) ──────────────────────────────
+  // Tapping any [data-tip] element shows a persistent popup — works on iOS/Android where :hover doesn't
+  (function() {
+    const popup = document.getElementById('tip-popup');
+    if (!popup) return;
+    let _activeTipEl = null;
+    function positionTip(el) {
+      popup.style.display = 'block';
+      const r = el.getBoundingClientRect();
+      const pw = popup.offsetWidth, ph = popup.offsetHeight;
+      let left = r.left;
+      if (left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
+      if (left < 8) left = 8;
+      // Show above if space, else below
+      const top = r.top >= ph + 12 ? r.top - ph - 6 : r.bottom + 6;
+      popup.style.left = left + 'px';
+      popup.style.top  = top  + 'px';
+    }
+    document.addEventListener('click', function(e) {
+      const tag = e.target.closest('[data-tip]');
+      if (tag && tag.dataset.tip) {
+        if (_activeTipEl === tag && popup.style.display !== 'none') {
+          // Second tap on same pill — dismiss
+          popup.style.display = 'none';
+          _activeTipEl = null;
+        } else {
+          popup.textContent = tag.dataset.tip;
+          popup.style.display = 'block';
+          _activeTipEl = tag;
+          positionTip(tag);
+          e.stopPropagation();
+        }
+      } else {
+        popup.style.display = 'none';
+        _activeTipEl = null;
+      }
+    }, true); // capture phase so it fires before other handlers
+    // Also hide on scroll
+    document.addEventListener('scroll', function() { popup.style.display = 'none'; _activeTipEl = null; }, true);
+  })();
 
   // Re-render active pages when tab becomes visible (handles Firebase reconnect, iOS app-switch, etc.)
   document.addEventListener('visibilitychange', () => {
