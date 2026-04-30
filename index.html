@@ -598,10 +598,6 @@ select.inp{cursor:pointer}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
     Rules<span class="badge">Live</span>
   </div>
-  <div class="ni" id="ni-ob" onclick="nav('ob')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
-    Objectives<span class="badge">Live</span>
-  </div>
 
   <div class="ni" id="ni-ms" onclick="nav('ms')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
@@ -633,8 +629,7 @@ select.inp{cursor:pointer}
     <div class="qc" onclick="nav('ab')"><div class="qc-icon">🪖</div><div class="qc-name">Army Builder</div><div class="qc-sub">Build &amp; manage armies</div></div>
     <div class="qc" onclick="nav('det')"><div class="qc-icon">🛡️</div><div class="qc-name">Detachments</div><div class="qc-sub">Rules &amp; stratagems</div></div>
     <div class="qc" onclick="nav('ru')"><div class="qc-icon">📖</div><div class="qc-name">Rules</div><div class="qc-sub">Phase &amp; mechanic reference</div></div>
-    <div class="qc" onclick="nav('ob')"><div class="qc-icon">🎯</div><div class="qc-name">Objectives</div><div class="qc-sub">Primary &amp; secondary</div></div>
-    <div class="qc" onclick="nav('ms')"><div class="qc-icon">🗺</div><div class="qc-name">Missions</div><div class="qc-sub">Generate &amp; track missions</div></div>
+    <div class="qc" onclick="nav('ms')"><div class="qc-icon">🗺</div><div class="qc-name">Missions</div><div class="qc-sub">Cards, deployment &amp; library</div></div>
     <div class="qc" onclick="nav('pt')"><div class="qc-icon">📋</div><div class="qc-name">My Tracker</div><div class="qc-sub">Personal battle log</div></div>
     <div class="qc" onclick="nav('mp')"><div class="qc-icon">🌐</div><div class="qc-name">Multiplayer</div><div class="qc-sub">Host or join a battle</div></div>
   </div>
@@ -807,88 +802,19 @@ select.inp{cursor:pointer}
   <div id="ru-detail" style="display:none"></div>
 </div>
 
-<!-- PAGE: OBJECTIVES -->
-<div class="pg" id="pg-ob">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-    <h1 class="ph1">Objectives</h1>
-    <button class="btn btn-p btn-sm" onclick="openObjModal(null)">+ Add Objective</button>
-  </div>
-  <div class="srch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input id="ob-search" placeholder="Search objectives…" oninput="renderObjectives()"></div>
-  <div class="chips">
-    <div class="chip active" data-oc="All" onclick="setObCat(this)">All</div>
-    <div class="chip" data-oc="Primary" onclick="setObCat(this)">Primary</div>
-    <div class="chip" data-oc="Secondary" onclick="setObCat(this)">Secondary</div>
-    <div class="chip" data-oc="Control" onclick="setObCat(this)">Control</div>
-    <div class="chip" data-oc="Destroy" onclick="setObCat(this)">Destroy</div>
-    <div class="chip" data-oc="Positional" onclick="setObCat(this)">Positional</div>
-  </div>
-  <h2 class="ph2" style="margin:6px 0 10px">Primary Objectives</h2>
-  <div class="card-grid" id="ob-primary"></div>
-  <h2 class="ph2" style="margin:12px 0 10px">Secondary Objectives</h2>
-  <div class="card-grid" id="ob-secondary"></div>
-
-  <div class="sep" style="margin:20px 0"></div>
+<!-- PAGE: MISSIONS -->
+<div class="pg" id="pg-ms">
+  <h1 class="ph1" style="margin-bottom:4px">Missions</h1>
+  <p style="font-size:11px;color:var(--ts);margin-bottom:14px">Deployment zone diagrams and mission card reference library.</p>
 
   <!-- DEPLOYMENT DIAGRAMS -->
   <h2 class="ph2" style="margin:0 0 4px">Deployment Zones</h2>
   <p style="font-size:11px;color:var(--ts);margin-bottom:14px">Visual reference for all six deployment types. Attacker = red, Defender = blue.</p>
   <div class="dep-grid" id="dep-grid"></div>
-</div>
 
-<!-- PAGE: MISSIONS -->
-<div class="pg" id="pg-ms">
-  <h1 class="ph1" style="margin-bottom:4px">Missions</h1>
-  <p style="font-size:11px;color:var(--ts);margin-bottom:14px">Generate a random mission or browse all card text.</p>
-
-  <!-- MISSION GENERATOR -->
-  <div class="card" style="margin-bottom:16px">
-    <div class="ph2" style="margin-bottom:10px">Mission Generator</div>
-    <div class="ms-pack-tabs">
-      <div class="ms-pack-tab active" data-pk="pn" onclick="msSetPack(this)">Pariah Nexus</div>
-      <div class="ms-pack-tab" data-pk="ca" onclick="msSetPack(this)">Chapter Approved</div>
-    </div>
-    <button class="btn btn-p" style="width:100%;margin-bottom:12px" onclick="msRollMission()">🎲 Roll Mission</button>
-    <div id="ms-gen-result" class="ms-gen-result">
-      <div id="ms-gen-deployment"></div>
-      <div id="ms-gen-primary"></div>
-      <div id="ms-gen-rule"></div>
-    </div>
-  </div>
-
-  <!-- SECONDARY MISSION HAND -->
-  <div class="card" style="margin-bottom:16px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <div class="ph2">Secondary Missions</div>
-      <div style="display:flex;gap:6px;align-items:center">
-        <span style="font-size:11px;color:var(--ts)">Fixed</span>
-        <label style="position:relative;display:inline-block;width:36px;height:20px">
-          <input type="checkbox" id="ms-tactical-toggle" onchange="msToggleTactical()" style="opacity:0;width:0;height:0">
-          <span style="position:absolute;cursor:pointer;inset:0;background:var(--bdr);border-radius:10px;transition:.2s"></span>
-          <span id="ms-toggle-knob" style="position:absolute;content:'';height:14px;width:14px;left:3px;bottom:3px;background:var(--ft);border-radius:50%;transition:.2s"></span>
-        </label>
-        <span style="font-size:11px;color:var(--ts)">Tactical</span>
-      </div>
-    </div>
-    <div class="sh-hand">
-      <div class="sh-slot" id="ms-slot-0" onclick="msDrawSecondary(0)">
-        <div class="sh-slot-empty">Tap to draw</div>
-      </div>
-      <div class="sh-slot" id="ms-slot-1" onclick="msDrawSecondary(1)">
-        <div class="sh-slot-empty">Tap to draw</div>
-      </div>
-    </div>
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-g btn-sm" style="flex:1" onclick="msShuffleSecondaries()">↺ Shuffle deck</button>
-      <button class="btn btn-g btn-sm" style="flex:1" onclick="msDrawSecondary(-1)">+ Draw card</button>
-    </div>
-    <div style="margin-top:10px;text-align:center">
-      <div class="sh-vp-total" id="ms-sec-vp">0</div>
-      <div class="sh-vp-label">Secondary VP scored this game</div>
-    </div>
-  </div>
+  <div class="sep" style="margin:20px 0"></div>
 
   <!-- CARD LIBRARY -->
-  <div class="sep" style="margin:4px 0 16px"></div>
   <div class="ms-section-hdr">
     <h2 class="ph2" style="margin:0">Card Library</h2>
   </div>
@@ -932,7 +858,15 @@ select.inp{cursor:pointer}
           <option value="">+ Add opponent's army…</option>
         </select>
       </div>
-      <button class="btn btn-p" style="width:100%;margin-top:16px" onclick="ptStartSession()">Start Session →</button>
+      <div class="sep" style="margin:14px 0"></div>
+      <div class="ph3" style="margin-bottom:6px">Mission <span style="color:var(--ts);font-size:11px">(optional — roll before starting)</span></div>
+      <div class="ms-pack-tabs" id="pt-setup-pack-tabs">
+        <div class="ms-pack-tab active" data-pk="pn" onclick="ptSetupSetPack(this)">Pariah Nexus</div>
+        <div class="ms-pack-tab" data-pk="ca" onclick="ptSetupSetPack(this)">Chapter Approved</div>
+      </div>
+      <button class="btn btn-g" style="width:100%;margin-bottom:8px" onclick="ptSetupRollMission()">🎲 Roll Mission</button>
+      <div id="pt-setup-mission-result" style="font-size:11px;color:var(--ts);text-align:center;padding:4px 0"></div>
+      <button class="btn btn-p" style="width:100%;margin-top:12px" onclick="ptStartSession()">Start Session →</button>
     </div>
   </div>
   <!-- Active session -->
@@ -988,21 +922,6 @@ select.inp{cursor:pointer}
   </div>
 </div>
 
-<!-- PT: Pick Primary modal -->
-<div class="overlay" id="m-pt-pick-primary">
-<div class="modal" style="max-width:400px">
-  <div class="modal-hdr"><div class="ph2">Pick Primary Objective</div>
-    <button class="modal-close" onclick="closeModal('m-pt-pick-primary')">✕</button></div>
-  <div id="m-pt-pick-primary-list" style="max-height:55vh;overflow-y:auto"></div>
-</div></div>
-
-<!-- PT: Pick Secondary modal -->
-<div class="overlay" id="m-pt-pick-sec">
-<div class="modal" style="max-width:400px">
-  <div class="modal-hdr"><div class="ph2">Pick Secondary Objective</div>
-    <button class="modal-close" onclick="closeModal('m-pt-pick-sec')">✕</button></div>
-  <div id="m-pt-pick-sec-list" style="max-height:55vh;overflow-y:auto"></div>
-</div></div>
 
 <!-- PAGE: SETTINGS -->
 <div class="pg" id="pg-settings">
@@ -1322,43 +1241,6 @@ select.inp{cursor:pointer}
   </div>
 </div></div>
 
-<!-- Objective Modal -->
-<div class="overlay" id="m-obj">
-<div class="modal" style="max-width:520px">
-  <div class="modal-hdr">
-    <div class="ph2" id="m-obj-title">Add Objective</div>
-    <button class="modal-close" onclick="closeModal('m-obj')">✕</button>
-  </div>
-  <input type="hidden" id="mo-id">
-  <div class="inp-row">
-    <div class="field"><label>Name*</label><input class="inp" id="mo-name"></div>
-    <div class="field"><label>Type</label>
-      <select class="inp" id="mo-type"><option>Primary</option><option>Secondary</option></select>
-    </div>
-  </div>
-  <div class="inp-row">
-    <div class="field"><label>Category</label>
-      <select class="inp" id="mo-cat">
-        <option>Control</option><option>Destroy</option><option>Positional</option>
-      </select>
-    </div>
-    <div class="field"><label>Auto-score Keyword</label>
-      <select class="inp" id="mo-autokw">
-        <option value="">None (manual)</option>
-        <option value="CHARACTER">CHARACTER</option>
-        <option value="VEHICLE_MONSTER">VEHICLE_MONSTER</option>
-        <option value="INFANTRY">INFANTRY</option>
-        <option value="UNIT_COUNT">UNIT_COUNT</option>
-      </select>
-    </div>
-  </div>
-  <div class="field"><label>Description</label><textarea class="inp" id="mo-desc" style="min-height:70px"></textarea></div>
-  <div class="field"><label>Scoring Summary</label><input class="inp" id="mo-score" placeholder="e.g. 5 VP per CHARACTER destroyed"></div>
-  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
-    <button class="btn btn-g" onclick="closeModal('m-obj')">Cancel</button>
-    <button class="btn btn-p" onclick="saveObjective()">Save Objective</button>
-  </div>
-</div></div>
 
 <!-- Spend CP Modal -->
 <div class="overlay" id="m-cp">
@@ -1510,7 +1392,7 @@ function nav(page) {
   // special alias for settings
   if (page === 'settings') { const s = document.getElementById('ni-settings'); if(s) s.classList.add('active'); }
   const renders = { home:null, ds:renderDSLib, ab:renderArmies, sc:renderShowcase,
-                    det:renderDetachments, ru:renderRules, ob:renderObPage,
+                    det:renderDetachments, ru:renderRules,
                     ms:renderMissionsPage, pt:renderPT, mp:renderMP, settings:renderFbStatus };
   if (renders[page]) renders[page]();
 }
@@ -3603,94 +3485,10 @@ function ptDrawSecretMission() {
   </div>`;
 }
 
-function renderObPage() {
-  renderObjectives();
-  renderDeploymentDiagrams();
-}
+// renderObPage removed — Objectives page deleted
 function renderMissionsPage() {
-  // Init secondary deck on first visit
-  if (!_msSecondaryDeck.length) msShuffleSecondaries();
+  renderDeploymentDiagrams();
   msRenderLibrary();
-}
-
-// ── OBJECTIVES ───────────────────────────────────────────
-function renderObjectives() {
-  const q = (document.getElementById('ob-search')||{value:''}).value.toLowerCase();
-  let filter = _obCat;
-  function matchObj(o) {
-    if (q && !o.name.toLowerCase().includes(q) && !o.desc.toLowerCase().includes(q)) return false;
-    if (filter==='All') return true;
-    if (filter==='Primary') return o.type==='Primary';
-    if (filter==='Secondary') return o.type==='Secondary';
-    return o.cat===filter;
-  }
-  function renderObjCard(o) {
-    return `<div class="obj-card ${escH(o.type)}">
-      <div class="obj-type">${escH(o.type)}</div>
-      <div class="obj-name">${escH(o.name)}</div>
-      <div class="obj-desc">${escH(o.desc)}</div>
-      <div class="obj-score">${escH(o.score)}</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
-        <span class="obj-cat">${escH(o.cat)}</span>
-        <div style="display:flex;gap:4px">
-          <button class="btn btn-g btn-sm" onclick="openObjModal('${escH(o.id)}')">Edit</button>
-          <button class="btn btn-g btn-sm" onclick="exportSingleObjective('${escH(o.id)}')" title="Export this objective">⬇</button>
-          <button class="btn btn-d btn-sm" onclick="deleteObjective('${escH(o.id)}')">Delete</button>
-        </div>
-      </div>
-    </div>`;
-  }
-  const prim = S.objectives.primary.filter(matchObj);
-  const sec  = S.objectives.secondary.filter(matchObj);
-  const pg = document.getElementById('ob-primary');
-  const sg = document.getElementById('ob-secondary');
-  if (pg) pg.innerHTML = prim.map(renderObjCard).join('') || '<div style="color:var(--ts);padding:10px">None</div>';
-  if (sg) sg.innerHTML = sec.map(renderObjCard).join('')  || '<div style="color:var(--ts);padding:10px">None</div>';
-}
-function setObCat(el) {
-  document.querySelectorAll('.pg#pg-ob .chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active'); _obCat = el.dataset.oc; renderObjectives();
-}
-function openObjModal(id) {
-  const all = [...S.objectives.primary,...S.objectives.secondary];
-  const o = id ? all.find(x=>x.id===id) : null;
-  document.getElementById('m-obj-title').textContent = o ? 'Edit Objective' : 'Add Objective';
-  document.getElementById('mo-id').value = o ? o.id : '';
-  document.getElementById('mo-name').value = o ? o.name : '';
-  document.getElementById('mo-type').value = o ? o.type : 'Secondary';
-  document.getElementById('mo-cat').value = o ? o.cat : 'Control';
-  document.getElementById('mo-autokw').value = o ? o.autoKw||'' : '';
-  document.getElementById('mo-desc').value = o ? o.desc : '';
-  document.getElementById('mo-score').value = o ? o.score : '';
-  openModal('m-obj');
-}
-function saveObjective() {
-  const name = document.getElementById('mo-name').value.trim();
-  if (!name) { toast('Name required'); return; }
-  const id = document.getElementById('mo-id').value;
-  const type = document.getElementById('mo-type').value;
-  const o = {
-    id: id || (type==='Primary'?'p':'s')+genId(),
-    name, type, cat: document.getElementById('mo-cat').value,
-    desc: document.getElementById('mo-desc').value,
-    score: document.getElementById('mo-score').value,
-    autoKw: document.getElementById('mo-autokw').value,
-    autoVP: 0
-  };
-  const arr = type==='Primary' ? S.objectives.primary : S.objectives.secondary;
-  const otherArr = type==='Primary' ? S.objectives.secondary : S.objectives.primary;
-  // check other array for id
-  const oi = otherArr.findIndex(x=>x.id===id);
-  if (oi>=0) otherArr.splice(oi,1);
-  if (id) { const i=arr.findIndex(x=>x.id===id); if(i>=0)arr[i]=o; else arr.push(o); }
-  else arr.push(o);
-  save(); closeModal('m-obj'); renderObjectives(); toast(id?'Objective updated!':'Objective added!');
-}
-function deleteObjective(id) {
-  if (!confirm('Delete this objective?')) return;
-  S.objectives.primary   = S.objectives.primary.filter(o=>o.id!==id);
-  S.objectives.secondary = S.objectives.secondary.filter(o=>o.id!==id);
-  save(); renderObjectives(); toast('Objective deleted');
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -3699,6 +3497,7 @@ function deleteObjective(id) {
 
 let _ptTab = 'pt-army';      // currently active PT sub-tab
 let _ptRefArmyIds = [];      // temp list of reference army IDs during setup
+let _ptPreMission = { pack:'pn', dep:null, pm:null, mr:null }; // pre-session mission roll
 
 function ptSave() {
   if (S.pt) localStorage.setItem('wc_pt', JSON.stringify(S.pt));
@@ -3808,10 +3607,17 @@ function ptStartSession() {
     cp:              0,
     round:           1,
     vpRounds:        [0, 0, 0, 0, 0],
-    primaryObj:      null,
-    secondaryObjs:   [],
+    // Mission state (new system)
+    missionPack:     _ptPreMission.pack || 'pn',
+    activeDep:       _ptPreMission.dep  || null,
+    activePM:        _ptPreMission.pm   || null,
+    activeMR:        _ptPreMission.mr   || null,
+    secDeck:         [],
+    secSlots:        [null, null],
+    secVP:           0,
     units,
   };
+  _ptPreMission = { pack:'pn', dep:null, pm:null, mr:null };
   _ptRefArmyIds = [];
   _ptTab = 'pt-army';
   ptSave();
@@ -3884,90 +3690,206 @@ function ptDestroyUnit(unitIdx) {
   renderPTActive();
 }
 
-function ptToggleSecAchieved(si) {
+// ── PT SETUP MISSION GENERATOR ────────────────────────────────
+
+function ptSetupSetPack(el) {
+  document.querySelectorAll('#pt-setup-pack-tabs .ms-pack-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  _ptPreMission.pack = el.dataset.pk;
+  // Reset rolled result when pack changes
+  _ptPreMission.dep = null; _ptPreMission.pm = null; _ptPreMission.mr = null;
+  const res = document.getElementById('pt-setup-mission-result');
+  if (res) res.textContent = '';
+}
+
+function ptSetupRollMission() {
+  const pack = _ptPreMission.pack || 'pn';
+  const deps = DEFAULT_DEPLOYMENTS || [];
+  const pms  = (DEFAULT_PRIMARY_MISSIONS || []).filter(c => (c.packs||[]).includes(pack));
+  const mrs  = DEFAULT_MISSION_RULES || []; // mission rules are pack-universal
+  if (!pms.length || !mrs.length || !deps.length) { toast('No mission data'); return; }
+  _ptPreMission.dep = deps[Math.floor(Math.random()*deps.length)];
+  _ptPreMission.pm  = pms[Math.floor(Math.random()*pms.length)];
+  _ptPreMission.mr  = mrs[Math.floor(Math.random()*mrs.length)];
+  const res = document.getElementById('pt-setup-mission-result');
+  if (res) res.innerHTML = '<strong style="color:var(--fp)">' + escH(_ptPreMission.dep.name) + '</strong>'
+    + ' · ' + escH(_ptPreMission.pm.name) + ' · ' + escH(_ptPreMission.mr.name);
+}
+
+// ── PT OBJECTIVES TAB (new mission-card system) ───────────────
+
+function ptAddVP(n) {
   if (!S.pt) return;
-  const sec = S.pt.secondaryObjs[si];
-  if (!sec) return;
-  sec.achieved = !sec.achieved;
+  const ri = (S.pt.round || 1) - 1;
+  S.pt.vpRounds[ri] = Math.max(0, (S.pt.vpRounds[ri] || 0) + n);
+  ptSave();
+  // Update header VP
+  const total = S.pt.vpRounds.reduce((a, b) => a + b, 0);
+  const vpEl = document.getElementById('pt-hdr-vp');
+  if (vpEl) vpEl.textContent = total;
+  // Show brief toast
+  toast('+' + n + ' VP (Round ' + S.pt.round + ')');
+}
+
+function ptAddSecVP(n) {
+  if (!S.pt) return;
+  S.pt.secVP = Math.max(0, (S.pt.secVP || 0) + n);
   ptSave();
   renderPTObjsTab();
 }
 
-function ptSwapSec(si) {
+function ptShufflePTSecondaries() {
   if (!S.pt) return;
-  const existIds = new Set(S.pt.secondaryObjs.map(s => s.id));
-  const pool = S.objectives.secondary.filter(o => !existIds.has(o.id));
-  if (!pool.length) { toast('No other secondaries available'); return; }
-  S.pt.secondaryObjs[si] = Object.assign({}, pool[Math.floor(Math.random() * pool.length)], { achieved: false });
-  ptSave();
-  renderPTObjsTab();
-}
-
-function ptShuffleSecondaries() {
-  if (!S.pt) return;
-  const pool = [...S.objectives.secondary];
-  const picked = [];
-  while (picked.length < 2 && pool.length) {
-    const i = Math.floor(Math.random() * pool.length);
-    picked.push(Object.assign({}, pool.splice(i, 1)[0], { achieved: false }));
+  const pool = [...(DEFAULT_SECONDARY_MISSIONS || [])]; // secondaries are pack-universal
+  // Shuffle into deck
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  S.pt.secondaryObjs = picked;
+  S.pt.secDeck  = pool.map(c => c.id);
+  S.pt.secSlots = [null, null];
+  S.pt.secVP    = 0;
   ptSave();
   renderPTObjsTab();
+  toast('Secondary deck shuffled');
 }
 
-function ptOpenPickPrimary() {
-  const list = document.getElementById('m-pt-pick-primary-list');
-  if (!list) return;
-  list.innerHTML = S.objectives.primary.map(o =>
-    '<button class="btn btn-g" style="width:100%;text-align:left;margin-bottom:6px;padding:10px" onclick="ptPickPrimary(' + o.id + ')">'
-    + '<strong>' + escH(o.name) + '</strong>'
-    + '<div style="font-size:11px;color:var(--ts);margin-top:2px">' + escH(o.desc || o.score || '') + '</div>'
-    + '</button>'
-  ).join('');
-  document.getElementById('m-pt-pick-primary').classList.add('open');
-}
-
-function ptPickPrimary(id) {
+function ptDrawPTSecondary(slotIdx) {
   if (!S.pt) return;
-  const obj = S.objectives.primary.find(o => o.id === id);
-  if (!obj) return;
-  S.pt.primaryObj = Object.assign({}, obj);
+  // Init deck if empty
+  if (!S.pt.secDeck || !S.pt.secDeck.length) {
+    const pool = [...(DEFAULT_SECONDARY_MISSIONS || [])]; // secondaries are pack-universal
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    S.pt.secDeck  = pool.map(c => c.id);
+    S.pt.secSlots = [null, null];
+  }
+  if (!S.pt.secDeck.length) { toast('Deck empty — shuffle to reset'); return; }
+  const cardId = S.pt.secDeck.shift();
+  const card   = (DEFAULT_SECONDARY_MISSIONS || []).find(c => c.id === cardId);
+  if (!card) return;
+  if (slotIdx === 0 || slotIdx === 1) {
+    S.pt.secSlots[slotIdx] = card;
+  } else {
+    // Find first empty slot, or push
+    const empty = S.pt.secSlots.findIndex(s => s === null);
+    if (empty >= 0) S.pt.secSlots[empty] = card;
+    else S.pt.secSlots.push(card);
+  }
   ptSave();
-  closeModal('m-pt-pick-primary');
   renderPTObjsTab();
 }
 
-function ptShufflePrimary() {
-  if (!S.pt || !S.objectives.primary.length) return;
-  S.pt.primaryObj = Object.assign({}, S.objectives.primary[Math.floor(Math.random() * S.objectives.primary.length)]);
-  ptSave();
-  renderPTObjsTab();
-}
-
-function ptOpenPickSec() {
-  const list = document.getElementById('m-pt-pick-sec-list');
-  if (!list || !S.pt) return;
-  if (S.pt.secondaryObjs.length >= 2) { toast('Already have 2 secondaries — use Swap to change one'); return; }
-  const existIds = new Set(S.pt.secondaryObjs.map(s => s.id));
-  const pool = S.objectives.secondary.filter(o => !existIds.has(o.id));
-  list.innerHTML = pool.map(o =>
-    '<button class="btn btn-g" style="width:100%;text-align:left;margin-bottom:6px;padding:10px" onclick="ptAddPickedSec(' + o.id + ')">'
-    + '<strong>' + escH(o.name) + '</strong>'
-    + '<div style="font-size:11px;color:var(--ts);margin-top:2px">' + escH(o.desc || o.score || '') + '</div>'
-    + '</button>'
-  ).join('');
-  document.getElementById('m-pt-pick-sec').classList.add('open');
-}
-
-function ptAddPickedSec(id) {
+function ptDiscardPTSecondary(slotIdx) {
   if (!S.pt) return;
-  const obj = S.objectives.secondary.find(o => o.id === id);
-  if (!obj) return;
-  S.pt.secondaryObjs.push(Object.assign({}, obj, { achieved: false }));
+  S.pt.secSlots[slotIdx] = null;
   ptSave();
-  closeModal('m-pt-pick-sec');
   renderPTObjsTab();
+}
+
+function ptRollMission() {
+  if (!S.pt) return;
+  const pack = S.pt.missionPack || 'pn';
+  const deps = DEFAULT_DEPLOYMENTS || [];
+  const pms  = (DEFAULT_PRIMARY_MISSIONS || []).filter(c => (c.packs||[]).includes(pack));
+  const mrs  = DEFAULT_MISSION_RULES || []; // mission rules are pack-universal
+  if (!pms.length || !mrs.length || !deps.length) { toast('No mission data'); return; }
+  S.pt.activeDep = deps[Math.floor(Math.random()*deps.length)];
+  S.pt.activePM  = pms[Math.floor(Math.random()*pms.length)];
+  S.pt.activeMR  = mrs[Math.floor(Math.random()*mrs.length)];
+  ptSave();
+  renderPTObjsTab();
+  toast('Mission rolled!');
+}
+
+function ptSetMissionPack(el) {
+  if (!S.pt) return;
+  document.querySelectorAll('#pt-pack-tabs .ms-pack-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  S.pt.missionPack = el.dataset.pk;
+  ptSave();
+}
+
+function renderPTObjsTab() {
+  const el = document.getElementById('pt-objs');
+  if (!el || !S.pt) return;
+  const pt = S.pt;
+  let html = '';
+
+  // ── Mission Generator ─────────────────────────────────────
+  html += '<div class="card" style="margin-bottom:12px">';
+  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
+    + '<div class="ph3" style="margin:0">Mission</div>'
+    + '<div id="pt-pack-tabs" class="ms-pack-tabs" style="margin:0">'
+    + '<div class="ms-pack-tab' + (pt.missionPack==='pn'?' active':'') + '" data-pk="pn" onclick="ptSetMissionPack(this)">PN</div>'
+    + '<div class="ms-pack-tab' + (pt.missionPack==='ca'?' active':'') + '" data-pk="ca" onclick="ptSetMissionPack(this)">CA</div>'
+    + '</div></div>';
+  html += '<button class="btn btn-g btn-sm" style="width:100%;margin-bottom:10px" onclick="ptRollMission()">🎲 Re-roll Mission</button>';
+
+  if (pt.activeDep || pt.activePM || pt.activeMR) {
+    // Deployment summary
+    if (pt.activeDep) {
+      html += '<div style="margin-bottom:8px;padding:8px;background:var(--bdr);border-radius:6px">'
+        + '<div style="font-size:9px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px">DEPLOYMENT</div>'
+        + '<div style="font-size:13px;font-weight:700;color:var(--ft)">' + escH(pt.activeDep.name) + '</div>'
+        + (pt.activeDep.desc ? '<div style="font-size:11px;color:var(--ts);margin-top:2px">' + escH(pt.activeDep.desc) + '</div>' : '')
+        + '</div>';
+    }
+    // Primary mission card
+    if (pt.activePM) {
+      html += buildMissionCardHTML(pt.activePM, 'primary', 'ptAddVP');
+    }
+    // Mission rule card
+    if (pt.activeMR) {
+      html += buildMissionCardHTML(pt.activeMR, 'mission_rule', 'ptAddVP');
+    }
+  } else {
+    html += '<div style="font-size:12px;color:var(--ts);text-align:center;padding:8px 0">No mission rolled yet — tap Re-roll to generate one.</div>';
+  }
+  html += '</div>';
+
+  // ── Secondary Mission Hand ────────────────────────────────
+  html += '<div class="card" style="margin-bottom:12px">';
+  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
+    + '<div class="ph3" style="margin:0">Secondary Missions</div>'
+    + '<div style="font-size:12px;color:var(--ts)">'
+    + '<span style="font-weight:700;color:var(--fp)">' + (pt.secVP || 0) + '</span> sec VP'
+    + '</div></div>';
+
+  const slots = pt.secSlots || [null, null];
+  slots.forEach((card, i) => {
+    if (card) {
+      html += '<div style="margin-bottom:8px">' + buildMissionCardHTML(card, 'secondary', 'ptAddSecVP') + '</div>';
+      html += '<button class="btn btn-d btn-sm" style="width:100%;margin-bottom:8px" onclick="ptDiscardPTSecondary(' + i + ')">Discard ↺</button>';
+    } else {
+      html += '<div style="border:2px dashed var(--bdr);border-radius:8px;padding:14px;text-align:center;margin-bottom:8px;cursor:pointer" onclick="ptDrawPTSecondary(' + i + ')">'
+        + '<span style="font-size:12px;color:var(--ts)">Tap to draw a card</span></div>';
+    }
+  });
+
+  html += '<div style="display:flex;gap:6px;margin-top:4px">'
+    + '<button class="btn btn-g btn-sm" style="flex:1" onclick="ptShufflePTSecondaries()">↺ Shuffle deck</button>'
+    + '<button class="btn btn-g btn-sm" style="flex:1" onclick="ptDrawPTSecondary(-1)">+ Draw another</button>'
+    + '</div>';
+  html += '</div>';
+
+  // ── VP per Round tracker ──────────────────────────────────
+  html += '<div class="card">';
+  html += '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">VP PER ROUND</div>';
+  const total = pt.vpRounds.reduce((a, b) => a + b, 0);
+  html += '<div class="pt-vp-grid">'
+    + pt.vpRounds.map((v, i) =>
+      '<div class="pt-vp-cell">'
+      + '<label>Round ' + (i + 1) + '</label>'
+      + '<input class="inp" type="number" min="0" value="' + v + '" oninput="ptSetRoundVP(' + i + ',this.value)" style="text-align:center;font-size:15px;font-weight:700;padding:4px">'
+      + '</div>'
+    ).join('') + '</div>';
+  html += '<div style="text-align:right;font-size:13px;color:var(--ts);margin-top:6px">Total: <strong style="color:var(--ft);font-size:15px">' + total + ' VP</strong></div>';
+  html += '</div>';
+
+  el.innerHTML = html;
 }
 
 function ptSetRoundVP(ri, val) {
@@ -3995,7 +3917,8 @@ function ptSwitchTab(tabId) {
   const sec = document.getElementById(tabId);
   if (btn) btn.classList.add('active');
   if (sec) sec.classList.add('active');
-  // Lazy-render new tabs on first open
+  // Lazy-render tabs on open
+  if (tabId === 'pt-objs') renderPTObjsTab();
   if (tabId === 'pt-guide') ptRenderGuide();
   if (tabId === 'pt-setup-tab') ptRenderChecklist();
 }
@@ -4214,63 +4137,6 @@ function renderPTArmyTab() {
   }
 
   el.innerHTML = html + (unitsHtml || '<div style="color:var(--ts);padding:10px;text-align:center">No units in this army.</div>') + stratHtml;
-}
-
-function renderPTObjsTab() {
-  const el = document.getElementById('pt-objs');
-  if (!el || !S.pt) return;
-  const pt    = S.pt;
-  const total = pt.vpRounds.reduce((a, b) => a + b, 0);
-
-  // Primary
-  const primHtml = pt.primaryObj
-    ? '<div class="pt-obj-card">'
-      + '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">PRIMARY OBJECTIVE</div>'
-      + '<div style="font-family:var(--fd);font-size:15px;color:var(--ft);margin-bottom:6px">' + escH(pt.primaryObj.name) + '</div>'
-      + '<div style="font-size:12px;color:var(--ts);line-height:1.5">' + escH(pt.primaryObj.desc || pt.primaryObj.score || '') + '</div>'
-      + '<div style="margin-top:8px;display:flex;gap:6px">'
-      + '<button class="btn btn-g btn-sm" onclick="ptOpenPickPrimary()">Change</button>'
-      + '<button class="btn btn-g btn-sm" onclick="ptShufflePrimary()">🎲 Shuffle</button>'
-      + '</div></div>'
-    : '<div class="card" style="margin-bottom:10px;text-align:center;padding:16px">'
-      + '<div style="color:var(--ts);margin-bottom:8px">No primary objective selected</div>'
-      + '<div style="display:flex;gap:6px;justify-content:center">'
-      + '<button class="btn btn-p btn-sm" onclick="ptOpenPickPrimary()">Pick Primary</button>'
-      + '<button class="btn btn-g btn-sm" onclick="ptShufflePrimary()">🎲 Shuffle</button>'
-      + '</div></div>';
-
-  // Secondaries
-  const secHtml = pt.secondaryObjs.map((s, i) =>
-    '<div class="pt-obj-card' + (s.achieved ? ' achieved' : '') + '">'
-    + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">'
-    + '<div><div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px">SECONDARY ' + (i + 1) + '</div>'
-    + '<div style="font-family:var(--fd);font-size:14px;color:var(--ft);margin-bottom:4px">' + escH(s.name) + '</div>'
-    + '<div style="font-size:11px;color:var(--ts);line-height:1.4">' + escH(s.desc || s.score || '') + '</div></div>'
-    + '<div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">'
-    + '<button class="btn btn-' + (s.achieved ? 'p' : 'g') + ' btn-sm" onclick="ptToggleSecAchieved(' + i + ')">' + (s.achieved ? '✓ Done' : 'Achieved') + '</button>'
-    + '<button class="btn btn-g btn-sm" onclick="ptSwapSec(' + i + ')">Swap</button>'
-    + '</div></div></div>'
-  ).join('');
-
-  // VP grid
-  const vpGrid = '<div class="pt-vp-grid">'
-    + pt.vpRounds.map((v, i) =>
-      '<div class="pt-vp-cell">'
-      + '<label>Round ' + (i + 1) + '</label>'
-      + '<input class="inp" type="number" min="0" value="' + v + '" oninput="ptSetRoundVP(' + i + ',this.value)" style="text-align:center;font-size:15px;font-weight:700;padding:4px">'
-      + '</div>'
-    ).join('') + '</div>'
-    + '<div style="text-align:right;font-size:13px;color:var(--ts);margin-top:4px">Total: <strong style="color:var(--ft);font-size:15px">' + total + ' VP</strong></div>';
-
-  el.innerHTML = '<div style="margin-bottom:10px">' + primHtml + '</div>'
-    + '<div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">SECONDARY OBJECTIVES</div>'
-    + (secHtml || '<div style="color:var(--ts);padding:8px 0;font-size:13px">No secondaries selected yet.</div>')
-    + '<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">'
-    + '<button class="btn btn-g btn-sm" onclick="ptOpenPickSec()">+ Pick Secondary</button>'
-    + '<button class="btn btn-g btn-sm" onclick="ptShuffleSecondaries()">🎲 Shuffle 2</button>'
-    + '</div>'
-    + '<div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin:16px 0 8px">VP PER ROUND</div>'
-    + '<div class="card">' + vpGrid + '</div>';
 }
 
 function renderPTRefTab() {
@@ -4563,20 +4429,7 @@ function _mpLobbyListen(code) {
   plRef.on('value', plFn);
   _mpListeners.push({ref:plRef, ev:'value', fn:plFn});
 
-  // Listen to primary objective — host writes it, all devices sync it to their PT
-  const priRef = _fbDb.ref('rooms/'+code+'/primaryObj');
-  const priFn  = snap => {
-    _mpLobbyData = _mpLobbyData || {};
-    _mpLobbyData.primaryObj = snap.val() || null;
-    // Sync to PT without triggering another FB write
-    if (_mpSession?.status === 'active' && S.pt && _mpLobbyData.primaryObj) {
-      S.pt.primaryObj = _mpLobbyData.primaryObj;
-      localStorage.setItem('wc_pt', JSON.stringify(S.pt));
-    }
-    if (document.getElementById('pg-mp')?.classList.contains('active')) renderMP();
-  };
-  priRef.on('value', priFn);
-  _mpListeners.push({ref:priRef, ev:'value', fn:priFn});
+  // Primary objective is now managed locally in PT (no Firebase sync)
 }
 
 function _mpSaveSessionArmy(army) {
@@ -4763,7 +4616,9 @@ function _mpActivateSession() {
       opponentArmyIds: [],
       cp: 0, round: 1,
       vpRounds: [0,0,0,0,0],
-      primaryObj: null, secondaryObjs: [],
+      missionPack: 'pn',
+      activeDep: null, activePM: null, activeMR: null,
+      secDeck: [], secSlots: [null, null], secVP: 0,
       units,
     };
     ptSave();
@@ -4800,12 +4655,7 @@ function mpSetActiveTurn(pos) {
     .catch(e => toast('Could not update turn'));
 }
 
-function mpDrawPrimary() {
-  if (!_mpSession || !S.objectives.primary.length) return;
-  const obj = S.objectives.primary[Math.floor(Math.random()*S.objectives.primary.length)];
-  _fbDb.ref('rooms/'+_mpSession.code+'/primaryObj').set(Object.assign({}, obj))
-    .catch(e => toast('Could not draw objective'));
-}
+// mpDrawPrimary removed — mission is now set per-player in PT (no Firebase sync)
 
 function mpSetViewPlayer(pid) {
   _mpViewPid = pid;
@@ -4820,7 +4670,6 @@ function renderMPActiveView() {
   const isHost  = _mpSession.role === 'host';
   const meta    = _mpLobbyData?.meta    || {};
   const players = _mpLobbyData?.players || {};
-  const priObj  = _mpLobbyData?.primaryObj || null;
   const round   = meta.round || 1;
   const actPos  = meta.activeTurnPos || 1;
 
@@ -4896,21 +4745,28 @@ function renderMPActiveView() {
     });
     html += '</div>';
 
-    // Primary Objective
-    html += '<div class="card" style="margin-bottom:10px">'
-      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
-      + '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:1px">Primary Objective</div>'
-      + (isHost ? '<button class="btn btn-g btn-sm" onclick="mpDrawPrimary()">🎲 '+(priObj?'Redraw':'Draw')+'</button>' : '')
-      + '</div>';
-    if (priObj) {
-      html += '<div style="font-family:var(--fd);font-size:15px;color:var(--ft);margin-bottom:4px">'+escH(priObj.name)+'</div>'
-        + '<div style="font-size:12px;color:var(--ts);line-height:1.5">'+escH(priObj.desc||priObj.score||'')+'</div>';
-    } else {
-      html += '<div style="font-size:13px;color:var(--ts);font-style:italic">'
-        + (isHost ? 'Tap Draw to share a primary objective with all players.' : 'Waiting for host to draw primary objective.')
-        + '</div>';
+    // Current Mission (read from local PT state — no Firebase)
+    const ptLocal = S.pt;
+    if (ptLocal && (ptLocal.activePM || ptLocal.activeDep)) {
+      html += '<div class="card" style="margin-bottom:10px">'
+        + '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Current Mission</div>';
+      if (ptLocal.activeDep) {
+        html += '<div style="font-size:10px;color:var(--ts);text-transform:uppercase;font-weight:700;letter-spacing:0.5px">Deployment</div>'
+          + '<div style="font-size:13px;font-weight:700;color:var(--ft);margin-bottom:6px">' + escH(ptLocal.activeDep.name) + '</div>';
+      }
+      if (ptLocal.activePM) {
+        html += '<div style="font-size:10px;color:var(--ts);text-transform:uppercase;font-weight:700;letter-spacing:0.5px">Primary Mission</div>'
+          + '<div style="font-family:var(--fd);font-size:14px;color:var(--ft);margin-bottom:4px">' + escH(ptLocal.activePM.name) + '</div>';
+        if (ptLocal.activePM.flavor) {
+          html += '<div style="font-size:11px;color:var(--ts);font-style:italic;margin-bottom:4px">' + escH(ptLocal.activePM.flavor) + '</div>';
+        }
+      }
+      if (ptLocal.activeMR) {
+        html += '<div style="font-size:10px;color:var(--ts);text-transform:uppercase;font-weight:700;letter-spacing:0.5px;margin-top:4px">Mission Rule</div>'
+          + '<div style="font-size:13px;font-weight:700;color:var(--ft)">' + escH(ptLocal.activeMR.name) + '</div>';
+      }
+      html += '</div>';
     }
-    html += '</div>';
 
     // Secondaries — all players
     html += '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Secondary Objectives</div>';
