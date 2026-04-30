@@ -36,10 +36,12 @@ input,select,textarea,button{font-family:var(--fu);font-size:13px}
 input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 
 /* LAYOUT */
-#app{display:grid;grid-template-rows:58px 1fr;grid-template-columns:200px 1fr;height:100vh;overflow:hidden}
+html{height:-webkit-fill-available}
+body{min-height:-webkit-fill-available}
+#app{display:grid;grid-template-rows:58px 1fr;grid-template-columns:200px 1fr;height:100vh;height:100svh;overflow:hidden}
 #hdr{grid-column:1/-1;background:var(--mid);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 18px;gap:14px;z-index:100}
-#sb{background:var(--mid);border-right:1px solid var(--bdr);overflow-y:auto;padding:12px 0;display:flex;flex-direction:column;gap:2px}
-#main{overflow-y:auto;padding:24px}
+#sb{background:var(--mid);border-right:1px solid var(--bdr);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 0;display:flex;flex-direction:column;gap:2px}
+#main{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:24px}
 
 /* HEADER */
 .hlogo{display:flex;align-items:center;gap:10px;cursor:pointer;flex:1}
@@ -80,8 +82,12 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 .ph3{font-family:var(--fd);font-size:13px;color:var(--ts)}
 .sep{height:1px;background:var(--bdr);margin:14px 0}
 
+/* iOS TOUCH FIX — prevent 300ms tap delay and highlight flash on all interactive elements */
+*{-webkit-tap-highlight-color:transparent}
+.btn,.chip,.ni,.qc,.pt-tab,.ms-pack-tab,.mc-hdr,.gg-hdr,.bsc-step,.sh-slot,.wg-item,.army-card,.hlogo,.fdot,.hgear,.loadout-btn,.preset-apply-btn,.preset-clear-btn,.abil,.ms-pack-tab,.modal-close{touch-action:manipulation}
+
 /* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;letter-spacing:.5px;border:none;transition:.15s}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;letter-spacing:.5px;border:none;transition:.15s;touch-action:manipulation}
 .btn-p{background:var(--fg);color:var(--ft);border:1px solid var(--fp)}
 .btn-p:hover{background:var(--fp);color:var(--bg)}
 .btn-g{background:transparent;color:var(--ts);border:1px solid var(--ba)}
@@ -123,7 +129,7 @@ select.inp{cursor:pointer}
 /* MODALS */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
 .overlay.open{display:flex}
-.modal{background:var(--mid);border:1px solid var(--bdr);border-radius:10px;width:100%;max-width:720px;max-height:85vh;overflow-y:auto;padding:24px;position:relative}
+.modal{background:var(--mid);border:1px solid var(--bdr);border-radius:10px;width:100%;max-width:720px;max-height:85vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:24px;position:relative}
 .modal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
 .modal-close{background:none;border:none;color:var(--ts);cursor:pointer;font-size:20px;padding:2px 6px;border-radius:4px}
 .modal-close:hover{background:var(--sur);color:var(--tp)}
@@ -401,10 +407,10 @@ select.inp{cursor:pointer}
 .vp-counter-btn:hover{background:#f39c12;color:#000;border-color:#f39c12}
 .vp-counter-val{font-size:20px;font-weight:700;color:var(--ft);font-family:var(--fd);min-width:36px;text-align:center}
 
-/* RESPONSIVE */
-@media(max-width:700px){
+/* RESPONSIVE — phones and narrow tablets */
+@media(max-width:900px){
   #app{grid-template-columns:1fr;grid-template-rows:58px auto 1fr}
-  #sb{grid-row:2;flex-direction:row;overflow-x:auto;overflow-y:hidden;padding:6px 8px;gap:0;border-right:none;border-bottom:1px solid var(--bdr)}
+  #sb{grid-row:2;flex-direction:row;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:6px 8px;gap:0;border-right:none;border-bottom:1px solid var(--bdr)}
   .scat{display:none}
   .ni{flex-direction:column;padding:6px 10px;font-size:10px;min-width:60px}
   .ni svg{margin:0}
@@ -416,6 +422,12 @@ select.inp{cursor:pointer}
   .score-tbl input{width:44px;height:28px;font-size:13px;padding:4px 2px}
   .vp-counter-btn{width:38px;height:38px;font-size:20px}
   .vp-counter-val{font-size:22px}
+}
+/* Landscape tablets — keep sidebar visible but narrower */
+@media(min-width:901px) and (max-width:1100px){
+  #app{grid-template-columns:160px 1fr}
+  #sb{padding:8px 0}
+  .ni{padding:7px 12px;font-size:11px}
 }
 
 /* ── WARGEAR CHECKBOXES (Feature 4) ── */
@@ -1958,16 +1970,19 @@ function removeSubModel(i) {
 }
 // Sub-model loadout click handler
 function lClickSub(el) {
-  const uid=parseInt(el.dataset.uid), si=parseInt(el.dataset.si), ii=parseInt(el.dataset.ii), cat=el.dataset.cat, wn=el.dataset.wn;
+  const uid=parseInt(el.dataset.uid), sq_i=parseInt(el.dataset.squad||'0'), si=parseInt(el.dataset.si), ii=parseInt(el.dataset.ii), cat=el.dataset.cat, wn=el.dataset.wn;
   const au = _currentArmy && _currentArmy.units.find(u=>u.id===uid); if (!au) return;
-  if (!au.subModelLoadout) au.subModelLoadout = [];
-  if (!au.subModelLoadout[si]) au.subModelLoadout[si] = [];
-  while (au.subModelLoadout[si].length <= ii) au.subModelLoadout[si].push({ranged:[],melee:[]});
-  let cur = au.subModelLoadout[si][ii][cat];
+  const u = S.units.find(x=>x.id===uid);
+  ensureSquads(au, u);
+  const sq = au.squads[sq_i]; if (!sq) return;
+  if (!sq.subModelLoadout) sq.subModelLoadout = [];
+  if (!sq.subModelLoadout[si]) sq.subModelLoadout[si] = [];
+  while (sq.subModelLoadout[si].length <= ii) sq.subModelLoadout[si].push({ranged:[],melee:[]});
+  let cur = sq.subModelLoadout[si][ii][cat];
   if (!Array.isArray(cur)) cur = cur ? [cur] : [];
   const idx = cur.indexOf(wn);
   if (idx >= 0) cur.splice(idx,1); else cur.push(wn);
-  au.subModelLoadout[si][ii][cat] = cur;
+  sq.subModelLoadout[si][ii][cat] = cur;
   save(); renderBuilderView();
 }
 function openUnitModal(id) {
@@ -2175,10 +2190,23 @@ function renderArmies() {
   }).join('');
 }
 function calcArmyPoints(army) {
-  return (army.units||[]).reduce((s,au) => {
+  // Unit points
+  const unitPts = (army.units||[]).reduce((s,au) => {
     const u = S.units.find(x=>x.id===au.id);
     return s + (u ? u.pts*au.count : 0);
   }, 0);
+  // Enhancement points — look up enhancement cost from detachment data
+  let enhPts = 0;
+  const fd = FACTION_DATA[army.faction];
+  const det = fd && fd.detachments ? fd.detachments.find(d=>d.name===army.detachment) : null;
+  if (det && det.enhancements) {
+    (army.units||[]).forEach(au => {
+      if (!au.enhancement) return;
+      const enh = det.enhancements.find(e=>e.name===au.enhancement);
+      if (enh) enhPts += enh.pts || 0;
+    });
+  }
+  return unitPts + enhPts;
 }
 function openNewArmyModal() {
   document.getElementById('ma-name').value = '';
@@ -2314,7 +2342,7 @@ function renderBuilderView() {
           <div class="enh-assign-desc">${escH(e.desc)}</div>
           <div class="enh-assign-select">
             <label>Assigned to</label>
-            <select class="inp" onchange="setEnhancement('${e.name.replace(/'/g,"\'")}',this.value)">
+            <select class="inp" data-enh="${escH(e.name)}" onchange="setEnhancement(this.dataset.enh,this.value)">
               <option value="">— None —</option>
               ${charUnits.map(au => {
                 const u = S.units.find(x=>x.id===au.id);
@@ -2329,63 +2357,66 @@ function renderBuilderView() {
       tabContent = '<div style="color:var(--ts);padding:20px;text-align:center">Select a detachment to see enhancements.</div>';
     }
   } else if (_tab === 'loadout') {
-    const sections = a.units.map(au => {
-      const u = S.units.find(x=>x.id===au.id); if (!u) return '';
+    const sections = a.units.flatMap(au => {
+      const u = S.units.find(x=>x.id===au.id); if (!u) return [];
       const rOpts = (u.ranged||[]).map(w=>w.n);
       const mOpts = (u.melee||[]).map(w=>w.n);
-      if (!rOpts.length && !mOpts.length) return '';
-      // Ensure loadout array matches model count
-      if (!au.modelCount) au.modelCount = parseInt((u.models||'1').split('-')[0])||1;
-      if (!au.loadout || au.loadout.length !== au.modelCount) {
-        const ex = au.loadout||[];
-        au.loadout = Array.from({length:au.modelCount},(_,i)=>ex[i]||{ranged:null,melee:null});
-      }
-      const modelRows = au.loadout.map((ml,mi) => {
-        // Migrate old string format to array format
-        const rSel = Array.isArray(ml.ranged) ? ml.ranged : (ml.ranged ? [ml.ranged] : []);
-        const mSel = Array.isArray(ml.melee)  ? ml.melee  : (ml.melee  ? [ml.melee]  : []);
-        const makeOpts = (opts, cat, sel) => opts.map(wn => {
-          const active = sel.includes(wn);
-          return `<span class="loadout-btn${active?' active':''}" data-uid="${au.id}" data-mi="${mi}" data-cat="${cat}" data-wn="${escH(wn)}" onclick="lClick(this)">${escH(wn)}</span>`;
-        }).join('');
-        return `<div class="loadout-row">
-          <div class="loadout-model-lbl">Model ${mi+1}</div>
-          ${rOpts.length?`<div class="loadout-cat"><span class="loadout-cat-lbl">Ranged</span><div class="loadout-btns">${makeOpts(rOpts,'ranged',rSel)||'<span style="color:var(--ts);font-size:11px">—</span>'}</div></div>`:''}
-          ${mOpts.length?`<div class="loadout-cat"><span class="loadout-cat-lbl">Melee</span><div class="loadout-btns">${makeOpts(mOpts,'melee',mSel)||'<span style="color:var(--ts);font-size:11px">—</span>'}</div></div>`:''}
-        </div>`;
-      }).join('');
-      // Sub-model loadout rows using parent's weapon pools
-      const subModelRows = (u.subModels||[]).flatMap((sm,si) => {
-        const cnt = sm.count||1;
-        if (!au.subModelLoadout) au.subModelLoadout = [];
-        if (!au.subModelLoadout[si]) au.subModelLoadout[si] = [];
-        while (au.subModelLoadout[si].length < cnt) au.subModelLoadout[si].push({ranged:[],melee:[]});
-        return Array.from({length:cnt},(_,ii) => {
-          const sml = au.subModelLoadout[si][ii]||{ranged:[],melee:[]};
-          const rSel = Array.isArray(sml.ranged)?sml.ranged:(sml.ranged?[sml.ranged]:[]);
-          const mSel = Array.isArray(sml.melee)?sml.melee:(sml.melee?[sml.melee]:[]);
-          const mkSub = (opts,cat,sel) => opts.map(wn => {
+      if (!rOpts.length && !mOpts.length) return [];
+      // Ensure squads exist and are synced (migrates legacy au.loadout/au.modelCount)
+      ensureSquads(au, u);
+      return au.squads.map((sq, si) => {
+        // Ensure this squad's loadout array matches its model count
+        if (!sq.modelCount) sq.modelCount = parseInt((u.models||'1').split('-')[0])||1;
+        if (!sq.loadout || sq.loadout.length !== sq.modelCount) {
+          const ex = sq.loadout||[];
+          sq.loadout = Array.from({length:sq.modelCount},(_,i)=>ex[i]||{ranged:[],melee:[]});
+        }
+        const modelRows = sq.loadout.map((ml,mi) => {
+          const rSel = Array.isArray(ml.ranged) ? ml.ranged : (ml.ranged ? [ml.ranged] : []);
+          const mSel = Array.isArray(ml.melee)  ? ml.melee  : (ml.melee  ? [ml.melee]  : []);
+          const makeOpts = (opts, cat, sel) => opts.map(wn => {
             const active = sel.includes(wn);
-            return `<span class="loadout-btn${active?' active':''}" data-uid="${au.id}" data-si="${si}" data-ii="${ii}" data-cat="${cat}" data-wn="${escH(wn)}" onclick="lClickSub(this)">${escH(wn)}</span>`;
+            return `<span class="loadout-btn${active?' active':''}" data-uid="${au.id}" data-squad="${si}" data-mi="${mi}" data-cat="${cat}" data-wn="${escH(wn)}" onclick="lClick(this)">${escH(wn)}</span>`;
           }).join('');
-          return `<div class="loadout-row" style="border-left:3px solid var(--fp)">
-            <div class="loadout-model-lbl" style="color:var(--tp)">${escH(sm.name)}${cnt>1?' '+(ii+1):''}</div>
-            ${rOpts.length?`<div class="loadout-cat"><span class="loadout-cat-lbl">Ranged</span><div class="loadout-btns">${mkSub(rOpts,'ranged',rSel)||'<span style="color:var(--ts);font-size:11px">—</span>'}</div></div>`:''}
-            ${mOpts.length?`<div class="loadout-cat"><span class="loadout-cat-lbl">Melee</span><div class="loadout-btns">${mkSub(mOpts,'melee',mSel)||'<span style="color:var(--ts);font-size:11px">—</span>'}</div></div>`:''}
+          return `<div class="loadout-row">
+            <div class="loadout-model-lbl">Model ${mi+1}</div>
+            ${rOpts.length?`<div class="loadout-cat"><span class="loadout-cat-lbl">Ranged</span><div class="loadout-btns">${makeOpts(rOpts,'ranged',rSel)||'<span style="color:var(--ts);font-size:11px">—</span>'}</div></div>`:''}
+            ${mOpts.length?`<div class="loadout-cat"><span class="loadout-cat-lbl">Melee</span><div class="loadout-btns">${makeOpts(mOpts,'melee',mSel)||'<span style="color:var(--ts);font-size:11px">—</span>'}</div></div>`:''}
           </div>`;
-        });
-      }).join('');
-
-      return `<div class="loadout-unit-section">
-        <div class="loadout-unit-hdr">
-          <div style="font-weight:700;font-size:13px;color:var(--tp)">${escH(u.name)}</div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span style="font-size:11px;color:var(--ts)">Models in unit:</span>
-            <input type="number" class="inp" style="width:58px;text-align:center;padding:4px" value="${au.modelCount}" min="1" onchange="setModelCount(${au.id},this.value)">
+        }).join('');
+        // Sub-model loadout rows
+        const subModelRows = (u.subModels||[]).flatMap((sm,smIdx) => {
+          const cnt = sm.count||1;
+          if (!sq.subModelLoadout) sq.subModelLoadout = [];
+          if (!sq.subModelLoadout[smIdx]) sq.subModelLoadout[smIdx] = [];
+          while (sq.subModelLoadout[smIdx].length < cnt) sq.subModelLoadout[smIdx].push({ranged:[],melee:[]});
+          return Array.from({length:cnt},(_,ii) => {
+            const sml = sq.subModelLoadout[smIdx][ii]||{ranged:[],melee:[]};
+            const rSel = Array.isArray(sml.ranged)?sml.ranged:(sml.ranged?[sml.ranged]:[]);
+            const mSel = Array.isArray(sml.melee)?sml.melee:(sml.melee?[sml.melee]:[]);
+            const mkSub = (opts,cat,sel) => opts.map(wn => {
+              const active = sel.includes(wn);
+              return `<span class="loadout-btn${active?' active':''}" data-uid="${au.id}" data-squad="${si}" data-si="${smIdx}" data-ii="${ii}" data-cat="${cat}" data-wn="${escH(wn)}" onclick="lClickSub(this)">${escH(wn)}</span>`;
+            }).join('');
+            return `<div class="loadout-row" style="border-left:3px solid var(--fp)">
+              <div class="loadout-model-lbl" style="color:var(--tp)">${escH(sm.name)}${cnt>1?' '+(ii+1):''}</div>
+              ${rOpts.length?`<div class="loadout-cat"><span class="loadout-cat-lbl">Ranged</span><div class="loadout-btns">${mkSub(rOpts,'ranged',rSel)||'<span style="color:var(--ts);font-size:11px">—</span>'}</div></div>`:''}
+              ${mOpts.length?`<div class="loadout-cat"><span class="loadout-cat-lbl">Melee</span><div class="loadout-btns">${mkSub(mOpts,'melee',mSel)||'<span style="color:var(--ts);font-size:11px">—</span>'}</div></div>`:''}
+            </div>`;
+          });
+        }).join('');
+        const hdrLabel = au.count > 1 ? `${escH(u.name)} — Squad ${si+1}` : escH(u.name);
+        return `<div class="loadout-unit-section">
+          <div class="loadout-unit-hdr">
+            <div style="font-weight:700;font-size:13px;color:var(--tp)">${hdrLabel}</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:11px;color:var(--ts)">Models:</span>
+              <input type="number" class="inp" style="width:58px;text-align:center;padding:4px" value="${sq.modelCount}" min="1" onchange="setModelCount(${au.id},${si},this.value)">
+            </div>
           </div>
-        </div>
-        ${modelRows}${subModelRows}
-      </div>`;
+          ${modelRows}${subModelRows}
+        </div>`;
+      });
     }).filter(Boolean);
     tabContent = sections.length
       ? `<p style="font-size:11px;color:var(--ts);margin-bottom:10px">Mark what each model is physically armed with. Only assigned weapons show in the match codex.</p>${sections.join('')}`
@@ -2435,9 +2466,20 @@ function adjustUnitCount(uid, delta) {
   if (!_currentArmy) return;
   const au = _currentArmy.units.find(u=>u.id===uid);
   if (!au) return;
-  au.count = Math.max(0, au.count+delta);
-  if (au.count===0) _currentArmy.units = _currentArmy.units.filter(u=>u.id!==uid);
-  renderBuilderView();
+  const u = S.units.find(x=>x.id===uid);
+  au.count = Math.max(0, (au.count||1)+delta);
+  if (au.count === 0) {
+    _currentArmy.units = _currentArmy.units.filter(x=>x.id!==uid);
+  } else {
+    ensureSquads(au, u);
+    // Grow squads if needed
+    while (au.squads.length < au.count) {
+      const mc = au.squads[0] ? au.squads[0].modelCount : (u ? parseInt((u.models||'1').split('-')[0])||1 : 1);
+      au.squads.push({ modelCount: mc, loadout: Array.from({length:mc},()=>({ranged:[],melee:[]})), subModelLoadout: [] });
+    }
+    au.squads.length = au.count;
+  }
+  save(); renderBuilderView();
 }
 function removeArmyUnit(uid) {
   if (!_currentArmy) return;
@@ -2480,9 +2522,18 @@ function renderPicker() {
 function pickerAdd(uid) {
   if (!_currentArmy) return;
   const au = _currentArmy.units.find(u=>u.id===uid);
-  if (au) au.count++;
-  else _currentArmy.units.push({id:uid, count:1, wargearSelected:[], enhancement:null});
-  renderBuilderView(); toast('Unit added');
+  const uDef = S.units.find(x=>x.id===uid);
+  const defaultMC = uDef ? (parseInt((uDef.models||'1').split('-')[0])||1) : 1;
+  const newSq = () => ({ modelCount: defaultMC, loadout: Array.from({length:defaultMC},()=>({ranged:[],melee:[]})), subModelLoadout: [] });
+  if (au) {
+    au.count = (au.count||1) + 1;
+    ensureSquads(au, uDef);
+    while (au.squads.length < au.count) au.squads.push(newSq());
+    au.squads.length = au.count;
+  } else {
+    _currentArmy.units.push({ id:uid, count:1, squads:[newSq()], wargearSelected:[], enhancement:null });
+  }
+  save(); renderBuilderView(); toast('Unit added');
 }
 // Feature 4: Wargear toggle
 function toggleWargear(uid, wgName) {
@@ -2504,24 +2555,27 @@ function applyPreset(uid, weapons, target) {
   const mNames = new Set((u.melee||[]).map(w=>w.n));
   const presetR = weapons.filter(w=>rNames.has(w));
   const presetM = weapons.filter(w=>mNames.has(w));
+  ensureSquads(au, u);
   if (target === 'main') {
-    // Main models — set badge display and au.loadout
+    // Main models — set badge display and apply to ALL squads
     au.wargearSelected = weapons.slice();
-    const modelCount = au.modelCount || parseInt((u.models||'1').split('-')[0])||1;
-    if (!au.loadout || au.loadout.length !== modelCount) {
-      au.loadout = Array.from({length:modelCount}, ()=>({ranged:[],melee:[]}));
-    }
-    au.loadout.forEach(m => { m.ranged = presetR.slice(); m.melee = presetM.slice(); });
+    au.squads.forEach(sq => {
+      const mc = sq.modelCount || parseInt((u.models||'1').split('-')[0])||1;
+      if (!sq.loadout || sq.loadout.length !== mc) sq.loadout = Array.from({length:mc}, ()=>({ranged:[],melee:[]}));
+      sq.loadout.forEach(m => { m.ranged = presetR.slice(); m.melee = presetM.slice(); });
+    });
   } else {
-    // Sub-model — write into au.subModelLoadout[si]
+    // Sub-model — write into subModelLoadout[si] for ALL squads
     const si = (u.subModels||[]).findIndex(sm=>sm.name===target);
     if (si < 0) { toast('Sub-model not found'); return; }
     const cnt = (u.subModels[si].count)||1;
-    if (!au.subModelLoadout) au.subModelLoadout = [];
-    if (!au.subModelLoadout[si] || au.subModelLoadout[si].length !== cnt) {
-      au.subModelLoadout[si] = Array.from({length:cnt}, ()=>({ranged:[],melee:[]}));
-    }
-    au.subModelLoadout[si].forEach(m => { m.ranged = presetR.slice(); m.melee = presetM.slice(); });
+    au.squads.forEach(sq => {
+      if (!sq.subModelLoadout) sq.subModelLoadout = [];
+      if (!sq.subModelLoadout[si] || sq.subModelLoadout[si].length !== cnt) {
+        sq.subModelLoadout[si] = Array.from({length:cnt}, ()=>({ranged:[],melee:[]}));
+      }
+      sq.subModelLoadout[si].forEach(m => { m.ranged = presetR.slice(); m.melee = presetM.slice(); });
+    });
   }
   save(); renderBuilderView();
   toast(weapons.length ? `Preset applied (${target==='main'?'main models':target}) — ${weapons.length} weapon${weapons.length===1?'':'s'} selected` : 'Selections cleared');
@@ -2547,32 +2601,42 @@ function setEnhancement(enhName, unitIdStr) {
 }
 
 // ── MODEL LOADOUT ─────────────────────────────────────────
+// Ensure au.squads exists and has correct length (migrates legacy au.loadout/au.modelCount)
+function ensureSquads(au, u) {
+  const cnt = au.count || 1;
+  if (!au.squads || au.squads.length !== cnt) {
+    const defaultMC = u ? (parseInt((u.models||'1').split('-')[0])||1) : 1;
+    const baseSq = {
+      modelCount: au.modelCount || defaultMC,
+      loadout: JSON.parse(JSON.stringify(au.loadout||[])),
+      subModelLoadout: JSON.parse(JSON.stringify(au.subModelLoadout||[]))
+    };
+    au.squads = Array.from({length:cnt}, () => JSON.parse(JSON.stringify(baseSq)));
+  }
+}
 function lClick(el) {
   const wn = el.dataset.wn;
-  const uid = parseInt(el.dataset.uid), mi = parseInt(el.dataset.mi), cat = el.dataset.cat;
+  const uid = parseInt(el.dataset.uid), si = parseInt(el.dataset.squad||'0'), mi = parseInt(el.dataset.mi), cat = el.dataset.cat;
   const au = _currentArmy && _currentArmy.units.find(u=>u.id===uid); if (!au) return;
-  if (!au.loadout || !au.loadout[mi]) return;
-  // Migrate old string format if needed
-  let cur = au.loadout[mi][cat];
+  const u = S.units.find(x=>x.id===uid);
+  ensureSquads(au, u);
+  const sq = au.squads[si]; if (!sq || !sq.loadout || !sq.loadout[mi]) return;
+  let cur = sq.loadout[mi][cat];
   if (!Array.isArray(cur)) cur = cur ? [cur] : [];
   const idx = cur.indexOf(wn);
   if (idx >= 0) cur.splice(idx, 1); else cur.push(wn);
-  au.loadout[mi][cat] = cur;
+  sq.loadout[mi][cat] = cur;
   save(); renderBuilderView();
 }
-function setModelCount(unitId, count) {
+function setModelCount(unitId, squadIdx, count) {
   const au = _currentArmy && _currentArmy.units.find(u=>u.id===unitId); if (!au) return;
-  au.modelCount = Math.max(1, parseInt(count)||1);
-  if (!au.loadout) au.loadout = [];
-  while (au.loadout.length < au.modelCount) au.loadout.push({ranged:[],melee:[]});
-  au.loadout.length = au.modelCount;
-  save(); renderBuilderView();
-}
-function setModelWeapon(unitId, modelIdx, category, weaponName) {
-  // Legacy single-set (unused by lClick but kept for safety)
-  const au = _currentArmy && _currentArmy.units.find(u=>u.id===unitId); if (!au) return;
-  if (!au.loadout || !au.loadout[modelIdx]) return;
-  au.loadout[modelIdx][category] = weaponName ? [weaponName] : [];
+  const u = S.units.find(x=>x.id===unitId);
+  ensureSquads(au, u);
+  const sq = au.squads[squadIdx]; if (!sq) return;
+  sq.modelCount = Math.max(1, parseInt(count)||1);
+  if (!sq.loadout) sq.loadout = [];
+  while (sq.loadout.length < sq.modelCount) sq.loadout.push({ranged:[],melee:[]});
+  sq.loadout.length = sq.modelCount;
   save(); renderBuilderView();
 }
 
@@ -2596,15 +2660,19 @@ function generateArmyText(army) {
     lines.push(`${u.name.toUpperCase()}${au.count>1?` ×${au.count}`:''} — ${pts} pts`);
     if (au.enhancement) lines.push(`  Enhancement: ${au.enhancement}`);
     if (au.wargearSelected&&au.wargearSelected.length) lines.push(`  Wargear: ${au.wargearSelected.join(', ')}`);
-    if (au.loadout&&au.loadout.length) {
+    const sqArr = au.squads || (au.loadout ? [{loadout:au.loadout}] : []);
+    sqArr.forEach((sq, si) => {
+      if (!sq.loadout || !sq.loadout.length) return;
       const groups = {};
-      au.loadout.forEach(m => {
-        const key = [m.ranged,m.melee].filter(Boolean).join(' + ')||'—';
+      sq.loadout.forEach(m => {
+        const r = Array.isArray(m.ranged)?m.ranged.join('+'):(m.ranged||'');
+        const mel = Array.isArray(m.melee)?m.melee.join('+'):(m.melee||'');
+        const key = [r,mel].filter(Boolean).join(' + ')||'—';
         groups[key] = (groups[key]||0)+1;
       });
       const loadoutStr = Object.entries(groups).map(([k,n])=>`${n}× ${k}`).join(' · ');
-      if (loadoutStr) lines.push(`  Loadout: ${loadoutStr}`);
-    }
+      if (loadoutStr) lines.push(`  Loadout${sqArr.length>1?` (Squad ${si+1})`:''}:${loadoutStr}`);
+    });
     if (u.keywords&&u.keywords.length) lines.push(`  [${u.keywords.join(' · ')}]`);
   });
   lines.push('', `${'─'.repeat(40)}`);
@@ -3989,9 +4057,11 @@ function renderPTArmyTab() {
 
     // Loadout filtering (match game tracker codex behaviour)
     const au = army ? (army.units || []).find(x => x.id === pu.uid) : null;
-    const ld = au ? (au.loadout || []) : [];
-    const smLd = au ? ((au.subModelLoadout || []).flat()) : [];
-    const allLd = [...ld, ...smLd];
+    // Collect loadouts from all squads (supports new per-squad format and legacy format)
+    const allLd = au ? (au.squads||[]).flatMap(sq => [
+      ...(sq.loadout||[]),
+      ...((sq.subModelLoadout||[]).flat())
+    ]).concat(au.squads ? [] : [...(au.loadout||[]), ...((au.subModelLoadout||[]).flat())]) : [];
     const _rSet = allLd.length ? new Set(allLd.flatMap(m => Array.isArray(m.ranged) ? m.ranged : (m.ranged ? [m.ranged] : []))) : null;
     const _mSet = allLd.length ? new Set(allLd.flatMap(m => Array.isArray(m.melee)  ? m.melee  : (m.melee  ? [m.melee]  : []))) : null;
     const activeR = _rSet && _rSet.size ? _rSet : null;
@@ -4859,9 +4929,11 @@ function _mpRenderArmyRef(army, faction, detIdx) {
       '<div class="codex-stat"><span>'+k+'</span>'+escH(st[k]||'—')+'</div>'
     ).join('') + (st.INV&&st.INV!=='None'?'<div class="codex-stat"><span>INV</span>'+escH(st.INV)+'</div>':'');
 
-    // Loadout filtering
-    const ld = au.loadout||[]; const smLd = (au.subModelLoadout||[]).flat();
-    const allLd = [...ld,...smLd];
+    // Loadout filtering (supports per-squad format and legacy format)
+    const allLd = (au.squads||[]).flatMap(sq => [
+      ...(sq.loadout||[]),
+      ...((sq.subModelLoadout||[]).flat())
+    ]).concat(au.squads ? [] : [...(au.loadout||[]), ...((au.subModelLoadout||[]).flat())]);
     const rSet = allLd.length ? new Set(allLd.flatMap(m=>Array.isArray(m.ranged)?m.ranged:(m.ranged?[m.ranged]:[]))) : null;
     const mSet = allLd.length ? new Set(allLd.flatMap(m=>Array.isArray(m.melee)?m.melee:(m.melee?[m.melee]:[]))) : null;
     const rW = (u.ranged||[]).filter(w=>!rSet||!rSet.size||rSet.has(w.n));
