@@ -232,6 +232,76 @@ select.inp{cursor:pointer}
 .cr-card-body{display:none;padding:0 12px 12px 12px;border-top:1px solid var(--bdr)}
 .cr-card-body.open{display:block}
 .cr-card-text{font-size:11px;color:var(--ts);line-height:1.6;white-space:pre-wrap;margin-top:10px}
+/* MISSIONS PAGE */
+.ms-section-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.ms-pack-tabs{display:flex;gap:6px;margin-bottom:14px}
+.ms-pack-tab{flex:1;padding:8px;border-radius:7px;border:1px solid var(--bdr);background:var(--cs);color:var(--ts);font-size:12px;font-weight:600;cursor:pointer;text-align:center;transition:.15s}
+.ms-pack-tab.active{background:var(--fp);color:var(--bg);border-color:var(--fp)}
+.ms-gen-result{display:none}
+.ms-gen-result.visible{display:block}
+/* Mission card (generator result + library) */
+.mc{background:var(--cs);border:1px solid var(--bdr);border-radius:8px;margin-bottom:10px;overflow:hidden}
+.mc-hdr{display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer;user-select:none}
+.mc-hdr:hover{background:rgba(255,255,255,.04)}
+.mc-type-pill{display:inline-block;border-radius:4px;padding:2px 8px;font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0}
+.mc-name{flex:1;font-family:var(--fd);font-size:12px;color:var(--ft);font-weight:600}
+.mc-arrow{font-size:14px;color:var(--ts);flex-shrink:0;transition:transform .15s}
+.mc-arrow.open{transform:rotate(90deg)}
+.mc-body{display:none;padding:0 12px 12px;border-top:1px solid var(--bdr)}
+.mc-body.open{display:block}
+.mc-flavor{font-size:11px;color:var(--tm);font-style:italic;margin-top:10px;margin-bottom:10px;line-height:1.5}
+.mc-when-drawn{background:rgba(255,180,0,.08);border:1px solid rgba(255,180,0,.2);border-radius:6px;padding:8px 10px;margin-bottom:10px}
+.mc-when-drawn-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#f0a500;margin-bottom:3px}
+.mc-when-drawn-text{font-size:11px;color:var(--ts);line-height:1.4}
+.mc-condition{border-top:1px solid var(--bdr);padding:10px 0 4px}
+.mc-condition:first-child{border-top:none}
+.mc-cond-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--fp);margin-bottom:3px}
+.mc-cond-when{font-size:10px;color:var(--tm);margin-bottom:4px;font-style:italic}
+.mc-cond-text{font-size:11px;color:var(--ts);line-height:1.5;white-space:pre-wrap}
+.mc-vp-row{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.mc-vp-btn{background:var(--fp);color:var(--bg);border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:700;cursor:pointer;transition:.15s}
+.mc-vp-btn:hover{opacity:.85}
+.mc-vp-badge{background:rgba(var(--fp-rgb,74,158,255),.15);color:var(--fp);border:1px solid rgba(var(--fp-rgb,74,158,255),.3);border-radius:10px;padding:2px 8px;font-size:11px;font-weight:700}
+/* Deployment diagrams */
+.dep-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dep-card{background:var(--cs);border:1px solid var(--bdr);border-radius:8px;padding:10px}
+.dep-name{font-family:var(--fd);font-size:11px;font-weight:700;color:var(--ft);margin-bottom:6px;text-align:center}
+.dep-desc{font-size:10px;color:var(--ts);line-height:1.4;margin-top:6px}
+.dep-svg{display:block;margin:0 auto}
+/* Secondary hand tracker */
+.sh-hand{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.sh-slot{background:var(--cs);border:1px dashed var(--bdr);border-radius:8px;min-height:80px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s}
+.sh-slot:hover{border-color:var(--fp)}
+.sh-slot.filled{border-style:solid;border-color:var(--bdr);align-items:flex-start;padding:0;overflow:hidden;cursor:default}
+.sh-slot-empty{color:var(--ts);font-size:11px;text-align:center;padding:8px}
+.sh-vp-total{font-family:var(--fd);font-size:28px;color:var(--fp);text-align:center;font-weight:700}
+.sh-vp-label{font-size:11px;color:var(--ts);text-align:center;margin-top:2px}
+/* PT tabs */
+.pt-tab{padding:8px 12px;border-radius:6px 6px 0 0;border:none;background:transparent;color:var(--ts);font-size:12px;cursor:pointer;border-bottom:2px solid transparent;transition:.15s;white-space:nowrap}
+.pt-tab.active{color:var(--ft);border-bottom-color:var(--fp)}
+/* Battle sequence checklist */
+.bsc-step{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--bdr)}
+.bsc-step:last-child{border-bottom:none}
+.bsc-check{width:20px;height:20px;border-radius:4px;border:2px solid var(--bdr);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;margin-top:1px}
+.bsc-check.done{background:var(--fp);border-color:var(--fp);color:var(--bg)}
+.bsc-num{font-family:var(--fd);font-size:11px;color:var(--tm);flex-shrink:0;width:18px;text-align:right;margin-top:2px}
+.bsc-content{flex:1}
+.bsc-title{font-size:12px;font-weight:600;color:var(--ft);margin-bottom:2px}
+.bsc-desc{font-size:11px;color:var(--ts);line-height:1.4}
+.bsc-step.done .bsc-title{color:var(--ts);text-decoration:line-through}
+/* Game guide cards */
+.gg-card{background:var(--cs);border:1px solid var(--bdr);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.gg-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;cursor:pointer;user-select:none}
+.gg-hdr:hover{background:rgba(255,255,255,.04)}
+.gg-title{font-size:12px;font-weight:600;color:var(--ft)}
+.gg-arrow{font-size:14px;color:var(--ts);transition:transform .15s}
+.gg-arrow.open{transform:rotate(90deg)}
+.gg-body{display:none;padding:0 12px 12px;border-top:1px solid var(--bdr)}
+.gg-body.open{display:block}
+.gg-text{font-size:11px;color:var(--ts);line-height:1.6;white-space:pre-wrap;margin-top:10px}
+/* Secret mission card */
+.sm-card{background:var(--cs);border:1px solid rgba(168,85,247,.3);border-radius:8px;padding:12px;margin-top:10px}
+.sm-revealed .mc-name{color:#a855f7}
 
 /* RULE DETAIL */
 .rsect{font-family:var(--fd);font-size:12px;color:var(--fp);padding:8px 0 4px;border-bottom:1px solid var(--bdr);margin:10px 0 6px;text-transform:uppercase;letter-spacing:1px}
@@ -533,6 +603,11 @@ select.inp{cursor:pointer}
     Objectives<span class="badge">Live</span>
   </div>
 
+  <div class="ni" id="ni-ms" onclick="nav('ms')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+    Missions<span class="badge p">New</span>
+  </div>
+
   <div class="ni" id="ni-pt" onclick="nav('pt')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
     My Tracker<span class="badge">Live</span>
@@ -559,6 +634,7 @@ select.inp{cursor:pointer}
     <div class="qc" onclick="nav('det')"><div class="qc-icon">🛡️</div><div class="qc-name">Detachments</div><div class="qc-sub">Rules &amp; stratagems</div></div>
     <div class="qc" onclick="nav('ru')"><div class="qc-icon">📖</div><div class="qc-name">Rules</div><div class="qc-sub">Phase &amp; mechanic reference</div></div>
     <div class="qc" onclick="nav('ob')"><div class="qc-icon">🎯</div><div class="qc-name">Objectives</div><div class="qc-sub">Primary &amp; secondary</div></div>
+    <div class="qc" onclick="nav('ms')"><div class="qc-icon">🗺</div><div class="qc-name">Missions</div><div class="qc-sub">Generate &amp; track missions</div></div>
     <div class="qc" onclick="nav('pt')"><div class="qc-icon">📋</div><div class="qc-name">My Tracker</div><div class="qc-sub">Personal battle log</div></div>
     <div class="qc" onclick="nav('mp')"><div class="qc-icon">🌐</div><div class="qc-name">Multiplayer</div><div class="qc-sub">Host or join a battle</div></div>
   </div>
@@ -750,6 +826,81 @@ select.inp{cursor:pointer}
   <div class="card-grid" id="ob-primary"></div>
   <h2 class="ph2" style="margin:12px 0 10px">Secondary Objectives</h2>
   <div class="card-grid" id="ob-secondary"></div>
+
+  <div class="sep" style="margin:20px 0"></div>
+
+  <!-- DEPLOYMENT DIAGRAMS -->
+  <h2 class="ph2" style="margin:0 0 4px">Deployment Zones</h2>
+  <p style="font-size:11px;color:var(--ts);margin-bottom:14px">Visual reference for all six deployment types. Attacker = red, Defender = blue.</p>
+  <div class="dep-grid" id="dep-grid"></div>
+</div>
+
+<!-- PAGE: MISSIONS -->
+<div class="pg" id="pg-ms">
+  <h1 class="ph1" style="margin-bottom:4px">Missions</h1>
+  <p style="font-size:11px;color:var(--ts);margin-bottom:14px">Generate a random mission or browse all card text.</p>
+
+  <!-- MISSION GENERATOR -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="ph2" style="margin-bottom:10px">Mission Generator</div>
+    <div class="ms-pack-tabs">
+      <div class="ms-pack-tab active" data-pk="pn" onclick="msSetPack(this)">Pariah Nexus</div>
+      <div class="ms-pack-tab" data-pk="ca" onclick="msSetPack(this)">Chapter Approved</div>
+    </div>
+    <button class="btn btn-p" style="width:100%;margin-bottom:12px" onclick="msRollMission()">🎲 Roll Mission</button>
+    <div id="ms-gen-result" class="ms-gen-result">
+      <div id="ms-gen-deployment"></div>
+      <div id="ms-gen-primary"></div>
+      <div id="ms-gen-rule"></div>
+    </div>
+  </div>
+
+  <!-- SECONDARY MISSION HAND -->
+  <div class="card" style="margin-bottom:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div class="ph2">Secondary Missions</div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <span style="font-size:11px;color:var(--ts)">Fixed</span>
+        <label style="position:relative;display:inline-block;width:36px;height:20px">
+          <input type="checkbox" id="ms-tactical-toggle" onchange="msToggleTactical()" style="opacity:0;width:0;height:0">
+          <span style="position:absolute;cursor:pointer;inset:0;background:var(--bdr);border-radius:10px;transition:.2s"></span>
+          <span id="ms-toggle-knob" style="position:absolute;content:'';height:14px;width:14px;left:3px;bottom:3px;background:var(--ft);border-radius:50%;transition:.2s"></span>
+        </label>
+        <span style="font-size:11px;color:var(--ts)">Tactical</span>
+      </div>
+    </div>
+    <div class="sh-hand">
+      <div class="sh-slot" id="ms-slot-0" onclick="msDrawSecondary(0)">
+        <div class="sh-slot-empty">Tap to draw</div>
+      </div>
+      <div class="sh-slot" id="ms-slot-1" onclick="msDrawSecondary(1)">
+        <div class="sh-slot-empty">Tap to draw</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-g btn-sm" style="flex:1" onclick="msShuffleSecondaries()">↺ Shuffle deck</button>
+      <button class="btn btn-g btn-sm" style="flex:1" onclick="msDrawSecondary(-1)">+ Draw card</button>
+    </div>
+    <div style="margin-top:10px;text-align:center">
+      <div class="sh-vp-total" id="ms-sec-vp">0</div>
+      <div class="sh-vp-label">Secondary VP scored this game</div>
+    </div>
+  </div>
+
+  <!-- CARD LIBRARY -->
+  <div class="sep" style="margin:4px 0 16px"></div>
+  <div class="ms-section-hdr">
+    <h2 class="ph2" style="margin:0">Card Library</h2>
+  </div>
+  <div class="chips" id="ms-lib-type-chips" style="margin-bottom:10px">
+    <div class="chip active" data-mt="all" onclick="msSetLibType(this)">All</div>
+    <div class="chip" data-mt="primary" onclick="msSetLibType(this)">Primary</div>
+    <div class="chip" data-mt="mission_rule" onclick="msSetLibType(this)">Mission Rules</div>
+    <div class="chip" data-mt="secondary" onclick="msSetLibType(this)">Secondary</div>
+    <div class="chip" data-mt="secret" onclick="msSetLibType(this)">Secret</div>
+  </div>
+  <div class="srch" style="margin-bottom:10px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input id="ms-lib-search" placeholder="Search cards…" oninput="msRenderLibrary()"></div>
+  <div id="ms-lib-grid"></div>
 </div>
 
 <!-- PAGE: MULTIPLAYER -->
@@ -801,13 +952,38 @@ select.inp{cursor:pointer}
         <button class="btn btn-d btn-sm" onclick="ptClearSession()">Clear</button>
       </div>
     </div>
-    <div class="pt-tabs">
-      <button class="pt-tab active" id="pt-tab-army" onclick="ptSwitchTab('pt-army')">⚔ My Army</button>
+    <div class="pt-tabs" style="overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch">
+      <button class="pt-tab active" id="pt-tab-army" onclick="ptSwitchTab('pt-army')">⚔ Army</button>
       <button class="pt-tab" id="pt-tab-objs" onclick="ptSwitchTab('pt-objs')">🎯 Objectives</button>
-      <button class="pt-tab" id="pt-tab-ref" onclick="ptSwitchTab('pt-ref')">📖 Reference</button>
+      <button class="pt-tab" id="pt-tab-setup" onclick="ptSwitchTab('pt-setup-tab')">📋 Setup</button>
+      <button class="pt-tab" id="pt-tab-guide" onclick="ptSwitchTab('pt-guide')">📖 Guide</button>
+      <button class="pt-tab" id="pt-tab-ref" onclick="ptSwitchTab('pt-ref')">🔗 Reference</button>
     </div>
     <div id="pt-army" class="pt-section active"></div>
     <div id="pt-objs" class="pt-section"></div>
+    <div id="pt-setup-tab" class="pt-section">
+      <!-- Battle Sequence Checklist -->
+      <div style="margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div class="ph2">Pre-Game Checklist</div>
+          <button class="btn btn-g btn-sm" onclick="ptResetChecklist()">↺ Reset</button>
+        </div>
+        <p style="font-size:11px;color:var(--ts);margin-bottom:12px">Work through these steps before the first dice roll.</p>
+        <div id="pt-checklist"></div>
+      </div>
+      <div class="sep" style="margin:16px 0"></div>
+      <!-- Secret Mission -->
+      <div>
+        <div class="ph2" style="margin-bottom:6px">Secret Mission</div>
+        <p style="font-size:11px;color:var(--ts);margin-bottom:10px">Available at end of Round 3 if your Primary VP ≤ opponent's. Draw one card — keep it face-down until battle end.</p>
+        <button class="btn btn-p" style="width:100%" onclick="ptDrawSecretMission()">🃏 Draw Secret Mission</button>
+        <div id="pt-secret-result" style="margin-top:10px"></div>
+      </div>
+    </div>
+    <div id="pt-guide" class="pt-section">
+      <div class="ph2" style="margin-bottom:10px">Mid-Game Guide</div>
+      <div id="pt-guide-cards"></div>
+    </div>
     <div id="pt-ref" class="pt-section"></div>
   </div>
 </div>
@@ -1245,6 +1421,13 @@ const FACTION_DATA_DEFAULT = {"Adepta Sororitas": {"army_rule_desc": "At the sta
 let FACTION_DATA = JSON.parse(JSON.stringify(FACTION_DATA_DEFAULT));
 const DEFAULT_CORE_UNIT_RULES = {"DEEP STRIKE": "During deployment, you can set up this unit in Reserves. At the end of your opponent's first turn, you can set it up anywhere on the battlefield more than 9\" from all enemy units.", "INFILTRATORS": "During deployment, if every model in this unit has this ability, you can set this unit up anywhere on the battlefield more than 9\" from the enemy deployment zone and all enemy units.", "SCOUTS": "After both players have deployed, this unit can make a Normal move of up to {X} (as if it were your Movement phase).", "LEADER": "This CHARACTER model can be attached to the unit listed in its datasheet. While it leads that unit, it is part of an Attached Unit.", "FEEL NO PAIN": "Each time this model would lose a wound, roll one D6: on a {X}, that wound is not lost.", "DEADLY DEMISE": "When this model is destroyed, roll one D6 before removing it from play: on a 4+, each unit within 6\" suffers {X} mortal wounds.", "STEALTH": "While this unit is receiving the benefits of cover, ranged attacks targeting it suffer an additional -1 to their hit rolls.", "LONE OPERATIVE": "Unless this model is your Warlord, it can only be selected as the target of a ranged attack if the attacking model is within 12\".", "FIGHTS FIRST": "If this unit is selected to fight, it fights first (before units that do not have this ability and that have not yet fought this phase).", "FIRING DECK": "Up to {X} friendly models embarked on this transport can shoot from its hull, using the transport's BS characteristic for their attacks.", "HOVER": "This model's Move characteristic becomes 20\" and it loses the FLY keyword.", "LETHAL HITS": "Critical hits (unmodified hit roll of 6) automatically wound the target.", "SUSTAINED HITS": "Each critical hit scores {X} additional hits.", "DEADLY DEMISE D3": "When this model is destroyed, roll one D6 before removing it from play: on a 4+, each unit within 6\" suffers D3 mortal wounds.", "ASSAULT RAMP": "After this model ends a Charge move, units can disembark from it even though it has already moved this phase."};
 const WEAPON_TOOLTIPS = {"ASSAULT": "Can be used even if the bearer Advanced this turn.", "BLAST": "Add 1 to Attacks for every 5 models in target unit. Cannot target units in Engagement Range.", "DEVASTATING WOUNDS": "Critical wounds (unmodified 6) cause mortal wounds equal to D. Attack sequence ends.", "EXTRA ATTACKS": "The bearer can attack with this weapon in addition to any other weapons it can make attacks with.", "HAZARDOUS": "After shooting/fighting, for each unmodified Hit roll of 1, bearer suffers 3 mortal wounds.", "HEAVY": "Add 1 to Hit rolls if the bearer's unit Remained Stationary this turn.", "IGNORES COVER": "Target cannot use Benefit of Cover against this weapon.", "INDIRECT FIRE": "This weapon can target units not visible to the bearer.", "LANCE": "If the bearer charged this turn, add 1 to the Wound roll.", "LETHAL HITS": "Critical hits (unmodified 6) automatically wound — no Wound roll needed.", "ONE SHOT": "This weapon can only be used once per battle.", "PISTOL": "Can be used in Engagement Range, targeting only units in Engagement Range.", "PRECISION": "Critical Hits can target any model in the unit, even a CHARACTER.", "PSYCHIC": "This weapon is a Psychic weapon. It can be used even if the bearer did not use a Psychic ability this turn.", "TORRENT": "This weapon automatically hits — do not make Hit rolls.", "TWIN-LINKED": "Re-roll any or all failed Wound rolls for attacks with this weapon.", "ANTI-INFANTRY": "An unmodified Wound roll of X against a target with the INFANTRY keyword scores a Critical Wound.", "ANTI-VEHICLE": "An unmodified Wound roll of X against a target with the VEHICLE keyword scores a Critical Wound.", "ANTI-MONSTER": "An unmodified Wound roll of X against a target with the MONSTER keyword scores a Critical Wound.", "ANTI-FLY": "An unmodified Wound roll of X against a target with the FLY keyword scores a Critical Wound.", "ANTI-CAVALRY": "An unmodified Wound roll of X against a target with the CAVALRY keyword scores a Critical Wound.", "ANTI-PSYKER": "An unmodified Wound roll of X against a target with the PSYKER keyword scores a Critical Wound.", "MELTA": "If the target is within half range, add X to the Damage characteristic.", "RAPID FIRE": "Each time this weapon targets a unit within half range, increase its Attacks by X.", "SUSTAINED HITS": "Each Critical Hit scores X additional hits.", "REVERBERATING SUMMONS": "Each time a model is destroyed by this weapon, return 1 destroyed model to a friendly unit within 12\" of the bearer."};
+const DEFAULT_PRIMARY_MISSIONS = [{"id": "purge", "name": "PURGE THE FOE", "packs": ["ca", "pn"], "flavor": "Exterminate the enemy. Show them no mercy.", "conditions": [{"label": "ANY BATTLE ROUND", "when": "End of the battle round.", "text": "Each player scores 4VP if one or more enemy units were destroyed this battle round.", "vp": 4}, {"label": "SECOND BATTLE ROUND ONWARDS", "when": "End of the battle round.", "text": "Each player scores 4VP if more enemy units than friendly units were destroyed this battle round.", "vp": 4}, {"label": "SECOND BATTLE ROUND ONWARDS", "when": "End of the Command phase (or the end of your turn if it is the fifth battle round and you are going second).", "text": "The player whose turn it is scores 4VP if they control one or more objective markers, and an additional 4VP if they control more objective markers than their opponent controls.", "vp": 4}]}, {"id": "take_hold", "name": "TAKE AND HOLD", "packs": ["ca", "pn"], "flavor": "Several strategic locations have been identified in your vicinity. You are ordered to assault these positions, secure them and hold them at any cost.", "conditions": [{"label": "SECOND BATTLE ROUND ONWARDS", "when": "End of the Command phase (or the end of your turn if it is the fifth battle round and you are going second).", "text": "The player whose turn it is scores 5VP for each objective marker they control (up to 15VP per turn).", "vp": 5}]}, {"id": "linchpin", "name": "LINCHPIN", "packs": ["ca", "pn"], "flavor": "True victory is built upon a firm foundation. If the centre cannot hold then all else swiftly crumbles.", "conditions": [{"label": "SECOND BATTLE ROUND ONWARDS", "when": "End of the Command phase (or the end of your turn if it is the fifth battle round and you are going second).", "text": "If the player whose turn it is does not control the objective marker in their deployment zone, they score 3VP for each objective marker they control.\n\nOR\n\nIf the player whose turn it is controls the objective marker in their deployment zone, they score 3VP for controlling that objective marker, and 5VP for each other objective marker they control (up to 15VP per turn).", "vp": 3}]}, {"id": "scorched", "name": "SCORCHED EARTH", "packs": ["ca", "pn"], "flavor": "What cannot be secured must be burned to ash.", "conditions": [{"label": "BURN OBJECTIVE (ACTION)", "when": null, "text": "STARTS: Your Shooting phase, from the second battle round onwards.\n\nUNITS: One unit from your army within range of an objective marker that is not within your deployment zone.\n\nCOMPLETES: End of your opponent's next turn or the end of the battle (whichever comes first), if your unit is still within range of the same objective marker and you control that objective marker.\n\nIF COMPLETED: That objective marker is burned and removed from the battlefield.", "vp": null}, {"label": "SECOND BATTLE ROUND ONWARDS", "when": "Any time.", "text": "Each time a player burns an objective marker, that player scores 5VP if that objective marker was in No Man's Land, or 10VP instead if that objective marker was in their opponent's deployment zone.", "vp": 5}, {"label": "SECOND BATTLE ROUND ONWARDS", "when": "End of the Command phase (or the end of your turn if it is the fifth battle round and you are going second).", "text": "The player whose turn it is scores 5VP for each objective marker they control (up to 10VP per turn).", "vp": 5}]}, {"id": "burden", "name": "BURDEN OF TRUST", "packs": ["ca", "pn"], "flavor": "The strategic prizes in this region must be guarded at all costs — a duty that falls upon a chosen few.", "conditions": [{"label": "SECOND BATTLE ROUND ONWARDS", "when": "End of the Command phase (or the end of your turn if it is the fifth battle round and you are going second).", "text": "The player whose turn it is scores 4VP for each objective marker they control that is not within their deployment zone. Then, for each objective marker that player controls, they can select one unit from their army (excluding AIRCRAFT) within range of that objective marker to guard it until the start of their next turn.", "vp": 4}, {"label": "SECOND BATTLE ROUND ONWARDS", "when": "End of each player's turn.", "text": "The opponent of the player whose turn it is scores 2VP for each of their units (excluding Battle-shocked units) that are within range of and guarding an objective marker they control.", "vp": 2}]}, {"id": "terraform", "name": "TERRAFORM", "packs": ["ca", "pn"], "flavor": "Victory here lies in dominating not only the foe, but also the landscape of the battlefield itself.", "conditions": [{"label": "TERRAFORM (ACTION)", "when": null, "text": "STARTS: Your Shooting phase.\n\nUNITS: One or more units from your army, each within range of a different objective marker that is not within your deployment zone and has not been terraformed.\n\nCOMPLETES: End of your opponent's next turn or the end of the battle (whichever comes first), if the unit performing this Action is still within range of the same objective marker and you control that objective marker.\n\nIF COMPLETED: Each of those objective markers is terraformed.", "vp": null}, {"label": "SECOND BATTLE ROUND ONWARDS", "when": "End of the Command phase (or the end of your turn if it is the fifth battle round and you are going second).", "text": "The player whose turn it is scores VP as follows (up to 15VP per turn):\n  4VP for each objective marker they control.\n  2VP for each objective marker they have terraformed during the battle.\n\nNote: these VP are cumulative, so a player who controls one objective marker that they have also terraformed will score 6VP that turn.", "vp": 4}, {"label": "SECOND BATTLE ROUND ONWARDS", "when": "End of the turn.", "text": "Each player scores 1VP for each objective marker that is terraformed by them.", "vp": 1}]}, {"id": "supply_drop", "name": "SUPPLY DROP", "packs": ["ca", "pn"], "flavor": "Supplies are inbound. Secure the drop coordinates.", "conditions": [{"label": "SETUP", "when": null, "text": "Start of the Battle: Players randomly select two different objective markers in No Man's Land; the first selected is the Alpha objective, the second selected is the Omega objective.\n\nStart of the Fourth Battle Round: The Alpha objective is removed from the battlefield.\n\nStart of the Fifth Battle Round: All objective markers in No Man's Land apart from the Omega objective are removed from the battlefield.", "vp": null}, {"label": "SECOND BATTLE ROUND ONWARDS", "when": "End of the Command phase (or the end of your turn if it is the fifth battle round and you are going second).", "text": "The player whose turn it is scores the following VP for each objective marker in No Man's Land that they control, depending on the current battle round:\n  5VP in the second and third battle rounds.\n  8VP in the fourth battle round.\n  15VP in the fifth battle round.", "vp": 5}]}, {"id": "ritual", "name": "THE RITUAL", "packs": ["ca", "pn"], "flavor": "Bitter foes clash in a race to finish a ritual to either sanctify or corrupt the battlefield.", "conditions": [{"label": "SETUP", "when": null, "text": "When setting up the battlefield, remove all objective markers in No Man's Land except the one closest to the centre of the battlefield.", "vp": null}, {"label": "THE RITUAL (ACTION)", "when": null, "text": "STARTS: Your Shooting phase.\n\nUNITS: One unit from your army.\n\nCOMPLETES: End of your turn.\n\nIF COMPLETED: Set up one objective marker anywhere on the battlefield wholly within No Man's Land and within 1\" of your unit, provided it can be setup exactly 12\" from one other objective marker within No Man's Land and not within 6\" of any other objective marker.", "vp": null}, {"label": "SECOND BATTLE ROUND ONWARDS", "when": "End of the Command phase (or the end of your turn if it is the fifth battle round and you are going second).", "text": "The player whose turn it is scores 5VP for each objective marker in No Man's Land that they control (up to 15VP per turn).", "vp": 5}]}, {"id": "uxo", "name": "UNEXPLODED ORDNANCE", "packs": ["ca", "pn"], "flavor": "Volatile undetonated material lies in your path. Shifting such hazards towards enemy territory could be the key to victory.", "conditions": [{"label": "SETUP", "when": null, "text": "The objective markers that start the battle in No Man's Land are Hazard objective markers.", "vp": null}, {"label": "MOVE HAZARD (ACTION)", "when": null, "text": "STARTS: Your Shooting phase.\n\nUNITS: One or more units from your army, each within range of a different Hazard objective marker you control.\n\nCOMPLETES: End of your turn, if the unit performing this Action is still within range of the same Hazard objective marker and you control that objective marker.\n\nIF COMPLETED: You can move each of those Hazard objective markers up to 6\". When doing so, that objective marker cannot end that move on top of any other objective marker or model, or inside impassable parts of terrain features.", "vp": null}, {"label": "SECOND BATTLE ROUND ONWARDS", "when": "End of each player's turn.", "text": "The player whose turn it is scores VP as follows:\n  8VP for each Hazard objective marker that is wholly within their opponent's deployment zone.\n  5VP for each other Hazard objective marker that is wholly within 6\" of their opponent's deployment zone.\n  2VP for each other Hazard objective marker that is wholly within 12\" of their opponent's deployment zone.", "vp": 8}]}, {"id": "hidden_supplies", "name": "HIDDEN SUPPLIES", "packs": ["ca"], "flavor": "Reconnaissance units have uncovered a hidden cache of materiel in this war zone.", "conditions": [{"label": "SETUP", "when": null, "text": "In the Place Objective Markers step, players must set up one additional objective marker in No Man's Land.\n\nBefore setting up this new objective marker, players must first move the objective marker in the centre of the battlefield 6\" directly towards one of the corners of the battlefield (if No Man's Land touches any of the corners of the battlefield, you must move the objective marker towards one of those corners). Otherwise, the players roll off, and the winner selects which corner the objective marker is moved towards. Players then set up the new objective marker 6\" from the centre of the battlefield towards the diagonally opposite corner of the battlefield to the previously moved objective marker.", "vp": null}, {"label": "SECOND BATTLE ROUND ONWARDS", "when": "End of the Command phase (or the end of your turn if it is the fifth battle round and you are going second).", "text": "The player whose turn it is scores VP as follows (these are cumulative):\n  5VP if they control one objective marker not within their deployment zone.\n  5VP if they control two objective markers not within their deployment zone.\n  5VP if they control more objective markers than their opponent controls.", "vp": 5}]}];
+const DEFAULT_MISSION_RULES = [{"id": "mr_fog", "name": "FOG OF WAR", "flavor": "Due to strange atmospheric conditions or supernatural phenomena, confusion abounds. Enemy positions are unknown, and you dare not commit your resources blindly.", "conditions": [{"label": "", "when": null, "text": "In the first battle round, units have the Benefit of Cover, and players cannot use Core Stratagems (excluding the New Orders Stratagem).", "vp": null}]}, {"id": "mr_raise", "name": "RAISE BANNERS", "flavor": "It is not enough this day simply to defeat the foe. Instead you must raise your banners high, announcing your conquests to all who witness them.", "conditions": [{"label": "", "when": null, "text": "At the end of each player's turn, if a BATTLELINE unit from their army is within range of an objective marker that player controls, that unit raises a banner on that objective marker: that player scores 1VP (which is counted towards their Secondary Mission score), and that player's units can no longer raise a banner on that objective marker.", "vp": 1}]}, {"id": "mr_rapid", "name": "RAPID ESCALATION", "flavor": "Armies hurl themselves recklessly into what is swiftly becoming a maelstrom of battle. With every passing moment, the flames of conflict rage higher.", "conditions": [{"label": "", "when": null, "text": "In the first battle round, each player can set up BATTLELINE units from Strategic Reserves in the Reinforcements step of their Movement phase. If they do, those units must be set up wholly within 6\" of any battlefield edge, but no model in those units can be set up within the enemy deployment zone.\n\nThe points total of the units a player can set up in this way cannot exceed 10% of their total points limit:\n  Incursion: 100 pts\n  Strike Force: 200 pts\n  Onslaught: 300 pts", "vp": null}]}, {"id": "mr_stalwarts", "name": "STALWARTS", "flavor": "This is not a time for gilded glory, but instead it is the hour when the mud-spattered, blood-drenched rank and file step forward and prove their worth.", "conditions": [{"label": "", "when": null, "text": "BATTLELINE units that perform an Action are still eligible to shoot in that turn (but cannot start to perform another Action in that turn), and BATTLELINE units can perform Actions while within Engagement Range of one or more enemy units.", "vp": null}]}, {"id": "mr_adapt", "name": "ADAPT OR DIE", "flavor": "On this changing battlefield, only a commander who can adapt their strategy swiftly and decisively stands any chance of seizing victory.", "conditions": [{"label": "FOR PLAYERS USING FIXED MISSIONS", "when": null, "text": "Once per battle, at the end of that player's turn, after scoring any VP, they can discard one of their Secondary Mission cards and replace it with another Secondary Mission card that has the Fixed Mission symbol.", "vp": null}, {"label": "FOR PLAYERS USING TACTICAL MISSIONS", "when": null, "text": "Twice per battle, after drawing a Secondary Mission card, that player can draw another Secondary Mission card, then shuffle one of those two Secondary Mission cards back into their Secondary Mission deck.", "vp": null}]}, {"id": "mr_smoke", "name": "SMOKE AND MIRRORS", "flavor": "Be it through technological trickery, sorcerous illusion or sheer cunning, both commanders seek to outfox and outmanoeuvre the other.", "conditions": [{"label": "", "when": null, "text": "After both players have deployed their armies, starting with the Attacker, each player can place one unit from their army that is on the battlefield into Strategic Reserves, regardless of how many units are already in Strategic Reserves.\n\nThe points value of such a unit cannot exceed 25% of each player's total points limit:\n  Incursion: 250 pts\n  Strike Force: 500 pts\n  Onslaught: 750 pts", "vp": null}]}, {"id": "mr_swift", "name": "SWIFT ACTION", "flavor": "Time is running out. Cataclysm approaches on an unimaginable scale. In the face of such terrors, every warrior fights with the speed and fury of desperation.", "conditions": [{"label": "", "when": null, "text": "BATTLELINE units that Advance or Fall Back are still eligible to perform an Action in that turn.", "vp": null}]}, {"id": "mr_inspired", "name": "INSPIRED LEADERSHIP", "flavor": "Few sights set such an inspiring example upon the battlefield than a commander leading from the very front, wreathed in glory and stained with gore.", "conditions": [{"label": "", "when": null, "text": "While a player's WARLORD is not within their deployment zone, each time a unit from that player's army takes a Battle-shock test, if that player's WARLORD is within 9\" of and visible to that unit, add 1 to that test.", "vp": null}]}, {"id": "mr_hidden", "name": "HIDDEN SUPPLIES", "flavor": "Reconnaissance units have uncovered a hidden cache of ammunition, fuel and rations in this war zone.", "conditions": [{"label": "WHEN DRAWN", "when": null, "text": "If you also drew The Ritual Primary Mission card, discard this Mission Rule card and draw a new Mission Rule card.", "vp": null}, {"label": "", "when": null, "text": "In the Place Objective Markers step, players must set up one additional objective marker in No Man's Land.\n\nBefore setting up this new objective marker, players must first move the objective marker in the centre of the battlefield 6\" directly towards one of the corners of the battlefield (if No Man's Land touches any of the corners of the battlefield, you must move the objective marker towards one of those corners). Otherwise, the players roll off, and the winner selects which corner the objective marker is moved towards. Players then set up the new objective marker 6\" from the centre of the battlefield towards the diagonally opposite corner of the battlefield to the previously moved objective marker.", "vp": null}]}, {"id": "mr_prepared", "name": "PREPARED POSITIONS", "flavor": "This is a battle long in the offing, a fight for which both commanders have had ample time to prepare both their warriors and their defences.", "conditions": [{"label": "", "when": null, "text": "Players can target their BATTLELINE units with the Go to Ground and Heroic Intervention Stratagems for 0CP (but cannot do so if they have already used that Stratagem on a different unit that turn).", "vp": null}]}];
+const DEFAULT_SECONDARY_MISSIONS = [{"id": "sec_assassination", "name": "ASSASSINATION", "fixed": true, "flavor": "The enemy look to their champions for courage. Identify and eliminate them with extreme prejudice.", "when_drawn": null, "conditions": [{"label": "ANY BATTLE ROUND (FIXED)", "when": "While this card is active.", "text": "Each time an enemy CHARACTER model is destroyed.", "vp": 4}, {"label": "ANY BATTLE ROUND (TACTICAL)", "when": "End of either player's turn.", "text": "One or more enemy CHARACTER models were destroyed this turn.", "vp": 5}, {"label": "ANY BATTLE ROUND (TACTICAL)", "when": "End of either player's turn.", "text": "All CHARACTER models from your opponent's army have been destroyed during the battle.", "vp": 5}]}, {"id": "sec_containment", "name": "CONTAINMENT", "fixed": false, "flavor": "By setting up servo-sentries, laying booby traps or demolishing routes of egress, you must trap your foes within the bounds of this battlefield.", "when_drawn": null, "conditions": [{"label": "CONTAINMENT (ACTION)", "when": null, "text": "STARTS: Your Shooting phase.\n\nUNITS: One or more units from your army that are wholly within 9\" of one or more battlefield edges and not within your deployment zone. Select a different one of those battlefield edges for each of those units.\n\nCOMPLETES: Immediately.\n\nIF COMPLETED: Each battlefield edge you selected is contained by your army.", "vp": null}, {"label": "ANY BATTLE ROUND", "when": "End of your turn.", "text": "For each battlefield edge contained by your army this turn: 3VP (up to 6VP).", "vp": 3}]}, {"id": "sec_marked", "name": "MARKED FOR DEATH", "fixed": false, "flavor": "These specific enemy assets must be eliminated to ensure victory, no matter how insignificant they might seem.", "when_drawn": "Your opponent must select three units from their army on the battlefield. If there are only one or two units from their army on the battlefield, they must select those units. If there are no units from their army on the battlefield, discard this card and draw a new Secondary Mission card.", "conditions": [{"label": "ANY BATTLE ROUND", "when": "End of either player's turn.", "text": "One or more of the selected units were destroyed (or removed from the battlefield for any other reason) this turn.", "vp": 5}]}, {"id": "sec_behind_lines", "name": "BEHIND ENEMY LINES", "fixed": false, "flavor": "Break through the foe's army and cut off their lines of escape.", "when_drawn": "If it is the first battle round, you can draw a new Secondary Mission card and shuffle this card back into your Secondary Mission deck.", "conditions": [{"label": "ANY BATTLE ROUND", "when": "End of your turn.", "text": "One unit from your army (excluding AIRCRAFT and Battle-shocked units) is wholly within your opponent's deployment zone.", "vp": 3}, {"label": "ANY BATTLE ROUND", "when": "End of your turn.", "text": "Two or more units from your army (excluding AIRCRAFT and Battle-shocked units) are wholly within your opponent's deployment zone.", "vp": 4}]}, {"id": "sec_no_prisoners", "name": "NO PRISONERS", "fixed": false, "flavor": "Exterminate your enemies.", "when_drawn": null, "conditions": [{"label": "ANY BATTLE ROUND", "when": "While this card is active.", "text": "Each time an enemy unit is destroyed: 2VP (up to 5VP).", "vp": 2}]}, {"id": "sec_bring_down", "name": "BRING IT DOWN", "fixed": false, "flavor": "The opposing army contains numerous heavily armoured units. Take any opportunity to bring them down.", "when_drawn": "If there are no enemy MONSTER or VEHICLE units on the battlefield, you can discard this card and draw a new Secondary Mission card.", "conditions": [{"label": "ANY BATTLE ROUND", "when": "While this card is active.", "text": "Each time an enemy MONSTER or VEHICLE unit is destroyed:\n  2VP base\n  +2VP if the total Wounds characteristics of the models in that unit was 15+ (at its Starting Strength)\n  +2VP if the total Wounds characteristics of the models in that unit was 20+ (at its Starting Strength)\n\nNote: the above VP are cumulative, so destroying a MONSTER or VEHICLE unit with a combined Wounds characteristic of 20 (at its Starting Strength) would award you 6VP.", "vp": 2}]}, {"id": "sec_defend", "name": "DEFEND STRONGHOLD", "fixed": false, "flavor": "You are charged with the defence of a key objective. It must not be permitted to fall into enemy hands.", "when_drawn": "If it is the first battle round, draw a new Secondary Mission card and shuffle this card back into your Secondary Mission deck.", "conditions": [{"label": "SECOND BATTLE ROUND ONWARDS", "when": "End of your opponent's turn or the end of the battle (whichever comes first).", "text": "You control one or more objective markers in your deployment zone.", "vp": 3}]}, {"id": "sec_sabotage", "name": "SABOTAGE", "fixed": false, "flavor": "This region is replete with strategic assets or supply caches vital to the foe. See to it that they are reduced to just so much flaming wreckage.", "when_drawn": null, "conditions": [{"label": "SABOTAGE (ACTION)", "when": null, "text": "STARTS: Your Shooting phase.\n\nUNITS: One unit from your army that is within a terrain feature and not within your deployment zone.\n\nCOMPLETES: End of your opponent's next turn or the end of the battle (whichever comes first), if your unit is on the battlefield.\n\nIF COMPLETED: Your unit commits sabotage.", "vp": null}, {"label": "ANY BATTLE ROUND", "when": "End of your opponent's turn or the end of the battle (whichever comes first).", "text": "Your unit committed sabotage this turn and is not within your opponent's deployment zone.", "vp": 4}, {"label": "ANY BATTLE ROUND", "when": "End of your opponent's turn or the end of the battle (whichever comes first).", "text": "Your unit committed sabotage this turn and is within your opponent's deployment zone.", "vp": 6}]}, {"id": "sec_storm", "name": "STORM HOSTILE OBJECTIVE", "fixed": false, "flavor": "Dominate the field of battle. Storm every site of tactical import and leave the foe with no place to hide.", "when_drawn": "If it is the first battle round, you can draw a new Secondary Mission card and shuffle this card back into your Secondary Mission deck.", "conditions": [{"label": "ANY BATTLE ROUND", "when": "End of your turn.", "text": "You control one or more objective markers that were controlled by your opponent at the start of the turn.", "vp": 4}, {"label": "SECOND BATTLE ROUND ONWARDS", "when": "End of your turn.", "text": "Your opponent did not control any objective markers at the start of the turn, and you control one or more objective markers that you did not control at the start of the turn.", "vp": 3}]}, {"id": "sec_cull", "name": "CULL THE HORDE", "fixed": false, "flavor": "The enemy come forth in teeming masses. Their ranks must be thinned if the day is to be won.", "when_drawn": "If there are no enemy units on the battlefield that satisfy either of the conditions required to achieve this card, you can discard this card and draw a new Secondary Mission card.", "conditions": [{"label": "ANY BATTLE ROUND", "when": "While this card is active.", "text": "Each time an enemy INFANTRY unit is destroyed, if one or more of the following conditions are satisfied:\n  • The Starting Strength of the destroyed unit was 20+.\n  • The total of the Wounds characteristics of the models in the destroyed unit was 25+ (at its Starting Strength).\n  • When that unit's player added that unit to their army, the points value they subtracted from the total permitted for this battle was sufficient for that unit to be composed of 20 or more models.\n\nNote: for the purposes of the above conditions, models in attached Leader units are ignored.", "vp": 5}]}, {"id": "sec_overwhelming", "name": "OVERWHELMING FORCE", "fixed": false, "flavor": "Scour the enemy from the face of the battlefield.", "when_drawn": null, "conditions": [{"label": "ANY BATTLE ROUND", "when": "While this card is active.", "text": "Each time an enemy unit that started the turn within range of an objective marker is destroyed: 3VP (up to 5VP).", "vp": 3}]}, {"id": "sec_extend", "name": "EXTEND BATTLE LINES", "fixed": false, "flavor": "The battleground is conquered one yard at a time. Press forward to establish a strong military presence in the area.", "when_drawn": null, "conditions": [{"label": "ANY BATTLE ROUND", "when": "End of your turn.", "text": "You control one or more objective markers within your deployment zone and one or more objective markers within No Man's Land.", "vp": 5}, {"label": "ANY BATTLE ROUND", "when": "End of your turn.", "text": "You only have one unit on the battlefield, and that unit controls one objective marker within No Man's Land.", "vp": 2}]}, {"id": "sec_engage", "name": "ENGAGE ON ALL FRONTS", "fixed": false, "flavor": "This area is of extreme importance. You are to lead an immediate all-out assault to capture it and deny it to our enemy for good.", "when_drawn": "If there are fewer than three units from your army on the battlefield, you can discard this card and draw a new Secondary Mission card.", "conditions": [{"label": "ANY BATTLE ROUND", "when": "End of your turn.", "text": "One or more units from your army (excluding AIRCRAFT and Battle-shocked units) are wholly within three different table quarters, and those units are all more than 6\" away from the centre of the battlefield.", "vp": 2}, {"label": "ANY BATTLE ROUND", "when": "End of your turn.", "text": "One or more units from your army (excluding AIRCRAFT and Battle-shocked units) are wholly within four different table quarters, and those units are all more than 6\" away from the centre of the battlefield.", "vp": 4}]}, {"id": "sec_recover", "name": "RECOVER ASSETS", "fixed": false, "flavor": "Scattered strategic assets must be swiftly reclaimed.", "when_drawn": "If there are fewer than two units from your army on the battlefield, you can discard this card and draw a new Secondary Mission card.", "conditions": [{"label": "RECOVER ASSETS (ACTION)", "when": null, "text": "STARTS: Your Shooting phase.\n\nUNITS: One or more units from your army, if each of those units is wholly within a different one of the following areas: your deployment zone; No Man's Land; your opponent's deployment zone.\n\nCOMPLETES: End of your opponent's next turn or the end of the battle (whichever comes first), if either two or three of those units are on the battlefield.\n\nIF COMPLETED: Those units recover assets.", "vp": null}, {"label": "ANY BATTLE ROUND", "when": "End of your opponent's turn or the end of the battle (whichever comes first).", "text": "Two of your units recovered assets this turn.", "vp": 3}, {"label": "ANY BATTLE ROUND", "when": "End of your opponent's turn or the end of the battle (whichever comes first).", "text": "Three of your units recovered assets this turn.", "vp": 6}]}, {"id": "sec_area_denial", "name": "AREA DENIAL", "fixed": false, "flavor": "It is critical that this area is dominated. No enemy vanguard or guerrilla units can be allowed to disrupt our plans.", "when_drawn": null, "conditions": [{"label": "ANY BATTLE ROUND", "when": "End of your turn.", "text": "One or more units from your army (excluding AIRCRAFT and Battle-shocked units) are within 3\" of the centre of the battlefield, and there are no enemy units within 3\" of the centre of the battlefield.", "vp": 2}, {"label": "ANY BATTLE ROUND", "when": "End of your turn.", "text": "One or more units from your army (excluding AIRCRAFT and Battle-shocked units) are within 3\" of the centre of the battlefield, and there are no enemy units within 6\" of the centre of the battlefield.", "vp": 5}]}, {"id": "sec_locus", "name": "ESTABLISH LOCUS", "fixed": false, "flavor": "Whether a teleport homer crackling with arcane energies, a daemonic summoning circle, a pheromonal marker or some other means of guiding forces onto the battlefield, this locus must be set up swiftly to pave the road to victory.", "when_drawn": null, "conditions": [{"label": "ESTABLISH LOCUS (ACTION)", "when": null, "text": "STARTS: Your Shooting phase.\n\nUNITS: One unit from your army.\n\nCOMPLETES: End of your turn, if that unit is within your opponent's deployment zone or within 6\" of the centre of the battlefield.\n\nIF COMPLETED: Your unit establishes a locus.", "vp": null}, {"label": "ANY BATTLE ROUND", "when": "End of your turn.", "text": "Your unit established a locus this turn and is within 6\" of the centre of the battlefield.", "vp": 2}, {"label": "ANY BATTLE ROUND", "when": "End of your turn.", "text": "Your unit established a locus this turn and is within your opponent's deployment zone.", "vp": 4}]}, {"id": "sec_no_mans", "name": "SECURE NO MAN'S LAND", "fixed": false, "flavor": "You must advance swiftly into no man's land and seize it before the enemy can, lest they take control of the entire battlefield.", "when_drawn": null, "conditions": [{"label": "ANY BATTLE ROUND", "when": "End of your turn.", "text": "You control one objective marker in No Man's Land.", "vp": 2}, {"label": "ANY BATTLE ROUND", "when": "End of your turn.", "text": "You control two or more objective markers in No Man's Land.", "vp": 5}]}, {"id": "sec_cleanse", "name": "CLEANSE", "fixed": false, "flavor": "The objectives in this area have been tainted and must be cleansed with ritual and purifying flame.", "when_drawn": null, "conditions": [{"label": "CLEANSE (ACTION)", "when": null, "text": "STARTS: Your Shooting phase.\n\nUNITS: One or more units from your army within range of an objective marker that is not within your deployment zone.\n\nCOMPLETES: End of your turn, if the unit performing this Action is still within range of the same objective marker and you control that objective marker.\n\nIF COMPLETED: That objective marker is cleansed by your army.", "vp": null}, {"label": "ANY BATTLE ROUND", "when": "End of your turn.", "text": "One objective marker was cleansed by your army this turn.", "vp": 2}, {"label": "ANY BATTLE ROUND", "when": "End of your turn.", "text": "Two or more objective markers were cleansed by your army this turn.", "vp": 4}]}];
+const DEFAULT_SECRET_MISSIONS = [{"id": "sec_unbroken", "name": "UNBROKEN WALL", "flavor": "Intelligence has revealed a secondary enemy attack incoming. Form a wall of warriors across this battlefield, ready to repel it.", "conditions": [{"label": "END OF BATTLE", "when": "End of the battle.", "text": "You control three or more objective markers that are not within your deployment zone.", "vp": 20}]}, {"id": "sec_cmd_insert", "name": "COMMAND INSERTION", "flavor": "Sometimes vital tasks cannot be entrusted to underlings. At such times, a commander must lead by example, bloodying their own hands to achieve victory.", "conditions": [{"label": "END OF BATTLE", "when": "End of the battle.", "text": "Your WARLORD is within range of one or more objective markers in your opponent's deployment zone that you control.", "vp": 20}]}, {"id": "sec_shatter", "name": "SHATTER COHESION", "flavor": "There is no surer way to prevent your foe securing victory than to utterly destroy their strategic and tactical capabilities.", "conditions": [{"label": "END OF BATTLE", "when": "End of the battle.", "text": "There are no units from your opponent's army on the battlefield.\n\nOR\n\nEvery unit from your opponent's army that is on the battlefield meets one or more of the following conditions:\n  • That unit is Battle-shocked.\n  • That unit is Below Half-strength.\n  • That unit is more than 3\" away from all objective markers.", "vp": 20}]}, {"id": "sec_attrition", "name": "WAR OF ATTRITION", "flavor": "This is to be a battle of numbers, wherein you must husband your core forces with skill while winnowing those of the foe.", "conditions": [{"label": "END OF BATTLE", "when": "End of the battle.", "text": "One or more BATTLELINE units from your army are within your opponent's deployment zone, and one of the following conditions applies:\n  • There are no BATTLELINE units from your opponent's army on the battlefield.\n  • Every BATTLELINE unit from your opponent's army that is on the battlefield is within your opponent's deployment zone.", "vp": 20}]}];
+const DEFAULT_DEPLOYMENTS = [{"id": "dep_tipping", "name": "TIPPING POINT", "packs": ["ca", "pn"], "desc": "Standard mirrored deployment along the long table edges. Deployment zones run the full length of the table, 9\" deep on each side. Suited to armies that want to engage quickly across a short distance."}, {"id": "dep_hammer", "name": "HAMMER AND ANVIL", "packs": ["ca", "pn"], "desc": "Both players deploy along the short table edges, meaning armies must cross the full 60\" length to meet each other. Favours long-range shooting and fast-moving armies."}, {"id": "dep_sweeping", "name": "SWEEPING ENGAGEMENT", "packs": ["ca", "pn"], "desc": "Both players deploy along the long edges, with deployment zones offset diagonally — one in the top-right, the other in the bottom-left. Creates an angled battlefield with lots of early skirmishing potential."}, {"id": "dep_dawn", "name": "DAWN OF WAR", "packs": ["ca", "pn"], "desc": "Deployment zones are set back further from the centre than normal, with a large No Man's Land between them. The extra distance slows early engagement and rewards objective-focused play."}, {"id": "dep_search", "name": "SEARCH AND DESTROY", "packs": ["ca", "pn"], "desc": "Armies deploy in diagonally opposite corners of the table, each in a roughly triangular zone. No Man's Land is the large central diagonal strip. Flanking and aggressive movement are rewarded."}, {"id": "dep_crucible", "name": "CRUCIBLE OF BATTLE", "packs": ["ca", "pn"], "desc": "The deployment zones are set back from centre but angled, creating an unusual approach vector. The central objectives are tightly contested and the flanks are wide open."}];
+const DEFAULT_BATTLE_SEQUENCE = [{"step": 1, "title": "Set Mission Parameters", "desc": "Agree on mission type: Incursion, Strike Force, or Asymmetric War. This determines which card decks you use."}, {"step": 2, "title": "Muster Armies", "desc": "Both players confirm their army lists are legal for the agreed points limit and battle size."}, {"step": 3, "title": "Determine Mission", "desc": "Draw one Deployment card, one Primary Mission card, and (if using them) one Mission Rule / Twist card. Or use a pre-set mission from the Tournament Mission Pool."}, {"step": 4, "title": "Read Mission", "desc": "Both players read the Primary Mission and Mission Rule cards together. Understand how VP is scored and any special conditions that apply."}, {"step": 5, "title": "Place Objective Markers", "desc": "Set up objective markers as shown on the Deployment card. Note any mission-specific adjustments (e.g. Hidden Supplies adds one extra objective)."}, {"step": 6, "title": "Create the Battlefield", "desc": "Set up terrain features. Missions are played on a 44\" × 60\" battlefield. Terrain should not be placed within 1\" of any impassable sections near objective markers."}, {"step": 7, "title": "Determine Attacker & Defender", "desc": "Look at the Deployment card. Roll off — the winner decides who is the Attacker and who is the Defender (or agree together)."}, {"step": 8, "title": "Select Secondary Missions", "desc": "Each player secretly notes whether they will use Fixed or Tactical Missions. If Fixed, also note which two cards. Then both players reveal simultaneously."}, {"step": 9, "title": "Declare Battle Formations", "desc": "Each player secretly notes: which Leaders attach to which units, which units embark in Transports, and which units start in Reserves. Then reveal."}, {"step": 10, "title": "Deploy Armies", "desc": "Players take turns deploying units one at a time, starting with the Defender. Units must be placed wholly within their deployment zone. TITANIC units cause the deploying player to skip their next turn."}, {"step": 11, "title": "Redeploy Units", "desc": "Resolve any special rules that allow units to redeploy after deployment (e.g. Scout moves). Players alternate, starting with the Attacker."}, {"step": 12, "title": "Determine First Turn", "desc": "Both players roll off. The winner chooses who takes the first turn."}, {"step": 13, "title": "Resolve Pre-Battle Rules", "desc": "Players alternate resolving any pre-battle special rules their units have, starting with the player who will take the first turn."}, {"step": 14, "title": "Begin the Battle", "desc": "The first battle round begins. Continue resolving battle rounds until the battle ends after Round 5."}, {"step": 15, "title": "Determine Victor", "desc": "At the end of the battle, the player with the most VP wins. Maximum 100VP total. If tied, the battle is a draw."}];
+const DEFAULT_GAME_GUIDE = [{"id": "gg_phases", "title": "Battle Turn — Phase Order (TLDR)", "text": "Each player takes a full turn in this exact phase order:\n\n1. COMMAND PHASE — Take Battle-shock tests for units below half-strength. Gain 1CP. Use \"start of Command phase\" abilities. If using Tactical Missions, draw Secondary Mission cards until you have two active.\n\n2. MOVEMENT PHASE — Move your units. A unit can Normal Move, Advance (move further but can't shoot standard weapons after), or Remain Stationary. Bring in units from Reserves.\n\n3. SHOOTING PHASE — Eligible units select targets and shoot. Units that Advanced this turn cannot shoot most weapons. Units within Engagement Range of enemies cannot shoot (with some exceptions).\n\n4. CHARGE PHASE — Declare charges against enemy units within 12\". Roll 2D6 — the result must be high enough to move the unit into Engagement Range (1\") of the target.\n\n5. FIGHT PHASE — Both players fight in melee. The player whose turn it is fights with their eligible units first, then the opponent fights back with theirs.\n\nAfter your turn ends, check mission scoring conditions. Then your opponent takes their turn through the same five phases."}, {"id": "gg_vp", "title": "VP Sources & Caps", "text": "Maximum total VP per player: 100VP\n\n  Primary Mission:   up to 50VP\n  Secondary Missions: up to 40VP total\n    (If using Fixed Missions: up to 20VP per Fixed Mission card)\n  Battle Ready Army:  10VP\n\nChapter Approved also has:\n  Challenger Cards:  up to 12VP\n  (Combined Primary + Secondary + Challenger: max 90VP)\n\nSecret Missions (Pariah Nexus):\n  If you undertake a Secret Mission at the end of Round 3, you cannot score Primary Mission VP in Round 5, and your Primary Mission VP is capped at 20VP for the whole game. In exchange you can score up to 20VP from the Secret Mission card at battle end.\n\nVP you earn is kept even if the unit that earned it is later destroyed or returned to the battlefield."}, {"id": "gg_actions", "title": "Actions — Rules Summary", "text": "A unit CANNOT start to perform an Action if any of the following apply:\n  • It is an AIRCRAFT unit.\n  • It is Battle-shocked.\n  • It has an Objective Control characteristic of 0.\n  • It is within Engagement Range of one or more enemy units (unless it is a TITANIC CHARACTER unit).\n  • It Advanced or Fell Back this turn.\n  • It is not eligible to shoot this phase (including units that have already been selected to shoot this phase).\n\nOnce a unit starts an Action:\n  • Until the Action completes or the turn ends (whichever is later), that unit cannot shoot or declare a charge.\n  • TITANIC CHARACTER units are the exception — they can perform an Action and still declare a charge, but cannot start another Action.\n\nIf a unit performing an Action makes a move (excluding Pile-in and Consolidation moves) or leaves the battlefield, that Action cannot be completed."}, {"id": "gg_reserves", "title": "Reserve Restrictions", "text": "No more than half the units in your army can start the battle in Reserves. The points total of those Reserves units also cannot exceed half your army's total points value.\n\n  (Units embarked in a TRANSPORT that is set up in Reserves count towards both limits.)\n\nReserves units cannot arrive on the battlefield during the first battle round (excluding units placed into Strategic Reserves during the battle itself).\n\nAny Reserves units that have not arrived on the battlefield by the end of the third battle round count as having been destroyed — as do any units embarked within them."}, {"id": "gg_secondary", "title": "Secondary Missions — Fixed vs Tactical", "text": "FIXED MISSIONS\nYou choose two Secondary Mission cards at the start of the game (these must have the Fixed Mission symbol). Those two cards remain active for the entire battle and can be scored multiple times. The rest of your Secondary Mission deck is set aside. Fixed Mission cards cannot be discarded except by the Adapt or Die Mission Rule.\n\nTACTICAL MISSIONS\nAt the start of your first Command phase, draw two cards from your Secondary Mission deck — both are active. At the start of each subsequent Command phase, if you have fewer than two active Secondary Mission cards, draw until you have two.\n\nAt the end of either player's turn: if you scored any VP from a Secondary Mission card that turn, discard it — it is achieved. You can also voluntarily discard an active card for 1CP (on your turn).\n\nNEW ORDERS STRATAGEM (1CP)\nWhen: End of your Command phase.\nTarget: One of your active Secondary Mission cards.\nEffect: Discard it and draw one new Secondary Mission card.\n\nIf your Secondary Mission deck runs out, you cannot draw any more."}, {"id": "gg_secret", "title": "Secret Missions — Trigger & Rules", "text": "At the end of the third battle round, starting with the player who had the second turn:\n\nIf your Primary Mission VP total is less than or equal to your opponent's, you CAN choose to undertake a Secret Mission.\n\nIf you do:\n  1. Secretly select one card from your Secret Mission deck. Place it face-down.\n  2. In the fifth battle round, you CANNOT score any VP from the Primary Mission card.\n  3. Your Primary Mission VP is capped at 20VP total for the whole game (any excess already scored above 20VP is lost).\n  4. At the end of the battle, reveal your Secret Mission card. If you achieved its goal, score the VP shown."}, {"id": "gg_battle_ready", "title": "Battle Ready — Definition", "text": "Battle Ready means every model in your army is fully painted with a detailed or textured base. This is the minimum painting standard for a mission game.\n\nIf your entire army meets this standard, you score 10VP at the end of the battle. This is separate from all mission scoring and is not subject to any VP cap other than the overall 100VP maximum."}, {"id": "gg_scoring_timing", "title": "Scoring Timing — Quick Reference", "text": "Different scoring conditions use different timing triggers:\n\n  \"End of the battle round\" — scored after both players have completed their turn. Both players score simultaneously.\n\n  \"End of the Command phase\" — scored at the end of the active player's Command phase, each turn.\n\n  \"End of your turn\" — scored at the end of the active player's turn (after the Fight phase).\n\n  \"End of your opponent's turn\" — scored at the end of your opponent's turn (you score while it is their turn).\n\n  \"While this card is active\" — scored each time the trigger happens, for as long as the card is in play.\n\n  \"End of the battle\" — scored only once, at the very end of Round 5.\n\nNote: if it is the fifth battle round and you are going second, \"End of the Command phase\" scoring is replaced by \"End of your turn\" instead."}, {"id": "gg_challenger", "title": "Challenger Cards (Chapter Approved only)", "text": "A player becomes the Challenger at the start of a battle round if they have fewer VP than their opponent and the difference is 6 or more. That player remains the Challenger until the end of that battle round.\n\nWhile you are the Challenger, draw one Challenger card at the start of your Command phase. Each card presents:\n  • One Stratagem (use it for free this turn), OR\n  • One Mission (complete it this turn for bonus VP)\n\nYou cannot do both — choose one. At the end of your turn, discard the card whether or not you used it.\n\nChallenger card VP counts towards a separate 12VP cap. Combined Primary + Secondary + Challenger VP is also capped at 90VP.\n\nNote: rules cannot change the CP cost of a Challenger Stratagem, and CP-generating abilities cannot trigger from Challenger Stratagems."}];
 /*WARCHIEF_DATA_END*/
 
 
@@ -1327,8 +1510,8 @@ function nav(page) {
   // special alias for settings
   if (page === 'settings') { const s = document.getElementById('ni-settings'); if(s) s.classList.add('active'); }
   const renders = { home:null, ds:renderDSLib, ab:renderArmies, sc:renderShowcase,
-                    det:renderDetachments, ru:renderRules, ob:renderObjectives,
-                    pt:renderPT, mp:renderMP, settings:renderFbStatus };
+                    det:renderDetachments, ru:renderRules, ob:renderObPage,
+                    ms:renderMissionsPage, pt:renderPT, mp:renderMP, settings:renderFbStatus };
   if (renders[page]) renders[page]();
 }
 
@@ -3086,6 +3269,350 @@ function deleteRule(id) {
   S.rules = S.rules.filter(r=>r.id!==id); save(); renderRules(); toast('Rule deleted');
 }
 
+// ── MISSIONS ─────────────────────────────────────────────
+// Type colours
+const MC_COLORS = {
+  primary:      {bg:'rgba(74,158,255,.15)',  border:'rgba(74,158,255,.35)',  text:'#4a9eff', label:'Primary'},
+  mission_rule: {bg:'rgba(251,146,60,.15)',  border:'rgba(251,146,60,.35)',  text:'#fb923c', label:'Mission Rule'},
+  secondary:    {bg:'rgba(52,211,153,.15)',  border:'rgba(52,211,153,.35)',  text:'#34d399', label:'Secondary'},
+  secret:       {bg:'rgba(168,85,247,.15)',  border:'rgba(168,85,247,.35)',  text:'#a855f7', label:'Secret'},
+  deployment:   {bg:'rgba(250,204,21,.15)',  border:'rgba(250,204,21,.35)',  text:'#facc15', label:'Deployment'},
+};
+
+let _msPack = 'pn';
+let _msLibType = 'all';
+let _msSecondaryDeck = [];
+let _msSecVP = 0;
+let _msSlots = [null, null];
+let _msTactical = false;
+
+function msSetPack(el) {
+  document.querySelectorAll('.ms-pack-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  _msPack = el.dataset.pk;
+}
+
+function msSetLibType(el) {
+  document.querySelectorAll('#ms-lib-type-chips .chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  _msLibType = el.dataset.mt;
+  msRenderLibrary();
+}
+
+// Build a mission card HTML (collapsible, with VP buttons)
+function buildMissionCardHTML(card, type, vpTarget) {
+  const col = MC_COLORS[type] || MC_COLORS.primary;
+  const pill = `<span class="mc-type-pill" style="background:${col.bg};color:${col.text};border:1px solid ${col.border}">${escH(col.label)}</span>`;
+  const uid = 'mc-' + (card.id||Math.random().toString(36).slice(2));
+  let html = `<div class="mc" id="${uid}">
+    <div class="mc-hdr" onclick="toggleMC('${uid}')">
+      ${pill}
+      <div class="mc-name">${escH(card.name)}</div>
+      <span class="mc-arrow">›</span>
+    </div>
+    <div class="mc-body">`;
+  if (card.flavor) html += `<div class="mc-flavor">${escH(card.flavor)}</div>`;
+  if (card.when_drawn) {
+    html += `<div class="mc-when-drawn">
+      <div class="mc-when-drawn-lbl">When Drawn</div>
+      <div class="mc-when-drawn-text">${escH(card.when_drawn)}</div>
+    </div>`;
+  }
+  (card.conditions||[]).forEach((c,ci) => {
+    html += `<div class="mc-condition">`;
+    if (c.label) html += `<div class="mc-cond-label">${escH(c.label)}</div>`;
+    if (c.when)  html += `<div class="mc-cond-when">When: ${escH(c.when)}</div>`;
+    if (c.text)  html += `<div class="mc-cond-text">${escH(c.text)}</div>`;
+    if (c.vp != null) {
+      const tgt = vpTarget || 'msAddSecVP';
+      html += `<div class="mc-vp-row">
+        <span class="mc-vp-badge">+${c.vp} VP</span>
+        <button class="mc-vp-btn" onclick="${tgt}(${c.vp})">+ Add VP</button>
+      </div>`;
+    }
+    html += `</div>`;
+  });
+  html += `</div></div>`;
+  return html;
+}
+
+function toggleMC(uid) {
+  const el = document.getElementById(uid);
+  if (!el) return;
+  const body = el.querySelector('.mc-body');
+  const arrow = el.querySelector('.mc-arrow');
+  const open = body.classList.contains('open');
+  body.classList.toggle('open', !open);
+  if (arrow) arrow.classList.toggle('open', !open);
+}
+
+// Mission Generator
+function msRollMission() {
+  const deployments = (DEFAULT_DEPLOYMENTS||[]).filter(d => d.packs.includes(_msPack));
+  const primaries   = (DEFAULT_PRIMARY_MISSIONS||[]).filter(p => p.packs.includes(_msPack));
+  const rules       = DEFAULT_MISSION_RULES||[];
+  if (!deployments.length || !primaries.length) return;
+  const dep = deployments[Math.floor(Math.random()*deployments.length)];
+  const pm  = primaries[Math.floor(Math.random()*primaries.length)];
+  const mr  = _msPack==='pn' ? rules[Math.floor(Math.random()*rules.length)] : null;
+
+  // Deployment card (simple – diagram inline)
+  const depCol = MC_COLORS.deployment;
+  const depUID = 'mc-dep-' + Date.now();
+  let depHTML = `<div class="mc" id="${depUID}">
+    <div class="mc-hdr" onclick="toggleMC('${depUID}')">
+      <span class="mc-type-pill" style="background:${depCol.bg};color:${depCol.text};border:1px solid ${depCol.border}">Deployment</span>
+      <div class="mc-name">${escH(dep.name)}</div>
+      <span class="mc-arrow">›</span>
+    </div>
+    <div class="mc-body">
+      ${dep.desc ? `<div class="mc-flavor">${escH(dep.desc)}</div>` : ''}
+      <div style="margin-top:10px">${renderDepSVG(dep.id)}</div>
+    </div>
+  </div>`;
+
+  document.getElementById('ms-gen-deployment').innerHTML = depHTML;
+  document.getElementById('ms-gen-primary').innerHTML = buildMissionCardHTML(pm, 'primary', 'msAddPrimVP');
+  document.getElementById('ms-gen-rule').innerHTML = mr ? buildMissionCardHTML(mr, 'mission_rule') : '';
+  const res = document.getElementById('ms-gen-result');
+  res.classList.add('visible');
+}
+
+// VP tracking (simple counters, no caps)
+let _msPrimVP = 0;
+function msAddPrimVP(n) {
+  _msPrimVP += n;
+  // Show a brief toast
+  showMsToast(`+${n} Primary VP → total ${_msPrimVP}`);
+}
+function msAddSecVP(n) {
+  _msSecVP += n;
+  const el = document.getElementById('ms-sec-vp');
+  if (el) el.textContent = _msSecVP;
+  showMsToast(`+${n} Secondary VP → total ${_msSecVP}`);
+}
+function showMsToast(msg) {
+  let t = document.getElementById('ms-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'ms-toast';
+    t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;z-index:9999;pointer-events:none;transition:opacity .3s';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => { t.style.opacity = '0'; }, 1800);
+}
+
+// Secondary hand
+function msToggleTactical() {
+  _msTactical = document.getElementById('ms-tactical-toggle').checked;
+  const knob = document.getElementById('ms-toggle-knob');
+  if (knob) knob.style.transform = _msTactical ? 'translateX(16px)' : 'translateX(0)';
+}
+function msShuffleSecondaries() {
+  _msSecondaryDeck = [...(DEFAULT_SECONDARY_MISSIONS||[])].sort(()=>Math.random()-.5);
+  _msSlots = [null, null];
+  _msSecVP = 0;
+  document.querySelectorAll('.sh-slot').forEach((sl,i) => {
+    sl.className = 'sh-slot';
+    sl.innerHTML = '<div class="sh-slot-empty">Tap to draw</div>';
+    sl.onclick = () => msDrawSecondary(i);
+  });
+  const vp = document.getElementById('ms-sec-vp');
+  if (vp) vp.textContent = '0';
+  showMsToast('Deck shuffled — ' + _msSecondaryDeck.length + ' cards');
+}
+function msDrawSecondary(slotIdx) {
+  if (!_msSecondaryDeck.length) { showMsToast('Deck is empty'); return; }
+  const card = _msSecondaryDeck.shift();
+  if (slotIdx === -1) {
+    // just show toast with card name (extra draw)
+    showMsToast('Drew: ' + card.name);
+    return;
+  }
+  _msSlots[slotIdx] = card;
+  const slotEl = document.getElementById('ms-slot-' + slotIdx);
+  if (!slotEl) return;
+  slotEl.className = 'sh-slot filled';
+  slotEl.onclick = null;
+  slotEl.innerHTML = buildMissionCardHTML(card, 'secondary');
+}
+
+// Card library
+function msRenderLibrary() {
+  const q = ((document.getElementById('ms-lib-search')||{}).value||'').toLowerCase();
+  const grid = document.getElementById('ms-lib-grid');
+  if (!grid) return;
+  let cards = [];
+  const add = (arr, type) => (arr||[]).forEach(c => cards.push({card:c, type}));
+  if (_msLibType==='all' || _msLibType==='primary')      add(DEFAULT_PRIMARY_MISSIONS,   'primary');
+  if (_msLibType==='all' || _msLibType==='mission_rule') add(DEFAULT_MISSION_RULES,      'mission_rule');
+  if (_msLibType==='all' || _msLibType==='secondary')    add(DEFAULT_SECONDARY_MISSIONS, 'secondary');
+  if (_msLibType==='all' || _msLibType==='secret')       add(DEFAULT_SECRET_MISSIONS,    'secret');
+  if (q) cards = cards.filter(({card}) =>
+    card.name.toLowerCase().includes(q) ||
+    (card.flavor||'').toLowerCase().includes(q) ||
+    (card.conditions||[]).some(c=>(c.text||'').toLowerCase().includes(q))
+  );
+  grid.innerHTML = cards.length
+    ? cards.map(({card,type}) => buildMissionCardHTML(card, type)).join('')
+    : '<div style="color:var(--ts);font-size:12px;font-style:italic;padding:8px 0">No cards match.</div>';
+}
+
+// Deployment SVG diagrams
+function renderDepSVG(id) {
+  const W=200, H=140, bg='#0d0d1a', att='rgba(239,68,68,0.5)', def='rgba(59,130,246,0.5)', nml='rgba(255,255,255,0.04)', line='rgba(255,255,255,0.15)';
+  const svgOpen = `<svg class="dep-svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="border-radius:6px;background:${bg}">`;
+  const svgClose = `</svg>`;
+  const label = (x,y,txt,col) => `<text x="${x}" y="${y}" fill="${col}" font-size="8" font-family="monospace" text-anchor="middle" dominant-baseline="middle" font-weight="bold">${txt}</text>`;
+  const rect = (x,y,w,h,fill) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" rx="2"/>`;
+  const poly = (pts,fill) => `<polygon points="${pts}" fill="${fill}"/>`;
+  const ln = (x1,y1,x2,y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${line}" stroke-width="1" stroke-dasharray="3,3"/>`;
+
+  const svgs = {
+    dep_tipping: svgOpen
+      + rect(0,0,W,H,nml)
+      + rect(0,0,W,28,att) + label(W/2,14,'ATTACKER','#ef4444')
+      + rect(0,H-28,W,28,def) + label(W/2,H-14,'DEFENDER','#3b82f6')
+      + ln(0,28,W,28) + ln(0,H-28,W,H-28)
+      + svgClose,
+    dep_hammer: svgOpen
+      + rect(0,0,W,H,nml)
+      + rect(0,0,38,H,att) + label(19,H/2,'ATT','#ef4444')
+      + rect(W-38,0,38,H,def) + label(W-19,H/2,'DEF','#3b82f6')
+      + ln(38,0,38,H) + ln(W-38,0,W-38,H)
+      + svgClose,
+    dep_sweeping: svgOpen
+      + rect(0,0,W,H,nml)
+      + poly(`0,0 ${W*0.55},0 0,${H*0.55}`,att) + label(22,22,'ATT','#ef4444')
+      + poly(`${W},${H} ${W*0.45},${H} ${W},${H*0.45}`,def) + label(W-22,H-22,'DEF','#3b82f6')
+      + svgClose,
+    dep_dawn: svgOpen
+      + rect(0,0,W,H,nml)
+      + rect(0,0,W,22,att) + label(W/2,11,'ATTACKER','#ef4444')
+      + rect(0,H-22,W,22,def) + label(W/2,H-11,'DEFENDER','#3b82f6')
+      + ln(0,22,W,22) + ln(0,H-22,W,H-22)
+      + label(W/2,H/2,'No Man\'s Land','rgba(255,255,255,0.3)')
+      + svgClose,
+    dep_search: svgOpen
+      + rect(0,0,W,H,nml)
+      + poly(`0,0 ${W*0.45},0 0,${H*0.45}`,att) + label(18,18,'ATT','#ef4444')
+      + poly(`${W},${H} ${W*0.55},${H} ${W},${H*0.55}`,def) + label(W-18,H-18,'DEF','#3b82f6')
+      + svgClose,
+    dep_crucible: svgOpen
+      + rect(0,0,W,H,nml)
+      + poly(`0,0 ${W*0.5},0 ${W*0.25},${H}`,att) + label(W*0.2,H/2,'ATT','#ef4444')
+      + poly(`${W},${H} ${W*0.5},${H} ${W*0.75},0`,def) + label(W*0.8,H/2,'DEF','#3b82f6')
+      + svgClose,
+  };
+  return svgs[id] || `<div style="color:var(--ts);font-size:11px">No diagram</div>`;
+}
+
+function renderDeploymentDiagrams() {
+  const grid = document.getElementById('dep-grid');
+  if (!grid) return;
+  grid.innerHTML = (DEFAULT_DEPLOYMENTS||[]).map(d => `
+    <div class="dep-card">
+      <div class="dep-name">${escH(d.name)}</div>
+      ${renderDepSVG(d.id)}
+      <div class="dep-desc">${escH(d.desc||'')}</div>
+    </div>
+  `).join('');
+}
+
+// ── PT GUIDE ─────────────────────────────────────────────
+function ptRenderGuide() {
+  const el = document.getElementById('pt-guide-cards');
+  if (!el || el.dataset.rendered) return;
+  el.dataset.rendered = '1';
+  el.innerHTML = (DEFAULT_GAME_GUIDE||[]).map(g => {
+    const uid = 'gg-' + g.id;
+    return `<div class="gg-card" id="${uid}">
+      <div class="gg-hdr" onclick="toggleGG('${uid}')">
+        <div class="gg-title">${escH(g.title)}</div>
+        <span class="gg-arrow">›</span>
+      </div>
+      <div class="gg-body">
+        <div class="gg-text">${escH(g.text)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleGG(uid) {
+  const el = document.getElementById(uid);
+  if (!el) return;
+  const body = el.querySelector('.gg-body');
+  const arrow = el.querySelector('.gg-arrow');
+  const open = body.classList.contains('open');
+  body.classList.toggle('open', !open);
+  if (arrow) arrow.classList.toggle('open', !open);
+}
+
+// ── PT CHECKLIST ─────────────────────────────────────────
+let _ptCheckState = {};
+function ptRenderChecklist() {
+  const el = document.getElementById('pt-checklist');
+  if (!el) return;
+  el.innerHTML = (DEFAULT_BATTLE_SEQUENCE||[]).map(s => {
+    const done = !!_ptCheckState[s.step];
+    return `<div class="bsc-step${done?' done':''}" id="bsc-${s.step}">
+      <div class="bsc-check${done?' done':''}" onclick="ptToggleCheck(${s.step})">
+        ${done ? '✓' : ''}
+      </div>
+      <div class="bsc-num">${s.step}.</div>
+      <div class="bsc-content">
+        <div class="bsc-title">${escH(s.title)}</div>
+        <div class="bsc-desc">${escH(s.desc)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function ptToggleCheck(step) {
+  _ptCheckState[step] = !_ptCheckState[step];
+  ptRenderChecklist();
+}
+function ptResetChecklist() {
+  _ptCheckState = {};
+  ptRenderChecklist();
+}
+
+// ── PT SECRET MISSION ─────────────────────────────────────
+function ptDrawSecretMission() {
+  const missions = DEFAULT_SECRET_MISSIONS||[];
+  if (!missions.length) return;
+  const m = missions[Math.floor(Math.random()*missions.length)];
+  const el = document.getElementById('pt-secret-result');
+  if (!el) return;
+  const col = MC_COLORS.secret;
+  el.innerHTML = `<div class="sm-card">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      <span style="background:${col.bg};color:${col.text};border:1px solid ${col.border};border-radius:4px;padding:2px 8px;font-size:9px;font-weight:700;text-transform:uppercase">Secret</span>
+      <div style="font-family:var(--fd);font-size:12px;font-weight:700;color:#a855f7">${escH(m.name)}</div>
+    </div>
+    ${m.flavor ? `<div style="font-size:11px;color:var(--tm);font-style:italic;margin-bottom:8px;line-height:1.5">${escH(m.flavor)}</div>` : ''}
+    ${(m.conditions||[]).map(c=>`
+      <div style="border-top:1px solid var(--bdr);padding-top:8px;margin-top:8px">
+        ${c.label ? `<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#a855f7;margin-bottom:3px">${escH(c.label)}</div>` : ''}
+        ${c.when  ? `<div style="font-size:10px;color:var(--tm);font-style:italic;margin-bottom:4px">When: ${escH(c.when)}</div>` : ''}
+        ${c.text  ? `<div style="font-size:11px;color:var(--ts);line-height:1.5;white-space:pre-wrap">${escH(c.text)}</div>` : ''}
+        ${c.vp != null ? `<div style="margin-top:6px"><span style="background:rgba(168,85,247,.15);color:#a855f7;border:1px solid rgba(168,85,247,.3);border-radius:10px;padding:3px 10px;font-size:11px;font-weight:700">+${c.vp} VP if achieved</span></div>` : ''}
+      </div>`).join('')}
+    <button class="btn btn-g btn-sm" style="width:100%;margin-top:10px" onclick="ptDrawSecretMission()">↺ Draw different card</button>
+  </div>`;
+}
+
+function renderObPage() {
+  renderObjectives();
+  renderDeploymentDiagrams();
+}
+function renderMissionsPage() {
+  // Init secondary deck on first visit
+  if (!_msSecondaryDeck.length) msShuffleSecondaries();
+  msRenderLibrary();
+}
+
 // ── OBJECTIVES ───────────────────────────────────────────
 function renderObjectives() {
   const q = (document.getElementById('ob-search')||{value:''}).value.toLowerCase();
@@ -3456,11 +3983,21 @@ function ptSwitchTab(tabId) {
   _ptTab = tabId;
   document.querySelectorAll('.pt-tab').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.pt-section').forEach(s => s.classList.remove('active'));
-  const key = tabId.replace('pt-', '');
-  const btn = document.getElementById('pt-tab-' + key);
+  // Map section IDs to button IDs explicitly
+  const btnMap = {
+    'pt-army': 'pt-tab-army',
+    'pt-objs': 'pt-tab-objs',
+    'pt-setup-tab': 'pt-tab-setup',
+    'pt-guide': 'pt-tab-guide',
+    'pt-ref': 'pt-tab-ref',
+  };
+  const btn = document.getElementById(btnMap[tabId] || ('pt-tab-' + tabId.replace('pt-','')));
   const sec = document.getElementById(tabId);
   if (btn) btn.classList.add('active');
   if (sec) sec.classList.add('active');
+  // Lazy-render new tabs on first open
+  if (tabId === 'pt-guide') ptRenderGuide();
+  if (tabId === 'pt-setup-tab') ptRenderChecklist();
 }
 
 function renderPTActive() {
