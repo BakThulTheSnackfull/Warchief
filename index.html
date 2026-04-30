@@ -4657,6 +4657,10 @@ function mpSetReady(ready) {
 function mpStartGame() {
   if (!_mpSession || _mpSession.role !== 'host') return;
   _fbDb.ref('rooms/'+_mpSession.code+'/meta').update({ status:'active' })
+    .then(() => {
+      // Host activates directly after write — don't wait for listener to re-fire
+      if (_mpSession?.status !== 'active') _mpActivateSession();
+    })
     .catch(e => toast('Could not start: ' + e.message));
 }
 
@@ -4701,9 +4705,25 @@ function _mpActivateSession() {
 
 function _mpSyncPTToFb() {
   if (!_fbDb || !_mpSession?.code || !_mpSession?.playerId || !S.pt) return;
+  // Sync per-player PT data (CP, VP rounds, secondary cards)
   _fbDb.ref('rooms/'+_mpSession.code+'/players/'+_mpSession.playerId)
-    .update({ cp: S.pt.cp, vpRounds: S.pt.vpRounds, secondaryObjs: S.pt.secondaryObjs })
-    .catch(e => console.error('[MP] sync failed:', e));
+    .update({
+      cp: S.pt.cp,
+      vpRounds: S.pt.vpRounds,
+      secondaryObjs: (S.pt.secSlots||[]).filter(Boolean)
+    })
+    .catch(e => console.error('[MP] player sync failed:', e));
+  // Sync shared mission to room meta so all players see the same primary mission
+  if (S.pt.activePM || S.pt.activeDep || S.pt.activeMR) {
+    _fbDb.ref('rooms/'+_mpSession.code+'/meta').update({
+      mission: {
+        activeDep:   S.pt.activeDep   || null,
+        activePM:    S.pt.activePM    || null,
+        activeMR:    S.pt.activeMR    || null,
+        missionPack: S.pt.missionPack || 'pn'
+      }
+    }).catch(e => console.error('[MP] mission sync failed:', e));
+  }
 }
 
 // ── MP ACTIVE VIEW ────────────────────────────────────────────
@@ -4815,27 +4835,37 @@ function renderMPActiveView() {
     });
     html += '</div>';
 
-    // Current Mission (read from local PT state — no Firebase)
+    // Current Mission — read from Firebase meta (synced by whoever rolled it in PT)
+    // Falls back to local S.pt if not yet synced
+    const sharedMission = meta.mission || null;
     const ptLocal = S.pt;
-    if (ptLocal && (ptLocal.activePM || ptLocal.activeDep)) {
+    const missionSrc = sharedMission || ptLocal;
+    if (missionSrc && (missionSrc.activePM || missionSrc.activeDep)) {
       html += '<div class="card" style="margin-bottom:10px">'
-        + '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Current Mission</div>';
-      if (ptLocal.activeDep) {
+        + '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">'
+        + 'Current Mission'
+        + (sharedMission ? '' : ' <span style="font-size:9px;color:var(--ts);font-weight:400">(local only — roll in PT to share)</span>')
+        + '</div>';
+      if (missionSrc.activeDep) {
         html += '<div style="font-size:10px;color:var(--ts);text-transform:uppercase;font-weight:700;letter-spacing:0.5px">Deployment</div>'
-          + '<div style="font-size:13px;font-weight:700;color:var(--ft);margin-bottom:6px">' + escH(ptLocal.activeDep.name) + '</div>';
+          + '<div style="font-size:13px;font-weight:700;color:var(--ft);margin-bottom:6px">' + escH(missionSrc.activeDep.name) + '</div>';
       }
-      if (ptLocal.activePM) {
+      if (missionSrc.activePM) {
         html += '<div style="font-size:10px;color:var(--ts);text-transform:uppercase;font-weight:700;letter-spacing:0.5px">Primary Mission</div>'
-          + '<div style="font-family:var(--fd);font-size:14px;color:var(--ft);margin-bottom:4px">' + escH(ptLocal.activePM.name) + '</div>';
-        if (ptLocal.activePM.flavor) {
-          html += '<div style="font-size:11px;color:var(--ts);font-style:italic;margin-bottom:4px">' + escH(ptLocal.activePM.flavor) + '</div>';
+          + '<div style="font-family:var(--fd);font-size:14px;color:var(--ft);margin-bottom:4px">' + escH(missionSrc.activePM.name) + '</div>';
+        if (missionSrc.activePM.flavor) {
+          html += '<div style="font-size:11px;color:var(--ts);font-style:italic;margin-bottom:4px">' + escH(missionSrc.activePM.flavor) + '</div>';
         }
       }
-      if (ptLocal.activeMR) {
+      if (missionSrc.activeMR) {
         html += '<div style="font-size:10px;color:var(--ts);text-transform:uppercase;font-weight:700;letter-spacing:0.5px;margin-top:4px">Mission Rule</div>'
-          + '<div style="font-size:13px;font-weight:700;color:var(--ft)">' + escH(ptLocal.activeMR.name) + '</div>';
+          + '<div style="font-size:13px;font-weight:700;color:var(--ft)">' + escH(missionSrc.activeMR.name) + '</div>';
       }
       html += '</div>';
+    } else if (_mpSession.status === 'active') {
+      html += '<div class="card" style="margin-bottom:10px;padding:12px;text-align:center">'
+        + '<div style="font-size:12px;color:var(--ts);font-style:italic">No mission set — roll one in My Tracker (PT tab) to share it here.</div>'
+        + '</div>';
     }
 
     // Secondaries — all players
@@ -5001,6 +5031,29 @@ window.addEventListener('DOMContentLoaded', () => {
     } catch(e) { _mpSession = null; localStorage.removeItem('wc_mp'); }
   }
   nav('home');
+
+  // Re-render active pages when tab becomes visible (handles Firebase reconnect, iOS app-switch, etc.)
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') return;
+    // If in a live MP session, re-check Firebase state and re-render
+    if (_mpSession && _fbDb) {
+      if (_mpSession.status === 'lobby') {
+        // Check if game has started while we were away
+        _fbDb.ref('rooms/'+_mpSession.code+'/meta').get().then(snap => {
+          const meta = snap.val();
+          if (meta?.status === 'active' && _mpSession?.status !== 'active') {
+            _mpActivateSession();
+          } else if (document.getElementById('pg-mp')?.classList.contains('active')) {
+            renderMP();
+          }
+        }).catch(() => {});
+      } else if (_mpSession.status === 'active') {
+        if (document.getElementById('pg-mp')?.classList.contains('active')) renderMP();
+      }
+    }
+    // Re-render PT if on that page
+    if (S.pt && document.getElementById('pg-pt')?.classList.contains('active')) renderPT();
+  });
 });
 
 </script>
